@@ -53,6 +53,7 @@ dependencies[] = token
 dependencies[] = views
 dependencies[] = views_bulk_operations
 dependencies[] = views_ui
+dependencies[] = menu_block
 
 ; Custom modules
 dependencies[] = masterprint_login

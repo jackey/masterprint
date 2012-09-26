@@ -61,6 +61,10 @@ projects[token][version] = 1.4
 projects[views_bulk_operations][subdir] = contrib
 projects[views_bulk_operations][version] = 3.0
 
+projects[menu_block][subdir] = contrib
+projects[menu_block][version] = 2.3
+menu_block
+
 ; Themes
 ; ------------
 
