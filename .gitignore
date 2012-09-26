@@ -33,3 +33,5 @@ cache/
 files/
 sites/*/files
 sites/*/private
+
+profiles/masterprint/modules/contrib
