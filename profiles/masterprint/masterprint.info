@@ -19,6 +19,7 @@ dependencies[] = ctools
 dependencies[] = context
 dependencies[] = context_layouts
 dependencies[] = context_ui
+dependencies[] = devel
 dependencies[] = block
 dependencies[] = contact
 dependencies[] = dblog
