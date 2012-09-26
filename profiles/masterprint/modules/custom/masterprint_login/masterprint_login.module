@@ -10,7 +10,7 @@ function masterprint_login_init() {
     && !(arg(0) == 'user'
     && (!arg(1) || arg(1) == 'password' || arg(1) == 'register'))) {
     if(!drupal_is_cli()){
-      drupal_set_message(t('You must login to use this site.'));
+      drupal_set_message(t('You must login to use the system.'));
       drupal_goto('user', array('query' => array('destination' => $_GET['q'])));
     }
   }
@@ -20,6 +20,21 @@ function masterprint_login_init() {
  * Implements hook_form_FORM_ID_alter()
  */
 function masterprint_login_form_user_login_alter(&$form, &$form_state, $form_id) {
-  drupal_set_title(t('Login interface'));
+
+}
+
+/**
+ * Implements hook_preprocess_page()
+ */
+function masterprint_login_preprocess_page(&$vars) {
+  switch (current_path()) {
+    case 'user/password':
+      drupal_set_title(t('Reset password'));
+      break;
+
+    case 'user':
+      drupal_set_title(t('Login interface'));
+      break;
+  }
 }
 

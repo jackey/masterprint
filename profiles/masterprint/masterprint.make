@@ -18,7 +18,7 @@ projects[devel][version] = "1.2"
 
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
-projects[features][version] = "1.0-beta4"
+projects[features][version] = "1.0"
 
 ; Contrib modules
 ; ------------
