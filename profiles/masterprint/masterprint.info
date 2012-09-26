@@ -54,5 +54,7 @@ dependencies[] = views_bulk_operations
 dependencies[] = views_ui
 
 ; Custom modules
+dependencies[] = masterprint_login
 
 ; Features
+dependencies[] = masterprint_settings
