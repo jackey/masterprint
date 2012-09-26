@@ -22,6 +22,9 @@ projects[features][version] = "1.0-beta4"
 
 ; Contrib modules
 ; ------------
+projects[admin][subdir] = contrib
+projects[admin][version] = 2.0-beta3
+
 projects[ctools][subdir] = contrib
 projects[ctools][version] = 1.2
 
@@ -46,7 +49,15 @@ projects[views_bulk_operations][version] = 3.0
 
 ; Themes
 ; ------------
+projects[tao][type] = theme
 projects[tao][version] = 3.0-beta4
+
+projects[rubik][type] = theme
+projects[rubik][version] = 4.0-beta8
+
+projects[cube][type] = theme
+projects[cube][version] = cube
 
 ; Libraries
 ; ------------
+

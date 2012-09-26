@@ -51,7 +51,7 @@ replace_drupal_non_core () {
       done;
     done;
     rm -rf $NON_CORE_TEMP_DIR;
-    echo "\nReplace non-core projects finished.";
+    echo -e "\nReplace non-core projects finished.";
     return 0;
 }
 
