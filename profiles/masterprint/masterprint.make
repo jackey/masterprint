@@ -31,6 +31,18 @@ projects[strongarm][version] = 2.0
 projects[views][subdir] = contrib
 projects[views][version] = 3.3
 
+projects[entity][subdir] = contrib
+projects[entity][version] = 1.0-rc3
+
+projects[libraries][subdir] = contrib
+projects[libraries][version] = 2.0
+
+projects[link][subdir] = contrib
+projects[link][version] = 1.0
+
+projects[views_bulk_operations][subdir] = contrib
+projects[views_bulk_operations][version] = 3.0
+
 
 ; Themes
 ; ------------
