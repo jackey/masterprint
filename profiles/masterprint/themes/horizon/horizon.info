@@ -1,5 +1,0 @@
-core = 7.x
-description = Custom theme for Master Print.
-engine = phptemplate
-name = Horizon
-base theme = tao

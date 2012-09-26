@@ -6,12 +6,8 @@
  * Perform actions to set up the site for this profile.
  */
 function masterprint_install() {
-  theme_enable(array('rubik', 'horizon'));
-  // Set theme for the site
-  variable_set('theme_default', 'rubik');
-
-  // Set theme for adminstration
-  variable_set('admin_theme', 'rubik');
+  theme_enable(array('bartik_ext'));
+  variable_set('theme_default', 'bartik_ext');
 
   variable_set('user_register', USER_REGISTER_VISITORS);
 

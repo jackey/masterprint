@@ -52,11 +52,6 @@ dependencies[] = views
 dependencies[] = views_bulk_operations
 dependencies[] = views_ui
 
-; Themes
-dependencies[] = tao
-dependencies[] = rubik
-dependencies[] = horizon
-
 ; Custom modules
 
 ; Features
