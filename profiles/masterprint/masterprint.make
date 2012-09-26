@@ -28,6 +28,9 @@ projects[admin][version] = 2.0-beta3
 projects[ctools][subdir] = contrib
 projects[ctools][version] = 1.2
 
+projects[diff][subdir] = contrib
+projects[diff][version] = 2.0
+
 projects[entityreference][subdir] = contrib
 projects[entityreference][version] = 1.0-rc5
 
