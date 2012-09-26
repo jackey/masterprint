@@ -20,6 +20,7 @@ dependencies[] = context
 dependencies[] = context_layouts
 dependencies[] = context_ui
 dependencies[] = devel
+dependencies[] = diff
 dependencies[] = block
 dependencies[] = contact
 dependencies[] = dblog
