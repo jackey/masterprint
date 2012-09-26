@@ -1,7 +1,7 @@
 name = Masterprint Settings
 description = Settings for the site.
 core = 7.x
-package = Features
+package = masterprint
 php = 5.2.4
 dependencies[] = features
 dependencies[] = logintoboggan
