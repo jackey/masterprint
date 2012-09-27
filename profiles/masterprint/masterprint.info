@@ -13,6 +13,7 @@ dependencies[] = number
 dependencies[] = menu
 dependencies[] = path
 dependencies[] = taxonomy
+dependencies[] = locale
 
 ; Contrib modules
 dependencies[] = admin
