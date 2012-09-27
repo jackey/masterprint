@@ -70,10 +70,11 @@ projects[views_bulk_operations][version] = 3.0
 projects[menu_block][subdir] = contrib
 projects[menu_block][version] = 2.3
 
-
 ; Themes
 ; ------------
 
 ; Libraries
 ; ------------
-
+libraries[profile_helper][download][type] = git
+libraries[profile_helper][download][url] = git@github.com:kurtzhong/profile_helper.git
+libraries[profile_helper][download][branch] = master
