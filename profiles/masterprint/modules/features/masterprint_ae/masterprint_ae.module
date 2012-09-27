@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+function masterprint_ae_menu() {
+  $items = array();
+
+  return $items;
+}
+
+/**
+ *
+ */
+
+
+/**
+ *
+ */

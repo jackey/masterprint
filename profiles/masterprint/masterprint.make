@@ -28,6 +28,9 @@ projects[admin][version] = 2.0-beta3
 projects[ctools][subdir] = contrib
 projects[ctools][version] = 1.2
 
+projects[date][subdir] = contrib
+projects[date][version] = 2.6
+
 projects[diff][subdir] = contrib
 projects[diff][version] = 2.0
 
@@ -49,8 +52,11 @@ projects[jquery_update][version] = 2.2
 projects[libraries][subdir] = contrib
 projects[libraries][version] = 2.0
 
-projects[link][subdir] = contrib
-projects[link][version] = 1.0
+projects[profile2][subdir] = contrib
+projects[profile2][version] = 1.2
+
+projects[logintoboggan][subdir] = contrib
+projects[logintoboggan][version] = 1.3
 
 projects[logintoboggan][subdir] = contrib
 projects[logintoboggan][version] = 1.3
@@ -63,7 +69,7 @@ projects[views_bulk_operations][version] = 3.0
 
 projects[menu_block][subdir] = contrib
 projects[menu_block][version] = 2.3
-menu_block
+
 
 ; Themes
 ; ------------

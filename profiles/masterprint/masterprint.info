@@ -9,6 +9,7 @@ dependencies[] = contact
 dependencies[] = dblog
 dependencies[] = field_ui
 dependencies[] = file
+dependencies[] = number
 dependencies[] = menu
 dependencies[] = path
 dependencies[] = taxonomy
@@ -19,6 +20,7 @@ dependencies[] = ctools
 dependencies[] = context
 dependencies[] = context_layouts
 dependencies[] = context_ui
+dependencies[] = date
 dependencies[] = devel
 dependencies[] = diff
 dependencies[] = block
@@ -54,9 +56,12 @@ dependencies[] = views
 dependencies[] = views_bulk_operations
 dependencies[] = views_ui
 dependencies[] = menu_block
+dependencies[] = profile2
 
 ; Custom modules
 dependencies[] = masterprint_login
+dependencies[] = masterprint_admin
+dependencies[] = masterprint_ae
 
 ; Features
 dependencies[] = masterprint_settings
