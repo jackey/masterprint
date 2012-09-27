@@ -1,0 +1,4 @@
+name = Masterprint AE
+description = Masterprint AE
+core = 7.x
+package = Masterprint
