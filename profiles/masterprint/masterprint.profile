@@ -1,6 +1,6 @@
 <?php
 
-require_once DRUPAL_ROOT . '/sites/all/libraries/profile_helper/profile_helper.inc';
+require_once DRUPAL_ROOT . '/profiles/masterprint/libraries/profile_helper/profile_helper.inc';
 
 /**
  * Implements hook_form_FORM_ID_alter().
