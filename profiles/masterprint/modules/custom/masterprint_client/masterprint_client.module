@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+function masterprint_client_menu() {
+  $items = array();
+  $items['client/add'] = array(
+    'title' => '添加新客户',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_client_add_form'),
+    'access arguments' => array('administer client'),
+    'file' => 'masterprint_client.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function masterprint_client_permission() {
+  return array(
+    'administer client' =>  array(
+      'title' => t('Administer client'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
