@@ -58,6 +58,7 @@ dependencies[] = views_bulk_operations
 dependencies[] = views_ui
 dependencies[] = menu_block
 dependencies[] = profile2
+dependencies[] = migrate
 
 ; Custom modules
 dependencies[] = masterprint_login

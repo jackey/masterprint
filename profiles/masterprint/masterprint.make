@@ -71,6 +71,9 @@ projects[views_bulk_operations][version] = 3.0
 projects[menu_block][subdir] = contrib
 projects[menu_block][version] = 2.3
 
+projects[migrate][subdir] = contrib
+projects[migrate][version] = 2.4
+
 ; Themes
 ; ------------
 
