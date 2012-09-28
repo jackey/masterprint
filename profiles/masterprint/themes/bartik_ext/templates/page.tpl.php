@@ -96,11 +96,11 @@
     <?php endif; ?>
 
     <?php if ($site_name || $site_slogan): ?>
-      <div id="name-and-slogan"<?php if ($hide_site_name && $hide_site_slogan) { print ' class="element-invisible"'; } ?>>
+      <div id="name-and-slogan"<?php if (!empty($hide_site_name) && $hide_site_slogan) { print ' class="element-invisible"'; } ?>>
 
         <?php if ($site_name): ?>
           <?php if ($title): ?>
-            <div id="site-name"<?php if ($hide_site_name) { print ' class="element-invisible"'; } ?>>
+            <div id="site-name"<?php if (!empty($hide_site_name)) { print ' class="element-invisible"'; } ?>>
               <strong>
                 <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><span><?php print $site_name; ?></span></a>
               </strong>
