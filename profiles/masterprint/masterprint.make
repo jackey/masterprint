@@ -19,6 +19,7 @@ projects[devel][version] = "1.2"
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 projects[features][version] = "1.0"
+projects[features][patch][] = http://drupal.org/files/features_static_caches-1063204-32.patch
 
 ; Contrib modules
 ; ------------

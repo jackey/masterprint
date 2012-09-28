@@ -1,41 +1,35 @@
 <?php
 
-require_once DRUPAL_ROOT . '/profiles/masterprint/libraries/profile_helper/profile_helper.inc';
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function masterprint_form_install_configure_form_alter(&$form, $form_state) {
-  $form['site_information']['site_name']['#default_value'] = 'Master Print';
-  $form['update_notifications']['update_status_module']['#default_value'] = array(0 => 0, 1 => 0);
-  $form['update_notifications']['#access'] = FALSE;
-}
+//require_once DRUPAL_ROOT . '/profiles/masterprint/libraries/profile_helper/profile_helper.inc';
 
 /**
  * Implements hook_install_tasks().
  */
-function masterprin_install_tasks($install_state) {
+function masterprint_install_tasks($install_state) {
   $tasks = array();
-  $tasks['install_custom_configure'] = array(
+  $tasks['masterprint_install_custom_configure'] = array(
     'display_name' => st('Other configurations'),
     'type' => 'batch',
   );
   return $tasks;
 }
 
+
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function masterprin_form_install_configure_form_alter(&$form, $form_state) {
+function masterprint_form_install_configure_form_alter(&$form, $form_state) {
   // Site information.
-  $form['site_information']['site_name']['#default_value'] = '';
+  $form['site_information']['site_name']['#default_value'] = 'Master Print';
+  $form['site_information']['site_mail']['#default_value'] = 'info@admin.com';
 
   // Admin account.
-  $form['admin_account']['account']['name']['#default_value'] = 'admin';
+  $form['admin_account']['account']['name']['#default_value'] = 'administrator';
+  $form['admin_account']['account']['mail']['#default_value'] = 'admin@admin.com';
 
   // Server settings.
   $form['server_settings']['site_default_country']['#default_value'] = 'CN';
-  $form['server_settings']['date_default_timezone']['#default_value'] = '';
+  $form['server_settings']['date_default_timezone']['#default_value'] = 'Asia/Shanghai';
 
   // Update notifications.
   $form['update_notifications']['update_status_module']['#default_value'] = array();
@@ -52,7 +46,7 @@ function masterprin_form_install_configure_form_alter(&$form, $form_state) {
 /**
  * Task callback.
  */
-function install_custom_configure(&$install_state) {
+function masterprint_install_custom_configure(&$install_state) {
   $batch = array();
   $batch['title'] = st('Configuring @drupal', array('@drupal' => drupal_install_profile_distribution_name()));
 
@@ -65,14 +59,14 @@ function install_custom_configure(&$install_state) {
   $batch['operations'][] = array('profile_helper_flush_cache', array());
 
   $batch['error_message'] = st('The configuration has encountered an error.');
-  $batch['finished'] = 'install_custom_configure_finished';
+  $batch['finished'] = 'masterprint_install_custom_configure_finished';
   return $batch;
 }
 
 /**
  * Batch finished callback.
  */
-function install_custom_configure_finished($success, $results, $operations) {
+function masterprint_install_custom_configure_finished($success, $results, $operations) {
   drupal_flush_all_caches();
 }
 

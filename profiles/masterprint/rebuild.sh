@@ -10,14 +10,14 @@ replace_drupal_core() {
     drush make masterprint_core.make drush_make_temp_core;
 
     if [ ! -d $CORE_TEMP_DIR ]; then
-      echo "Fail to fetch drupal core into the temp direcotory.";
-      return 1;
+       echo "Fail to fetch drupal core into the temp direcotory.";
+       return 1;
     fi;
 
     echo -e "Replacing the core...\r";
     DIRS="includes misc modules profiles/minimal profiles/standard profiles/testing scripts themes";
     for DIR in $DIRS; do
-      rm -rf "../../$DIR";
+       rm -rf "../../$DIR";
     done;
 
     cp -R $CORE_TEMP_DIR/* ../../;
@@ -33,8 +33,8 @@ replace_drupal_non_core () {
     drush make --no-core --contrib-destination=$NON_CORE_TEMP_DIR --force-complete masterprint.make -y;
 
     if [ ! -d $NON_CORE_TEMP_DIR ]; then
-      echo "Fetching projects failed.";
-      return 1;
+       echo "Fetching projects failed.";
+       return 1;
     fi;
 
     echo -e "Replacing projects...\c";
@@ -45,9 +45,9 @@ replace_drupal_non_core () {
       fi;
 
       for PROJECT in `ls "$NON_CORE_TEMP_DIR/$PROJECT_TYPE"`; do
-        rm -rf "./$DIR/$PROJECT";
-        cp -R "$NON_CORE_TEMP_DIR/$PROJECT_TYPE/$PROJECT" "./$PROJECT_TYPE/";
-        echo -e ".\c";
+          rm -rf "./$DIR/$PROJECT";
+          cp -R "$NON_CORE_TEMP_DIR/$PROJECT_TYPE/$PROJECT" "./$PROJECT_TYPE/";
+          echo -e ".\c";
       done;
     done;
     rm -rf $NON_CORE_TEMP_DIR;
@@ -57,8 +57,8 @@ replace_drupal_non_core () {
 
 # Replace both core and non-core
 replace_drupal_whole () {
-  replace_drupal_core
-  replace_drupal_non_core
+    replace_drupal_core
+    replace_drupal_non_core
 }
 
 # Options array
@@ -85,26 +85,3 @@ select opt in "${options[@]}"; do
         *) echo "Invalid option. Try another one.";continue;;
     esac
 done
-
-exit;
-    if [ ! -d temp_all ]; then
-      echo "Failed.";
-      exit;
-    fi;
-    echo -e "Replacing all...\c";
-    for DIR in `ls temp_all`; do
-      if [ ! -d "./$DIR" ]; then
-         mkdir -p "./$DIR";
-      fi;
-      for SUB_DIR in `ls "temp_all/$DIR"`; do
-        if [ -d "./$DIR/$SUB_DIR" ]; then
-           rm -rf "./$DIR/$SUB_DIR";
-        fi;
-        cp -R "temp_all/$DIR/$SUB_DIR" "./$DIR/";
-        echo -e ".\c";
-      done;
-    done;
-    rm -rf temp_all;
-    echo "done.";
-    ;;
-esac
