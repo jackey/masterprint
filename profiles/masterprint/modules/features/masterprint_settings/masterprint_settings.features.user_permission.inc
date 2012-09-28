@@ -244,6 +244,104 @@ function masterprint_settings_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: edit any admin profile.
+  $permissions['edit any admin profile'] = array(
+    'name' => 'edit any admin profile',
+    'roles' => array(
+      0 => '管理员',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit any ae profile.
+  $permissions['edit any ae profile'] = array(
+    'name' => 'edit any ae profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit any client profile.
+  $permissions['edit any client profile'] = array(
+    'name' => 'edit any client profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit any dealer profile.
+  $permissions['edit any dealer profile'] = array(
+    'name' => 'edit any dealer profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit any salesman profile.
+  $permissions['edit any salesman profile'] = array(
+    'name' => 'edit any salesman profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit any stock_keeper profile.
+  $permissions['edit any stock_keeper profile'] = array(
+    'name' => 'edit any stock_keeper profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit own admin profile.
+  $permissions['edit own admin profile'] = array(
+    'name' => 'edit own admin profile',
+    'roles' => array(
+      0 => '管理员',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit own ae profile.
+  $permissions['edit own ae profile'] = array(
+    'name' => 'edit own ae profile',
+    'roles' => array(
+      0 => 'AE业务经理',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit own client profile.
+  $permissions['edit own client profile'] = array(
+    'name' => 'edit own client profile',
+    'roles' => array(
+      0 => '客户',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit own dealer profile.
+  $permissions['edit own dealer profile'] = array(
+    'name' => 'edit own dealer profile',
+    'roles' => array(
+      0 => '客户的经销商',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit own salesman profile.
+  $permissions['edit own salesman profile'] = array(
+    'name' => 'edit own salesman profile',
+    'roles' => array(
+      0 => '客户销售人员',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: edit own stock_keeper profile.
+  $permissions['edit own stock_keeper profile'] = array(
+    'name' => 'edit own stock_keeper profile',
+    'roles' => array(
+      0 => '管理员',
+    ),
+    'module' => 'profile2',
+  );
+
   // Exported permission: execute php code.
   $permissions['execute php code'] = array(
     'name' => 'execute php code',
@@ -298,6 +396,104 @@ function masterprint_settings_user_default_permissions() {
     'name' => 'use admin toolbar',
     'roles' => array(),
     'module' => 'admin',
+  );
+
+  // Exported permission: view any admin profile.
+  $permissions['view any admin profile'] = array(
+    'name' => 'view any admin profile',
+    'roles' => array(
+      0 => '管理员',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view any ae profile.
+  $permissions['view any ae profile'] = array(
+    'name' => 'view any ae profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view any client profile.
+  $permissions['view any client profile'] = array(
+    'name' => 'view any client profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view any dealer profile.
+  $permissions['view any dealer profile'] = array(
+    'name' => 'view any dealer profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view any salesman profile.
+  $permissions['view any salesman profile'] = array(
+    'name' => 'view any salesman profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view any stock_keeper profile.
+  $permissions['view any stock_keeper profile'] = array(
+    'name' => 'view any stock_keeper profile',
+    'roles' => array(),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view own admin profile.
+  $permissions['view own admin profile'] = array(
+    'name' => 'view own admin profile',
+    'roles' => array(
+      0 => '管理员',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view own ae profile.
+  $permissions['view own ae profile'] = array(
+    'name' => 'view own ae profile',
+    'roles' => array(
+      0 => 'AE业务经理',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view own client profile.
+  $permissions['view own client profile'] = array(
+    'name' => 'view own client profile',
+    'roles' => array(
+      0 => '客户',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view own dealer profile.
+  $permissions['view own dealer profile'] = array(
+    'name' => 'view own dealer profile',
+    'roles' => array(
+      0 => '客户的经销商',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view own salesman profile.
+  $permissions['view own salesman profile'] = array(
+    'name' => 'view own salesman profile',
+    'roles' => array(
+      0 => '客户销售人员',
+    ),
+    'module' => 'profile2',
+  );
+
+  // Exported permission: view own stock_keeper profile.
+  $permissions['view own stock_keeper profile'] = array(
+    'name' => 'view own stock_keeper profile',
+    'roles' => array(
+      0 => '管理员',
+    ),
+    'module' => 'profile2',
   );
 
   // Exported permission: view own unpublished content.
