@@ -1,6 +1,6 @@
 <?php
 
-//require_once DRUPAL_ROOT . '/profiles/masterprint/libraries/profile_helper/profile_helper.inc';
+require_once DRUPAL_ROOT . '/profiles/masterprint/libraries/profile_helper/profile_helper.inc';
 
 /**
  * Implements hook_install_tasks().
@@ -77,8 +77,8 @@ function masterprint_profile_create_dummy_users() {
   $users =  array(
     '管理员' => array(
       array(
-        'name' => 'admin',
-        'pass' => 'admin',
+        'name' => 'admin_one',
+        'pass' => 'admin_one',
       ),
       array(
         'name' => 'admin_two',

@@ -6,8 +6,10 @@
  * Perform actions to set up the site for this profile.
  */
 function masterprint_install() {
-  theme_enable(array('bartik_ext'));
+  theme_enable(array('bartik_ext', 'seven'));
   variable_set('theme_default', 'bartik_ext');
+  variable_set('admin_theme', 'seven');
+  variable_set('node_admin_theme', 1);
 
   variable_set('user_register', USER_REGISTER_VISITORS);
 
