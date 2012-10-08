@@ -64,6 +64,7 @@ dependencies[] = migrate
 dependencies[] = masterprint_login
 dependencies[] = masterprint_admin
 dependencies[] = masterprint_ae
+dependencies[] = masterprint_product
 
 ; Features
 dependencies[] = masterprint_settings

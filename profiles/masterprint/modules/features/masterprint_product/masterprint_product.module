@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the masterprint_product feature.
+ */
+
+include_once 'masterprint_product.features.inc';
