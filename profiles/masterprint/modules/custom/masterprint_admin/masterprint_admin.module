@@ -6,9 +6,16 @@
 function masterprint_admin_menu() {
   $items = array();
   $items['admin/my-salers'] = array(
-  	'title' => '销售人员',
+  	'title' => '我的销售人员',
   	'description' => '查看我的销售人员',
   	'page callback' => 'list_saler',
+  	'access callback' => 'user_is_client',
+  );
+
+  $items['admin/my-salee'] = array(
+  	'title' => '我的经销商',
+  	'description' => '查看我的销售人员',
+  	'page callback' => 'list_salee',
   	'access callback' => 'user_is_client',
   );
 
@@ -32,6 +39,11 @@ function user_is_client() {
 function list_saler() {
 	global $user;
 	return views_embed_view('my_sale_staff', 'block');
+}
+
+function list_salee() {
+	global $user;
+	return views_embed_view('my_sale_staff', 'block_1');
 }
 
 /**

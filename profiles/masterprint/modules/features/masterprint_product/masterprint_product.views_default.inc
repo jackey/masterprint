@@ -74,7 +74,7 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['relationships']['profile']['field'] = 'profile';
   $handler->display->display_options['relationships']['profile']['required'] = 0;
   $handler->display->display_options['relationships']['profile']['bundle_types'] = array(
-    'salesman' => 'salesman',
+    'dealer' => 'dealer',
   );
   /* Field: User: Uid */
   $handler->display->display_options['fields']['uid']['id'] = 'uid';
@@ -127,30 +127,6 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['fields']['name']['link_to_user'] = 1;
   $handler->display->display_options['fields']['name']['overwrite_anonymous'] = 0;
   $handler->display->display_options['fields']['name']['format_username'] = 1;
-  /* Field: Profile: 联系人 */
-  $handler->display->display_options['fields']['field_salesman_contacter']['id'] = 'field_salesman_contacter';
-  $handler->display->display_options['fields']['field_salesman_contacter']['table'] = 'field_data_field_salesman_contacter';
-  $handler->display->display_options['fields']['field_salesman_contacter']['field'] = 'field_salesman_contacter';
-  $handler->display->display_options['fields']['field_salesman_contacter']['relationship'] = 'profile';
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['more_link'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['field_salesman_contacter']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['field_salesman_contacter']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['field_salesman_contacter']['hide_alter_empty'] = 1;
-  $handler->display->display_options['fields']['field_salesman_contacter']['field_api_classes'] = 0;
   /* Field: Profile: 电话 */
   $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
   $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';
@@ -175,35 +151,35 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['fields']['field_tel']['empty_zero'] = 0;
   $handler->display->display_options['fields']['field_tel']['hide_alter_empty'] = 1;
   $handler->display->display_options['fields']['field_tel']['field_api_classes'] = 0;
-  /* Field: Profile: 地址 */
-  $handler->display->display_options['fields']['field_salesman_addresses']['id'] = 'field_salesman_addresses';
-  $handler->display->display_options['fields']['field_salesman_addresses']['table'] = 'field_data_field_salesman_addresses';
-  $handler->display->display_options['fields']['field_salesman_addresses']['field'] = 'field_salesman_addresses';
-  $handler->display->display_options['fields']['field_salesman_addresses']['relationship'] = 'profile';
-  $handler->display->display_options['fields']['field_salesman_addresses']['label'] = '联系地址';
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['more_link'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['field_salesman_addresses']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['field_salesman_addresses']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['hide_alter_empty'] = 1;
-  $handler->display->display_options['fields']['field_salesman_addresses']['group_rows'] = 1;
-  $handler->display->display_options['fields']['field_salesman_addresses']['delta_offset'] = '0';
-  $handler->display->display_options['fields']['field_salesman_addresses']['delta_reversed'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['delta_first_last'] = 0;
-  $handler->display->display_options['fields']['field_salesman_addresses']['field_api_classes'] = 0;
+  /* Field: Profile: 联系人 */
+  $handler->display->display_options['fields']['field_dealer_contacter']['id'] = 'field_dealer_contacter';
+  $handler->display->display_options['fields']['field_dealer_contacter']['table'] = 'field_data_field_dealer_contacter';
+  $handler->display->display_options['fields']['field_dealer_contacter']['field'] = 'field_dealer_contacter';
+  $handler->display->display_options['fields']['field_dealer_contacter']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['more_link'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['field_dealer_contacter']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_dealer_contacter']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_dealer_contacter']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['field_dealer_contacter']['field_api_classes'] = 0;
+  /* Field: Profile: 名称 */
+  $handler->display->display_options['fields']['field_dealer_name']['id'] = 'field_dealer_name';
+  $handler->display->display_options['fields']['field_dealer_name']['table'] = 'field_data_field_dealer_name';
+  $handler->display->display_options['fields']['field_dealer_name']['field'] = 'field_dealer_name';
+  $handler->display->display_options['fields']['field_dealer_name']['relationship'] = 'profile';
   /* Field: User: Link */
   $handler->display->display_options['fields']['view_user']['id'] = 'view_user';
   $handler->display->display_options['fields']['view_user']['table'] = 'users';
@@ -269,7 +245,7 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['filters']['rid']['table'] = 'users_roles';
   $handler->display->display_options['filters']['rid']['field'] = 'rid';
   $handler->display->display_options['filters']['rid']['value'] = array(
-    8 => '8',
+    7 => '7',
   );
   $handler->display->display_options['filters']['rid']['reduce_duplicates'] = 0;
 
@@ -286,6 +262,9 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['pager']['options']['id'] = '0';
   $handler->display->display_options['pager']['options']['expose']['items_per_page_options_all'] = 0;
+
+  /* Display: Block-我的经销商列表 */
+  $handler = $view->new_display('block', 'Block-我的经销商列表', 'block_1');
   $translatables['my_sale_staff'] = array(
     t('Master'),
     t('我的客户列表'),
@@ -297,9 +276,9 @@ function masterprint_product_views_default_views() {
     t('Desc'),
     t('Profile'),
     t('用户名'),
-    t('联系人'),
     t('电话'),
-    t('联系地址'),
+    t('联系人'),
+    t('名称'),
     t('查看'),
     t('销售员资料'),
     t('编辑'),
@@ -308,6 +287,7 @@ function masterprint_product_views_default_views() {
     t('Items per page'),
     t('- All -'),
     t('Offset'),
+    t('Block-我的经销商列表'),
   );
   $export['my_sale_staff'] = $view;
 
