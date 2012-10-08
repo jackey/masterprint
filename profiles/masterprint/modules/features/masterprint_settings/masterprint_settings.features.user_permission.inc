@@ -44,7 +44,9 @@ function masterprint_settings_user_default_permissions() {
   // Exported permission: access devel information.
   $permissions['access devel information'] = array(
     'name' => 'access devel information',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'authenticated user',
+    ),
     'module' => 'devel',
   );
 
@@ -65,7 +67,12 @@ function masterprint_settings_user_default_permissions() {
   // Exported permission: access user profiles.
   $permissions['access user profiles'] = array(
     'name' => 'access user profiles',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'anonymous user',
+      1 => 'authenticated user',
+      2 => '客户',
+      3 => '客户销售人员',
+    ),
     'module' => 'user',
   );
 
@@ -270,14 +277,18 @@ function masterprint_settings_user_default_permissions() {
   // Exported permission: edit any dealer profile.
   $permissions['edit any dealer profile'] = array(
     'name' => 'edit any dealer profile',
-    'roles' => array(),
+    'roles' => array(
+      0 => '客户',
+    ),
     'module' => 'profile2',
   );
 
   // Exported permission: edit any salesman profile.
   $permissions['edit any salesman profile'] = array(
     'name' => 'edit any salesman profile',
-    'roles' => array(),
+    'roles' => array(
+      0 => '客户',
+    ),
     'module' => 'profile2',
   );
 
@@ -319,7 +330,8 @@ function masterprint_settings_user_default_permissions() {
   $permissions['edit own dealer profile'] = array(
     'name' => 'edit own dealer profile',
     'roles' => array(
-      0 => '客户的经销商',
+      0 => '客户',
+      1 => '客户的经销商',
     ),
     'module' => 'profile2',
   );
@@ -328,7 +340,8 @@ function masterprint_settings_user_default_permissions() {
   $permissions['edit own salesman profile'] = array(
     'name' => 'edit own salesman profile',
     'roles' => array(
-      0 => '客户销售人员',
+      0 => '客户',
+      1 => '客户销售人员',
     ),
     'module' => 'profile2',
   );
@@ -417,21 +430,29 @@ function masterprint_settings_user_default_permissions() {
   // Exported permission: view any client profile.
   $permissions['view any client profile'] = array(
     'name' => 'view any client profile',
-    'roles' => array(),
+    'roles' => array(
+      0 => '客户',
+      1 => '客户的经销商',
+      2 => '客户销售人员',
+    ),
     'module' => 'profile2',
   );
 
   // Exported permission: view any dealer profile.
   $permissions['view any dealer profile'] = array(
     'name' => 'view any dealer profile',
-    'roles' => array(),
+    'roles' => array(
+      0 => '客户',
+    ),
     'module' => 'profile2',
   );
 
   // Exported permission: view any salesman profile.
   $permissions['view any salesman profile'] = array(
     'name' => 'view any salesman profile',
-    'roles' => array(),
+    'roles' => array(
+      0 => '客户',
+    ),
     'module' => 'profile2',
   );
 
@@ -473,7 +494,8 @@ function masterprint_settings_user_default_permissions() {
   $permissions['view own dealer profile'] = array(
     'name' => 'view own dealer profile',
     'roles' => array(
-      0 => '客户的经销商',
+      0 => '客户',
+      1 => '客户的经销商',
     ),
     'module' => 'profile2',
   );
@@ -482,7 +504,8 @@ function masterprint_settings_user_default_permissions() {
   $permissions['view own salesman profile'] = array(
     'name' => 'view own salesman profile',
     'roles' => array(
-      0 => '客户销售人员',
+      0 => '客户',
+      1 => '客户销售人员',
     ),
     'module' => 'profile2',
   );
