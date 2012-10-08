@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function masterprint_client_install() {
+ $weight = db_select('system', 's')
+              ->fields('s', array('weight'))
+              ->condition('name', 'masterprint_client', '=')
+              ->execute()
+              ->fetchField();
+
+  db_update('system')
+    ->fields(array('weight' => $weight +100))
+    ->condition('name', 'masterprint_client', '=')
+    ->execute();
+}

@@ -21,8 +21,19 @@ function masterprint_client_menu() {
  */
 function masterprint_client_permission() {
   return array(
+    //管理客户
     'administer client' =>  array(
-      'title' => t('Administer client'),
+      'title' => t('管理客户'),
+      'restrict access' => TRUE,
+    ),
+    //管理客户销售人员
+    'administer client saler' => array(
+      'title' => t('管理销售人员'),
+      'restrict access' => TRUE,
+    ),
+    //管理客户销售商
+    'administer client supplier' => array(
+      'title' => t('管理销售商'),
       'restrict access' => TRUE,
     ),
   );

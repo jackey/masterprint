@@ -10,6 +10,8 @@ stylesheets[all][] = css/style.css
 stylesheets[all][] = css/colors.css
 stylesheets[print][] = css/print.css
 
+scripts[] = scripts/masterprint.js
+
 regions[header] = Header
 regions[help] = Help
 regions[page_top] = Page top
