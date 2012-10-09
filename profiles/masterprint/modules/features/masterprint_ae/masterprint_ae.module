@@ -1,19 +1,184 @@
 <?php
 
+include_once 'masterprint_ae.features.inc';
+
 /**
  * Implements hook_menu()
  */
 function masterprint_ae_menu() {
   $items = array();
 
+  $items['user/%user/ae'] = array(
+    'title' => 'AE管理',
+    'type' => MENU_LOCAL_TASK,
+    'access arguments' => array('manage ae account'),
+    'page callback' => 'masterprint_ae_load_managed_aes',
+    'page arguments' => array(1),
+  );
+  $items['user/%user/ae/list'] = array(
+    'title' => '我管理的AE',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['user/%user/ae/add'] = array(
+    'title' => '添加AE',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_ae_add_ae_form', 1),
+    'access arguments' => array('manage ae account'),
+  );
   return $items;
 }
 
 /**
- *
+ * Form used for adding/editing an AE
  */
+function masterprint_ae_add_ae_form($form, $form_state, $user) {
+  $form = array();
+
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('用户名'),
+    '#maxlength' => USERNAME_MAX_LENGTH,
+    '#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+    '#required' => TRUE,
+    '#attributes' => array('class' => array('username')),
+    '#default_value' => '',
+  );
+  $form['mail'] = array(
+    '#type' => 'textfield',
+    '#title' => t('E-mail地址'),
+    '#maxlength' => EMAIL_MAX_LENGTH,
+    '#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
+    '#required' => TRUE,
+    '#default_value' => '',
+  );
+
+  $form['pass'] = array(
+    '#type' => 'password_confirm',
+    '#size' => 25,
+    '#description' => t('Provide a password for the new account in both fields.'),
+    '#required' => TRUE,
+  );
+
+  // @TODO: Load all the fields in the profile2 of type AE
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('添加'),
+  );
+  return $form;
+}
+
+/**
+ * Validation handler
+ */
+function masterprint_ae_add_ae_form_validate(&$form, &$form_state) {
+  // Validate username.
+  if (isset($form_state['values']['name'])) {
+    if ($error = user_validate_name($form_state['values']['name'])) {
+      form_set_error('name', $error);
+    }
+    else {
+      $duplicate = (bool) db_select('users')
+        ->fields('users', array('uid'))
+        ->condition('name', db_like($form_state['values']['name']), 'LIKE')
+        ->range(0, 1)
+        ->execute()
+        ->fetchField();
+
+      if ($duplicate) {
+        form_set_error('name', t('The name %name is already taken.', array('%name' => $form_state['values']['name'])));
+      }
+    }
+  }
+
+  // Trim whitespace from mail, to prevent confusing 'e-mail not valid'
+  // warnings often caused by cutting and pasting.
+  $mail = trim($form_state['values']['mail']);
+  form_set_value($form['mail'], $mail, $form_state);
+
+  // Validate email
+  if ($error = user_validate_mail($form_state['values']['mail'])) {
+    form_set_error('mail', $error);
+  }
+  else {
+    $duplicate = (bool) db_select('users')
+      ->fields('users', array('uid'))
+      ->condition('mail', db_like($form_state['values']['mail']), 'LIKE')
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+
+    if ($duplicate) {
+      form_set_error('mail', t('The e-mail address %email is already taken.', array('%email' => $form_state['values']['mail'])));
+    }
+  }
+}
+
+/**
+ * Submission handler
+ */
+function masterprint_ae_add_ae_form_submit(&$form, &$form_state) {
+  global $user;
+  $uid = $user->uid;
+
+  // Get the role id of role 'AE'
+  $ae_role = user_role_load_by_name('AE业务经理');
+  $ae_rid = $ae_role->rid;
+
+  // Build the user object
+  $new_user = array(
+    'name' => $form_state['values']['name'],
+    'pass' => $form_state['values']['pass'],
+    'mail' => $form_state['values']['mail'],
+    'init' => $form_state['values']['mail'],
+    'status' => 1,
+    'access' => REQUEST_TIME,
+    'roles' => array($ae_rid => 'AE业务经理'),
+    'field_created_by' => array(
+      LANGUAGE_NONE => array(
+        array('target_id' => $uid)
+      ),
+    ),
+  );
+
+  $account = user_save(NULL, $new_user);
+
+  // TODO: Send mail?
+}
 
 
 /**
- *
+ * Display a list of all the AEs managed by the current user
  */
+function masterprint_ae_load_managed_aes($user) {
+  // Load all AEs created by the current user
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'user')
+    ->entityCondition('bundle', 'user')
+    ->propertyCondition('status', 1)
+    ->fieldCondition('field_created_by', 'target_id', $user->uid, '=');
+
+  $result = $query->execute();
+  $uids = array_keys($users = $result['user']);
+
+  $output = '';
+  $output .= views_embed_view('ae_listing', 'created_by_user', $user->uid);
+  return $output;
+}
+
+/**
+ * Implementation of hook_permission()
+ */
+function masterprint_ae_permission() {
+  return array(
+    'manage ae accounts' => array(
+      'title' => t('Manage AE accounts'),
+      'description' => t('Manage AE accounts.'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+

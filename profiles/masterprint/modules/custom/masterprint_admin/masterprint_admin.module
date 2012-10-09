@@ -6,17 +6,17 @@
 function masterprint_admin_menu() {
   $items = array();
   $items['admin/my-salers'] = array(
-  	'title' => '我的销售人员',
-  	'description' => '查看我的销售人员',
-  	'page callback' => 'list_saler',
-  	'access callback' => 'user_is_client',
+    'title' => '我的销售人员',
+    'description' => '查看我的销售人员',
+    'page callback' => 'list_saler',
+    'access callback' => 'user_is_client',
   );
 
   $items['admin/my-salee'] = array(
-  	'title' => '我的经销商',
-  	'description' => '查看我的销售人员',
-  	'page callback' => 'list_salee',
-  	'access callback' => 'user_is_client',
+    'title' => '我的经销商',
+    'description' => '查看我的销售人员',
+    'page callback' => 'list_salee',
+    'access callback' => 'user_is_client',
   );
 
   return $items;
@@ -25,25 +25,24 @@ function masterprint_admin_menu() {
 
 
 function user_is_client() {
-	global $user;
-
-	//暂时只允许客户访问这里
-	if (isset($user->roles['6']) || $user->uid == 1) {
-		return TRUE;
-	}
-	else {
-		return FALSE;
-	}
+  global $user;
+  //暂时只允许客户访问这里
+  if (isset($user->roles['6']) || $user->uid == 1) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
 }
 
 function list_saler() {
-	global $user;
-	return views_embed_view('my_sale_staff', 'block');
+  global $user;
+  return views_embed_view('my_sale_staff', 'block');
 }
 
 function list_salee() {
-	global $user;
-	return views_embed_view('my_sale_staff', 'block_1');
+  global $user;
+  return views_embed_view('my_sale_staff', 'block_1');
 }
 
 /**
