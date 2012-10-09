@@ -239,7 +239,7 @@ function masterprint_product_field_default_fields() {
   $fields['node-product_apply-field_product_detail_pdf'] = array(
     'field_config' => array(
       'active' => '1',
-      'cardinality' => '1',
+      'cardinality' => '-1',
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_product_detail_pdf',
@@ -293,7 +293,7 @@ function masterprint_product_field_default_fields() {
       'settings' => array(
         'description_field' => 0,
         'file_directory' => '',
-        'file_extensions' => 'pdf',
+        'file_extensions' => 'pdf ppt xsl xls txt jpg jepg jpeg png',
         'max_filesize' => '',
         'user_register_form' => FALSE,
       ),
@@ -454,11 +454,87 @@ function masterprint_product_field_default_fields() {
     ),
   );
 
+  // Exported field: 'profile2-dealer-field_owned_company'.
+  $fields['profile2-dealer-field_owned_company'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_owned_company',
+      'foreign keys' => array(
+        'node' => array(
+          'columns' => array(
+            'target_id' => 'nid',
+          ),
+          'table' => 'node',
+        ),
+      ),
+      'indexes' => array(
+        'target_id' => array(
+          0 => 'target_id',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'entityreference',
+      'settings' => array(
+        'handler' => 'base',
+        'handler_settings' => array(
+          'behaviors' => array(
+            'views-select-list' => array(
+              'status' => 0,
+            ),
+          ),
+          'sort' => array(
+            'type' => 'none',
+          ),
+          'target_bundles' => array(),
+        ),
+        'profile2_private' => 0,
+        'target_type' => 'user',
+      ),
+      'translatable' => '0',
+      'type' => 'entityreference',
+    ),
+    'field_instance' => array(
+      'bundle' => 'dealer',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'entityreference',
+          'settings' => array(
+            'link' => FALSE,
+          ),
+          'type' => 'entityreference_label',
+          'weight' => 5,
+        ),
+      ),
+      'entity_type' => 'profile2',
+      'field_name' => 'field_owned_company',
+      'label' => '所属公司',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
+        'weight' => '9',
+      ),
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('产品描述PDF');
   t('印刷说明');
   t('您需要多少印刷产品');
+  t('所属公司');
   t('数量');
   t('最小打包数量');
   t('每次打印的最小数量');

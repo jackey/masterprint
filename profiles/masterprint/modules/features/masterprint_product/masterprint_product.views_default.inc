@@ -22,7 +22,7 @@ function masterprint_product_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = '我的客户列表';
+  $handler->display->display_options['title'] = '我的经销商';
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'access user profiles';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -68,6 +68,12 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['style_options']['override'] = 1;
   $handler->display->display_options['style_options']['sticky'] = 0;
   $handler->display->display_options['style_options']['empty_table'] = 0;
+  /* No results behavior: Global: Result summary */
+  $handler->display->display_options['empty']['result']['id'] = 'result';
+  $handler->display->display_options['empty']['result']['table'] = 'views';
+  $handler->display->display_options['empty']['result']['field'] = 'result';
+  $handler->display->display_options['empty']['result']['empty'] = FALSE;
+  $handler->display->display_options['empty']['result']['content'] = '您暂时没有经销商或者销售客户';
   /* Relationship: User: Profile */
   $handler->display->display_options['relationships']['profile']['id'] = 'profile';
   $handler->display->display_options['relationships']['profile']['table'] = 'users';
@@ -251,6 +257,8 @@ function masterprint_product_views_default_views() {
 
   /* Display: Block-我的销售员列表 */
   $handler = $view->new_display('block', 'Block-我的销售员列表', 'block');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = '我的销售员';
   $handler->display->display_options['defaults']['access'] = FALSE;
   $handler->display->display_options['access']['type'] = 'role';
   $handler->display->display_options['access']['role'] = array(
@@ -262,18 +270,35 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['pager']['options']['id'] = '0';
   $handler->display->display_options['pager']['options']['expose']['items_per_page_options_all'] = 0;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: User: Active */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'users';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: User: Roles */
+  $handler->display->display_options['filters']['rid']['id'] = 'rid';
+  $handler->display->display_options['filters']['rid']['table'] = 'users_roles';
+  $handler->display->display_options['filters']['rid']['field'] = 'rid';
+  $handler->display->display_options['filters']['rid']['value'] = array(
+    8 => '8',
+  );
+  $handler->display->display_options['filters']['rid']['reduce_duplicates'] = 0;
 
   /* Display: Block-我的经销商列表 */
   $handler = $view->new_display('block', 'Block-我的经销商列表', 'block_1');
   $translatables['my_sale_staff'] = array(
     t('Master'),
-    t('我的客户列表'),
+    t('我的经销商'),
     t('more'),
     t('Apply'),
     t('Reset'),
     t('Sort by'),
     t('Asc'),
     t('Desc'),
+    t('您暂时没有经销商或者销售客户'),
     t('Profile'),
     t('用户名'),
     t('电话'),
@@ -284,6 +309,7 @@ function masterprint_product_views_default_views() {
     t('编辑'),
     t('user/[uid]/edit/salesman'),
     t('Block-我的销售员列表'),
+    t('我的销售员'),
     t('Items per page'),
     t('- All -'),
     t('Offset'),
