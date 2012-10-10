@@ -72,6 +72,7 @@ function masterprint_install_custom_configure_finished($success, $results, $oper
 
 /**
  * Prepopulate some users
+ * @todo: Are the roles aready in the system when it's invoked?
  */
 function masterprint_profile_create_dummy_users() {
   $users =  array(
@@ -79,24 +80,29 @@ function masterprint_profile_create_dummy_users() {
       array(
         'name' => 'admin_one',
         'pass' => 'admin_one',
+        'mail' => 'admin_one@test.com',
       ),
       array(
         'name' => 'admin_two',
         'pass' => 'admin_two',
+        'mail' => 'admin_two@test.com',
       ),
     ),
     'AE业务经理' => array(
       array(
         'name' => 'ae_one',
         'pass' => 'ae_one',
+        'mail' => 'ae_one@test.com',
       ),
       array(
         'name' => 'ae_two',
         'pass' => 'ae_two',
+          'mail' => 'ae_two@test.com',
       ),
       array(
         'name' => 'ae_three',
         'pass' => 'ae_three',
+        'mail' => 'ae_three@test.com',
       ),
     ),
   );
@@ -108,8 +114,10 @@ function masterprint_profile_create_dummy_users() {
       $edit = array(
         'name' => $user['name'],
         'pass' => $user['pass'],
+        'mail' => $form_state['values']['mail'],
         'status' => 1,
         'language' => 'en',
+        'access' => REQUEST_TIME,
         // Add role to user
         'roles' => array($role->rid => $role->name),
       );

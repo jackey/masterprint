@@ -7,16 +7,16 @@ include_once 'masterprint_ae.features.inc';
  */
 function masterprint_ae_menu() {
   $items = array();
-
   $items['user/%user/ae'] = array(
     'title' => 'AE管理',
     'type' => MENU_LOCAL_TASK,
-    'access arguments' => array('manage ae account'),
+    'access arguments' => array('manage ae accounts'),
     'page callback' => 'masterprint_ae_load_managed_aes',
     'page arguments' => array(1),
   );
   $items['user/%user/ae/list'] = array(
     'title' => '我管理的AE',
+    'access arguments' => array('manage ae accounts'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['user/%user/ae/add'] = array(
@@ -24,7 +24,7 @@ function masterprint_ae_menu() {
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('masterprint_ae_add_ae_form', 1),
-    'access arguments' => array('manage ae account'),
+    'access arguments' => array('manage ae accounts'),
   );
   return $items;
 }
@@ -147,22 +147,10 @@ function masterprint_ae_add_ae_form_submit(&$form, &$form_state) {
   // TODO: Send mail?
 }
 
-
 /**
  * Display a list of all the AEs managed by the current user
  */
 function masterprint_ae_load_managed_aes($user) {
-  // Load all AEs created by the current user
-  $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'user')
-    ->entityCondition('bundle', 'user')
-    ->propertyCondition('status', 1)
-    ->fieldCondition('field_created_by', 'target_id', $user->uid, '=');
-
-  $result = $query->execute();
-  $uids = array_keys($users = $result['user']);
-
   $output = '';
   $output .= views_embed_view('ae_listing', 'created_by_user', $user->uid);
   return $output;
@@ -180,5 +168,3 @@ function masterprint_ae_permission() {
     ),
   );
 }
-
-
