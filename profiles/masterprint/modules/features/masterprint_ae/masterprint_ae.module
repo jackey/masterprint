@@ -32,7 +32,7 @@ function masterprint_ae_menu() {
 /**
  * Form used for adding/editing an AE
  */
-function masterprint_ae_add_ae_form($form, $form_state, $user) {
+function masterprint_ae_add_ae_form($form, &$form_state, $user) {
   $form = array();
 
   $form['name'] = array(
@@ -60,12 +60,20 @@ function masterprint_ae_add_ae_form($form, $form_state, $user) {
     '#required' => TRUE,
   );
 
-  // @TODO: Load all the fields in the profile2 of type AE
+  // Append the profile2 AE fields
+  $form['profile_ae'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('AE资料'),
+  );
+  $profile = profile_create(array('type' => 'ae'));
+  $form_state['profiles']['ae'] = $profile;
+  field_attach_form('profile2', $profile, $form['profile_ae'], $form_state);
 
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('添加'),
+    '#value' => t('保存'),
   );
+
   return $form;
 }
 
@@ -113,6 +121,14 @@ function masterprint_ae_add_ae_form_validate(&$form, &$form_state) {
       form_set_error('mail', t('The e-mail address %email is already taken.', array('%email' => $form_state['values']['mail'])));
     }
   }
+
+  // Validate profile2 fields
+  if (isset($form_state['values']['profile_ae'])) {
+    // @see entity_form_field_validate()
+    $pseudo_entity = (object) $form_state['values']['profile_ae'];
+    $pseudo_entity->type = 'ae';
+    field_attach_form_validate('profile2', $pseudo_entity, $form['profile_ae'], $form_state);
+  }
 }
 
 /**
@@ -145,6 +161,15 @@ function masterprint_ae_add_ae_form_submit(&$form, &$form_state) {
   $account = user_save(NULL, $new_user);
 
   // TODO: Send mail?
+
+  // Save profile2 fields
+  profile2_form_submit_build_profile($form, $form_state);
+  // This is needed as some submit callbacks like user_register_submit() rely on
+  // clean form values.
+  profile2_form_submit_cleanup($form, $form_state);
+  $profile = $form_state['profiles']['ae'];
+  $profile->uid = $account->uid;
+  profile2_save($profile);
 }
 
 /**
