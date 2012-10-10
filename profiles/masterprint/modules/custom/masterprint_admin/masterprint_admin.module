@@ -8,34 +8,35 @@ function masterprint_admin_menu() {
   $items['admin/my-salers'] = array(
     'title' => '我的销售人员',
     'description' => '查看我的销售人员',
-    'page callback' => 'list_saler',
+    'page callback' => 'list_salers',
     'access arguments' => array('administer client saler'),
   );
 
-  $items['admin/my-salee'] = array(
+  $items['admin/my-sealers'] = array(
     'title' => '我的经销商',
     'description' => '查看我的经销商',
-    'page callback' => 'list_salee',
+    'page callback' => 'list_sealers',
     'access arguments' => array('administer client supplier'),
   );
 
   return $items;
 }
 
-function list_saler() {
+function list_salers() {
   $views_name = 'my_sale_staff';
   $display_id = 'block';
 
   if ($view = views_get_view($views_name)) {
     $output = $view->execute_display($display_id, array());
     if (!$view->total_rows) {
-    	return t('抱歉，您暂时没有销售用户'). l('点击添加', 'admin/people/create');
+    	return t('抱歉，您暂时没有销售人员'). l('点击添加', 'admin/people/create');
     }
-    return $output;
+    return $output['content'];
   }
+  return 'error';
 }
 
-function list_salee() {
+function list_sealers() {
   $views_name = 'my_sale_staff';
   $display_id = 'block_1';
 
@@ -44,8 +45,9 @@ function list_salee() {
     if (!$view->total_rows) {
     	return t('抱歉，您暂时没有经销商用户').l('点击添加', 'admin/people/create');
     }
-    return $output;
+    return $output['content'];
   }
+  return 'error';
 }
 
 /**
