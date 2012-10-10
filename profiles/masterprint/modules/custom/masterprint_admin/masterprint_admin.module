@@ -8,41 +8,46 @@ function masterprint_admin_menu() {
   $items['admin/my-salers'] = array(
     'title' => '我的销售人员',
     'description' => '查看我的销售人员',
-    'page callback' => 'list_saler',
-    'access callback' => 'user_is_client',
+    'page callback' => 'list_salers',
+    'access arguments' => array('administer client saler'),
   );
 
-  $items['admin/my-salee'] = array(
+  $items['admin/my-sealers'] = array(
     'title' => '我的经销商',
-    'description' => '查看我的销售人员',
-    'page callback' => 'list_salee',
-    'access callback' => 'user_is_client',
+    'description' => '查看我的经销商',
+    'page callback' => 'list_sealers',
+    'access arguments' => array('administer client supplier'),
   );
 
   return $items;
 }
 
+function list_salers() {
+  $views_name = 'my_sale_staff';
+  $display_id = 'block';
 
-
-function user_is_client() {
-  global $user;
-  //暂时只允许客户访问这里
-  if (isset($user->roles['6']) || $user->uid == 1) {
-    return TRUE;
+  if ($view = views_get_view($views_name)) {
+    $output = $view->execute_display($display_id, array());
+    if (!count($view->result)) {
+    	return t('抱歉，您暂时没有销售人员'). l('点击添加', 'admin/people/create');
+    }
+    return $output['content'];
   }
-  else {
-    return FALSE;
-  }
+  return 'error';
 }
 
-function list_saler() {
-  global $user;
-  return views_embed_view('my_sale_staff', 'block');
-}
+function list_sealers() {
+  $views_name = 'my_sale_staff';
+  $display_id = 'block_1';
 
-function list_salee() {
-  global $user;
-  return views_embed_view('my_sale_staff', 'block_1');
+  if ($view = views_get_view($views_name)) {
+    $output = $view->execute_display($display_id, array());
+    if (!count($view->result)) {
+    	return t('抱歉，您暂时没有经销商用户').l('点击添加', 'admin/people/create');
+    }
+    return $output['content'];
+  }
+  return 'error';
 }
 
 /**
