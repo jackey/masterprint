@@ -28,7 +28,7 @@ function list_salers() {
 
   if ($view = views_get_view($views_name)) {
     $output = $view->execute_display($display_id, array());
-    if (!$view->total_rows) {
+    if (!count($view->result)) {
     	return t('抱歉，您暂时没有销售人员'). l('点击添加', 'admin/people/create');
     }
     return $output['content'];
@@ -42,7 +42,7 @@ function list_sealers() {
 
   if ($view = views_get_view($views_name)) {
     $output = $view->execute_display($display_id, array());
-    if (!$view->total_rows) {
+    if (!count($view->result)) {
     	return t('抱歉，您暂时没有经销商用户').l('点击添加', 'admin/people/create');
     }
     return $output['content'];
