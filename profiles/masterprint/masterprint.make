@@ -47,6 +47,9 @@ projects[views][version] = 3.3
 projects[entity][subdir] = contrib
 projects[entity][version] = 1.0-rc3
 
+projects[force_password_change][subdir] = contrib
+projects[force_password_change][version] = 1.0-rc2
+
 projects[jquery_update][subdir] = contrib
 projects[jquery_update][version] = 2.2
 

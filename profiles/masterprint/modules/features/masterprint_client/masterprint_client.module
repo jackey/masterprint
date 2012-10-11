@@ -1,0 +1,242 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+function masterprint_client_menu() {
+  $items = array();
+  $items['user/%user/client'] = array(
+    'title' => '客户管理',
+    'type' => MENU_LOCAL_TASK,
+    'access arguments' => array('manage client accounts'),
+    'page callback' => 'masterprint_client_load_managed_clients',
+    'page arguments' => array(1),
+  );
+  $items['user/%user/client/list'] = array(
+    'title' => '客户列表',
+    'access arguments' => array('manage client accounts'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['user/%user/client/add'] = array(
+    'title' => '添加客户',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_client_add_client_form', 1),
+    'access arguments' => array('manage client accounts'),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function masterprint_client_permission() {
+  return array(
+    'manage client accounts' => array(
+      'title' => t('Manage client accounts'),
+      'description' => t('Manage client accounts.'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Form used for adding/editing an AE
+ */
+function masterprint_client_add_client_form($form, &$form_state, $user) {
+  $form = array();
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('用户名'),
+    '#maxlength' => USERNAME_MAX_LENGTH,
+    '#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+    '#required' => TRUE,
+    '#attributes' => array('class' => array('username')),
+    '#default_value' => '',
+  );
+  $form['mail'] = array(
+    '#type' => 'textfield',
+    '#title' => t('E-mail地址'),
+    '#maxlength' => EMAIL_MAX_LENGTH,
+    '#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
+    '#required' => TRUE,
+    '#default_value' => '',
+  );
+
+  // Client's password's randomly generated, not specified by creator
+
+  // Append the profile2 AE fields
+  $form['profile_client'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('客户资料'),
+  );
+  $profile = profile_create(array('type' => 'client'));
+  $form_state['profiles']['client'] = $profile;
+  field_attach_form('profile2', $profile, $form['profile_client'], $form_state);
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('提交'),
+  );
+
+  return $form;
+}
+
+/**
+ * Validation handler
+ */
+function masterprint_client_add_client_form_validate(&$form, &$form_state) {
+  // Validate username.
+  if (isset($form_state['values']['name'])) {
+    if ($error = user_validate_name($form_state['values']['name'])) {
+      form_set_error('name', $error);
+    }
+    else {
+      $duplicate = (bool) db_select('users')
+        ->fields('users', array('uid'))
+        ->condition('name', db_like($form_state['values']['name']), 'LIKE')
+        ->range(0, 1)
+        ->execute()
+        ->fetchField();
+
+      if ($duplicate) {
+        form_set_error('name', t('The name %name is already taken.', array('%name' => $form_state['values']['name'])));
+      }
+    }
+  }
+
+  // Trim whitespace from mail, to prevent confusing 'e-mail not valid'
+  // warnings often caused by cutting and pasting.
+  $mail = trim($form_state['values']['mail']);
+  form_set_value($form['mail'], $mail, $form_state);
+
+  // Validate email
+  if ($error = user_validate_mail($form_state['values']['mail'])) {
+    form_set_error('mail', $error);
+  }
+  else {
+    $duplicate = (bool) db_select('users')
+      ->fields('users', array('uid'))
+      ->condition('mail', db_like($form_state['values']['mail']), 'LIKE')
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+
+    if ($duplicate) {
+      form_set_error('mail', t('The e-mail address %email is already taken.', array('%email' => $form_state['values']['mail'])));
+    }
+  }
+
+  // Validate profile2 fields
+  if (isset($form_state['values']['profile_client'])) {
+    // @see entity_form_field_validate()
+    $pseudo_entity = (object) $form_state['values']['profile_client'];
+    $pseudo_entity->type = 'client';
+    field_attach_form_validate('profile2', $pseudo_entity, $form['profile_client'], $form_state);
+  }
+}
+
+/**
+ * Submission handler
+ */
+function masterprint_client_add_client_form_submit(&$form, &$form_state) {
+  global $user;
+  $uid = $user->uid;
+
+  // Get the role id of role 'Client'
+  $role_name = '客户';
+  $role = user_role_load_by_name('客户');
+  $rid = $role->rid;
+
+  // Build the user object
+  $pass = masterprint_client_generate_client_password();
+  $new_user = array(
+    'name' => $form_state['values']['name'],
+    'pass' => $pass,
+    'mail' => $form_state['values']['mail'],
+    'init' => $form_state['values']['mail'],
+    'status' => 1,
+    'access' => REQUEST_TIME,
+    'roles' => array($rid => $role_name),
+    'field_created_by' => array(
+      LANGUAGE_NONE => array(
+        array('target_id' => $uid)
+      ),
+    ),
+  );
+
+  dpm($pass);
+
+  $account = user_save(NULL, $new_user);
+
+  // Save profile2 fields
+  profile2_form_submit_build_profile($form, $form_state);
+  // This is needed as some submit callbacks like user_register_submit() rely on
+  // clean form values.
+  profile2_form_submit_cleanup($form, $form_state);
+  $profile = $form_state['profiles']['client'];
+  $profile->uid = $account->uid;
+  profile2_save($profile);
+
+  // Send email
+  $mail_from = variable_get('system_mail', 'Masterprint <admin@masterprint.com>');
+  $mail_to = $account->mail;
+  $mail_subject = 'Test subject';
+  $login_url = url('user', array('absolute' => true));
+
+  // Don't indent the message, it will break the email format.
+  $mail_message = "
+尊敬的用户，你好：
+欢迎使用Masterprint系统！你的账号已经创建好:
+
+用户名: $account->name
+密　码：$pass
+
+请访问 $login_url 登陆系统。
+(如果你无法直接点击链接，请将链接地址复制到浏览器地址栏后访问。)";
+
+  masterprint_client_send_email($mail_from, $mail_to, $mail_subject, $mail_message);
+}
+
+/**
+ * Display a list of all the AEs managed by the current user
+ */
+function masterprint_client_load_managed_clients($user) {
+  $output = '';
+  $output .= views_embed_view('client_listing', 'created_by_user', $user->uid);
+  return $output;
+}
+
+/**
+ * Generate a random password
+ */
+function masterprint_client_generate_client_password() {
+  $len = mt_rand(6, 8);
+  return user_password($len);
+}
+
+/**
+ * Send a email to the newly created client
+ */
+function masterprint_client_send_email($from, $to, $subject, $message) {
+  $token = microtime();
+  $message = array(
+    'id' =>'masterprint_client_' . $token,
+    'to' => $to,
+    'subject' => $subject,
+    'body' => array($message),
+    'headers' => array(
+      'From' => $from,
+      'Sender' => $from,
+      'Return-Path' => $from,
+    ),
+  );
+  $system = drupal_mail_system('masterprint_client', $token);
+  $message = $system->format($message);
+  if ($system->mail($message)) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
