@@ -1,0 +1,13 @@
+name = Grammar Parser Library
+description = Libraries interface to the Grammar Parser library.
+package = Libraries
+core = 7.x
+
+dependencies[] = libraries (>=2)
+
+; Information added by drupal.org packaging script on 2012-08-31
+version = "7.x-1.0"
+core = "7.x"
+project = "grammar_parser_lib"
+datestamp = "1346376745"
+

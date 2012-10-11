@@ -77,6 +77,10 @@ projects[menu_block][version] = 2.3
 projects[migrate][subdir] = contrib
 projects[migrate][version] = 2.4
 
+projects[grammar_parser_lib][subdir] = contrib
+projects[grammar_parser_lib][version] = 1.0
+
+
 ; Themes
 ; ------------
 
@@ -86,3 +90,8 @@ projects[migrate][version] = 2.4
 libraries[profile_helper][download][type] = git
 libraries[profile_helper][download][url] = git@github.com:kurtzhong/profile_helper.git
 libraries[profile_helper][download][branch] = master
+
+projects[grammar_parser][type] = library
+projects[grammar_parser][download][type] = file
+projects[grammar_parser][download][url] = http://ftp.drupal.org/files/projects/grammar_parser-7.x-1.2.tar.gz
+
