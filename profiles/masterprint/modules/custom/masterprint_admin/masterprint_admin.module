@@ -5,57 +5,5 @@
  */
 function masterprint_admin_menu() {
   $items = array();
-  $items['admin/my-salers'] = array(
-    'title' => '我的销售人员',
-    'description' => '查看我的销售人员',
-    'page callback' => 'list_salers',
-    'access arguments' => array('administer client saler'),
-  );
-
-  $items['admin/my-sealers'] = array(
-    'title' => '我的经销商',
-    'description' => '查看我的经销商',
-    'page callback' => 'list_sealers',
-    'access arguments' => array('administer client supplier'),
-  );
-
   return $items;
 }
-
-function list_salers() {
-  $views_name = 'my_sale_staff';
-  $display_id = 'block';
-
-  if ($view = views_get_view($views_name)) {
-    $output = $view->execute_display($display_id, array());
-    if (!count($view->result)) {
-    	return t('抱歉，您暂时没有销售人员'). l('点击添加', 'admin/people/create');
-    }
-    return $output['content'];
-  }
-  return 'error';
-}
-
-function list_sealers() {
-  $views_name = 'my_sale_staff';
-  $display_id = 'block_1';
-
-  if ($view = views_get_view($views_name)) {
-    $output = $view->execute_display($display_id, array());
-    if (!count($view->result)) {
-    	return t('抱歉，您暂时没有经销商用户').l('点击添加', 'admin/people/create');
-    }
-    return $output['content'];
-  }
-  return 'error';
-}
-
-/**
- *
- */
-
-
-/**
- * Form used to add admin for site.
- */
-

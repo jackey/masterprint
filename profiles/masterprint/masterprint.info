@@ -62,12 +62,11 @@ dependencies[] = profile2
 dependencies[] = migrate
 
 
-; Custom modules
-dependencies[] = masterprint_login
-dependencies[] = masterprint_client
+; Custom modules & features
 dependencies[] = masterprint_admin
 dependencies[] = masterprint_ae
+dependencies[] = masterprint_client
+dependencies[] = masterprint_dealer
+dependencies[] = masterprint_login
 dependencies[] = masterprint_product
-
-; Features
 dependencies[] = masterprint_settings
