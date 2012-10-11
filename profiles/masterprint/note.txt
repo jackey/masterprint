@@ -1,0 +1,6 @@
+Installation for development
+----------------------------
+
+- Drush install the site
+
+    drush si masterprint --account-pass=admin --site-name=Masterprint --db-url=mysql://root:root@localhost/masterprint -y
