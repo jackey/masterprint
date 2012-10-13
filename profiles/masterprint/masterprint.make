@@ -42,7 +42,9 @@ projects[strongarm][subdir] = contrib
 projects[strongarm][version] = 2.0
 
 projects[views][subdir] = contrib
-projects[views][version] = 3.3
+projects[views][download][type] = git
+projects[views][download][url] = http://git.drupal.org/project/views.git
+projects[views][download][revision] = cc9a82a11d393467c0a51e27e5f3937efbf01f5c
 
 projects[entity][subdir] = contrib
 projects[entity][version] = 1.0-rc3
@@ -85,7 +87,7 @@ projects[grammar_parser_lib][version] = 1.0
 ; Libraries
 ; ------------
 libraries[profile_helper][download][type] = git
-libraries[profile_helper][download][url] = git@github.com:kurtzhong/profile_helper.git
+libraries[profile_helper][download][url] = git@github.com:kurtzhong/drupal_profile_helper.git
 libraries[profile_helper][download][branch] = master
 
 projects[grammar_parser][type] = library
