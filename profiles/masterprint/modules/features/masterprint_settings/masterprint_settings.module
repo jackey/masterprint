@@ -5,3 +5,21 @@
 
 // Drupal needs this blank file.
 include_once 'masterprint_settings.features.inc';
+
+/**
+ * Implements hook_menu()
+ */
+function masterprint_settings_menu() {
+  $items = array();
+  $items['admin/config/masterprint'] = array(
+    'title' => 'Masterprint',
+    'description' => 'Settings for Masterprint site.',
+    'position' => 'right',
+    'weight' => 0,
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+  return $items;
+}

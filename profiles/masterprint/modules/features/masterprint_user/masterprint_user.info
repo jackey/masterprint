@@ -1,0 +1,10 @@
+name = masterprint_user
+description = Masterprint User
+core = 7.x
+package = Masterprint
+php = 5.2.4
+dependencies[] = ctools
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:1
+features[variable][] = masterprint_user_password_change_roles

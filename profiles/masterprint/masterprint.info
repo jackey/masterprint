@@ -32,7 +32,6 @@ dependencies[] = field_sql_storage
 dependencies[] = field_ui
 dependencies[] = file
 dependencies[] = filter
-dependencies[] = force_password_change
 dependencies[] = image
 dependencies[] = list
 dependencies[] = logintoboggan
@@ -61,7 +60,6 @@ dependencies[] = menu_block
 dependencies[] = profile2
 dependencies[] = migrate
 
-
 ; Custom modules & features
 dependencies[] = masterprint_admin
 dependencies[] = masterprint_ae
@@ -70,3 +68,4 @@ dependencies[] = masterprint_dealer
 dependencies[] = masterprint_login
 dependencies[] = masterprint_product
 dependencies[] = masterprint_settings
+dependencies[] = masterprint_user

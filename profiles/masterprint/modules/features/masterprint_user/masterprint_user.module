@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+function masterprint_user_menu() {
+  $items = array();
+  $items['admin/config/masterprint/password_change'] = array(
+    'title' => 'Password Change',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_user_password_change_settings'),
+    'access arguments' => array('administer site configuration'),
+    'weight' => 10,
+    'file' => 'masterprint_user.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Check if the user should change password
+ */
+function masterprint_user_check_user_change_password_status($uid) {
+  // An identifier that the user don't need to change password
+  $status = FALSE;
+
+  // Check if the user is in the specified role
+  $user = user_load($uid);
+  $user_roles = !empty($user->roles) ? $user->roles : array();
+
+  $role_settings = variable_get('masterprint_user_password_change_roles', array());
+  $change_roles = !empty($role_settings) ? array_filter($role_settings) : array();
+  $intersection = array_intersect_key($user_roles, $change_roles);
+
+  if (!empty($intersection)) {
+    // Check if the user have changed password
+    $result = db_select('masterprint_user_password_change', 'c')
+      ->fields('c')
+      ->condition('uid', $uid)
+      ->condition('status', 1)
+      ->execute()
+      ->fetchAssoc();
+
+    if (empty($result)) {
+      $status = TRUE;
+    }
+  }
+  return $status;
+}
+
+/**
+ * Implements hook_user_login()
+ */
+function masterprint_user_login(&$edit, $account) {
+
+}
+
+/**
+ * Implements hook_user_update()
+ */
+function masterprint_user_update(&$edit, $account, $category) {
+  // If the password has been changed, log it
+  if ($account->pass != $account->original->pass) {
+    masterprint_user_log_password_change($account->uid);
+  }
+}
+
+/**
+ * Log the user has changed his/her password
+ */
+function masterprint_user_log_password_change($uid) {
+  $record = array(
+    'uid' => $uid,
+    'changed_date' => REQUEST_TIME,
+    'status' => 1,
+  );
+  drupal_write_record('masterprint_user_password_change', $record);
+}
+
+/**
+ * Implements hook_init()
+ */
+function masterprint_user_init() {
+  global $user;
+  $edit_path = 'user/' . $user->uid . '/edit';
+  $need_change = masterprint_user_check_user_change_password_status($user->uid);
+
+  if ($need_change) {
+    if (current_path() != $edit_path) {
+      drupal_goto($edit_path);
+    }
+    drupal_set_message('请修改密码！');
+  }
+}
