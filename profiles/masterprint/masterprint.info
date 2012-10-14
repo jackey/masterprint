@@ -69,4 +69,5 @@ dependencies[] = masterprint_dealer
 dependencies[] = masterprint_product
 dependencies[] = masterprint_salesman
 dependencies[] = masterprint_settings
+dependencies[] = masterprint_stock_keeper
 dependencies[] = masterprint_user

@@ -1,0 +1,11 @@
+name = Masterprint Stock Keeper
+core = 7.x
+package = Features
+php = 5.2.4
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:1
+features[user_permission][] = manage stock_keeper accounts
+features[views_view][] = stock_keeper_listing

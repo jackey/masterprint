@@ -1,0 +1,211 @@
+<?php
+/**
+ * @file
+ * Code for the masterprint_stock_keeper feature.
+ */
+
+include_once 'masterprint_stock_keeper.features.inc';
+
+/**
+ * Implements hook_menu()
+ */
+function masterprint_stock_keeper_menu() {
+  $items = array();
+  $items['user/%user/stock_keeper'] = array(
+    'title' => '仓储管理员管理',
+    'type' => MENU_LOCAL_TASK,
+    'access arguments' => array('manage stock_keeper accounts'),
+    'page callback' => 'masterprint_stock_keeper_load_managed_stock_keepers',
+    'page arguments' => array(1),
+    'weight' => 180,
+  );
+  $items['user/%user/stock_keeper/list'] = array(
+    'title' => '仓储管理员列表',
+    'access arguments' => array('manage stock_keeper accounts'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['user/%user/stock_keeper/add'] = array(
+    'title' => '添加仓储管理员',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_stock_keeper_add_stock_keeper_form', 1),
+    'access arguments' => array('manage stock_keeper accounts'),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function masterprint_stock_keeper_permission() {
+  return array(
+    'manage stock_keeper accounts' => array(
+      'title' => t('Manage stock_keeper accounts'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Form used for adding/editing an AE
+ */
+function masterprint_stock_keeper_add_stock_keeper_form($form, &$form_state, $user) {
+  $form = array();
+
+  $form['account'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('账户信息'),
+  );
+
+  $form['account']['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('用户名'),
+    '#maxlength' => USERNAME_MAX_LENGTH,
+    '#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+    '#required' => TRUE,
+    '#attributes' => array('class' => array('username')),
+    '#default_value' => '',
+  );
+  $form['account']['mail'] = array(
+    '#type' => 'textfield',
+    '#title' => t('E-mail地址'),
+    '#maxlength' => EMAIL_MAX_LENGTH,
+    '#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
+    '#required' => TRUE,
+    '#default_value' => '',
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('提交'),
+  );
+
+  // stock_keeper's password's randomly generated, not specified by creator
+  return $form;
+}
+
+/**
+ * Validation handler
+ */
+function masterprint_stock_keeper_add_stock_keeper_form_validate(&$form, &$form_state) {
+  // Validate username.
+  if (isset($form_state['values']['name'])) {
+    if ($error = user_validate_name($form_state['values']['name'])) {
+      form_set_error('name', $error);
+    }
+    else {
+      $duplicate = (bool) db_select('users')
+        ->fields('users', array('uid'))
+        ->condition('name', db_like($form_state['values']['name']), 'LIKE')
+        ->range(0, 1)
+        ->execute()
+        ->fetchField();
+
+      if ($duplicate) {
+        form_set_error('name', t('The name %name is already taken.', array('%name' => $form_state['values']['name'])));
+      }
+    }
+  }
+
+  // Trim whitespace from mail, to prevent confusing 'e-mail not valid'
+  // warnings often caused by cutting and pasting.
+  $mail = trim($form_state['values']['mail']);
+  form_set_value($form['account']['mail'], $mail, $form_state);
+
+  // Validate email
+  if ($error = user_validate_mail($form_state['values']['mail'])) {
+    form_set_error('mail', $error);
+  }
+  else {
+    $duplicate = (bool) db_select('users')
+      ->fields('users', array('uid'))
+      ->condition('mail', db_like($form_state['values']['mail']), 'LIKE')
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+
+    if ($duplicate) {
+      form_set_error('mail', t('The e-mail address %email is already taken.', array('%email' => $form_state['values']['mail'])));
+    }
+  }
+}
+
+/**
+ * Submission handler
+ */
+function masterprint_stock_keeper_add_stock_keeper_form_submit(&$form, &$form_state) {
+  global $user;
+  $uid = $user->uid;
+
+  // Get the role id of role 'stock_keeper'
+  $role_name = '仓储管理员';
+  $role = user_role_load_by_name($role_name);
+  $rid = $role->rid;
+
+  // Build the user object
+  $pass = masterprint_stock_keeper_generate_stock_keeper_password();
+  $new_user = array(
+    'name' => $form_state['values']['name'],
+    'pass' => $pass,
+    'mail' => $form_state['values']['mail'],
+    'init' => $form_state['values']['mail'],
+    'status' => 1,
+    'access' => REQUEST_TIME,
+    'roles' => array($rid => $role_name),
+    'field_created_by' => array(
+      LANGUAGE_NONE => array(
+        array('target_id' => $uid)
+      ),
+    ),
+  );
+
+  $account = user_save(NULL, $new_user);
+
+
+  // Notify and redirect
+  drupal_set_message(t('仓储管理员添加成功！'));
+  $form_state['redirect'] = 'user/' . $user->uid . '/stock_keeper/list';
+}
+
+/**
+ * Display a list of all the AEs managed by the current user
+ */
+function masterprint_stock_keeper_load_managed_stock_keepers($user) {
+  $output = '';
+  $output .= views_embed_view('stock_keeper_listing', 'created_by_user', $user->uid);
+  return $output;
+}
+
+/**
+ * Generate a random password
+ */
+function masterprint_stock_keeper_generate_stock_keeper_password() {
+  $len = mt_rand(6, 8);
+  return user_password($len);
+}
+
+/**
+ * Send a email to the newly created stock_keeper
+ */
+function masterprint_stock_keeper_send_email($from, $to, $subject, $message) {
+  $token = microtime();
+  $message = array(
+    'id' =>'masterprint_stock_keeper_' . $token,
+    'to' => $to,
+    'subject' => $subject,
+    'body' => array($message),
+    'headers' => array(
+      'From' => $from,
+      'Sender' => $from,
+      'Return-Path' => $from,
+    ),
+  );
+  $system = drupal_mail_system('masterprint_stock_keeper', $token);
+  $message = $system->format($message);
+  if ($system->mail($message)) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
