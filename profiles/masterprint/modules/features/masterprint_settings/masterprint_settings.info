@@ -30,7 +30,6 @@ features[field][] = profile2-admin-field_fullname
 features[field][] = profile2-admin-field_tel
 features[field][] = profile2-ae-field_address
 features[field][] = profile2-ae-field_age
-features[field][] = profile2-ae-field_created_by
 features[field][] = profile2-ae-field_entry_date
 features[field][] = profile2-ae-field_fullname
 features[field][] = profile2-ae-field_gender

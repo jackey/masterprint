@@ -1,5 +1,4 @@
-name = Masterprint Dealer
-description = Masterprint Dealer
+name = Masterprint Salesman
 core = 7.x
 package = Masterprint
 php = 5.2.4
@@ -8,5 +7,5 @@ dependencies[] = features
 dependencies[] = views
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:1
-features[user_permission][] = manage dealer accounts
-features[views_view][] = dealer_listing
+features[user_permission][] = manage salesman accounts
+features[views_view][] = salesman_listing

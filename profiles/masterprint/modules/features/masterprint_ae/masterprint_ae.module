@@ -16,7 +16,7 @@ function masterprint_ae_menu() {
     'weight' => 120,
   );
   $items['user/%user/ae/list'] = array(
-    'title' => '我管理的AE',
+    'title' => 'AE列表',
     'access arguments' => array('manage ae accounts'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
@@ -35,8 +35,11 @@ function masterprint_ae_menu() {
  */
 function masterprint_ae_add_ae_form($form, &$form_state, $user) {
   $form = array();
-
-  $form['name'] = array(
+  $form['account'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('账户信息'),
+  );
+  $form['account']['name'] = array(
     '#type' => 'textfield',
     '#title' => t('用户名'),
     '#maxlength' => USERNAME_MAX_LENGTH,
@@ -45,7 +48,7 @@ function masterprint_ae_add_ae_form($form, &$form_state, $user) {
     '#attributes' => array('class' => array('username')),
     '#default_value' => '',
   );
-  $form['mail'] = array(
+  $form['account']['mail'] = array(
     '#type' => 'textfield',
     '#title' => t('E-mail地址'),
     '#maxlength' => EMAIL_MAX_LENGTH,
@@ -54,7 +57,7 @@ function masterprint_ae_add_ae_form($form, &$form_state, $user) {
     '#default_value' => '',
   );
 
-  $form['pass'] = array(
+  $form['account']['pass'] = array(
     '#type' => 'password_confirm',
     '#size' => 25,
     '#description' => t('Provide a password for the new account in both fields.'),
@@ -64,7 +67,7 @@ function masterprint_ae_add_ae_form($form, &$form_state, $user) {
   // Append the profile2 AE fields
   $form['profile_ae'] = array(
     '#type' => 'fieldset',
-    '#title' => t('AE资料'),
+    '#title' => t('资料信息'),
   );
   $profile = profile_create(array('type' => 'ae'));
   $form_state['profiles']['ae'] = $profile;
@@ -104,7 +107,7 @@ function masterprint_ae_add_ae_form_validate(&$form, &$form_state) {
   // Trim whitespace from mail, to prevent confusing 'e-mail not valid'
   // warnings often caused by cutting and pasting.
   $mail = trim($form_state['values']['mail']);
-  form_set_value($form['mail'], $mail, $form_state);
+  form_set_value($form['account']['mail'], $mail, $form_state);
 
   // Validate email
   if ($error = user_validate_mail($form_state['values']['mail'])) {
@@ -171,6 +174,10 @@ function masterprint_ae_add_ae_form_submit(&$form, &$form_state) {
   $profile = $form_state['profiles']['ae'];
   $profile->uid = $account->uid;
   profile2_save($profile);
+
+  // Notify and redirect
+  drupal_set_message(t('AE添加成功!'));
+  $form_state['redirect'] = 'user/' . $user->uid . '/ae/list';
 }
 
 /**

@@ -1,4 +1,4 @@
-name = masterprint_client
+name = Masterprint Client
 description = Masterprint Client
 core = 7.x
 package = Masterprint

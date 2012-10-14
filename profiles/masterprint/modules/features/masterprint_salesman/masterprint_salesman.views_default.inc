@@ -1,21 +1,21 @@
 <?php
 /**
  * @file
- * masterprint_dealer.views_default.inc
+ * masterprint_salesman.views_default.inc
  */
 
 /**
  * Implements hook_views_default_views().
  */
-function masterprint_dealer_views_default_views() {
+function masterprint_salesman_views_default_views() {
   $export = array();
 
   $view = new view();
-  $view->name = 'dealer_listing';
-  $view->description = 'AE listing';
+  $view->name = 'salesman_listing';
+  $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'users';
-  $view->human_name = 'dealer_listing';
+  $view->human_name = 'salesman_listing';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
@@ -38,21 +38,24 @@ function masterprint_dealer_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = '您尚未创建任何客户经销商。';
+  $handler->display->display_options['empty']['area']['content'] = '您尚未创建任何客户销售人员。';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
   /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'users';
   $handler->display->display_options['fields']['name_1']['field'] = 'name';
+  $handler->display->display_options['fields']['name_1']['label'] = '账户名';
   /* 字段: 用户: E-mail */
   $handler->display->display_options['fields']['mail']['id'] = 'mail';
   $handler->display->display_options['fields']['mail']['table'] = 'users';
   $handler->display->display_options['fields']['mail']['field'] = 'mail';
+  $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
   /* 字段: 用户: Created date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'users';
   $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['date_format'] = 'time ago';
+  $handler->display->display_options['fields']['created']['label'] = '创建于';
+  $handler->display->display_options['fields']['created']['date_format'] = 'short';
   /* Contextual filter: 用户: 创建人 (field_created_by) */
   $handler->display->display_options['arguments']['field_created_by_target_id']['id'] = 'field_created_by_target_id';
   $handler->display->display_options['arguments']['field_created_by_target_id']['table'] = 'field_data_field_created_by';
@@ -75,13 +78,13 @@ function masterprint_dealer_views_default_views() {
   $handler->display->display_options['filters']['rid']['table'] = 'users_roles';
   $handler->display->display_options['filters']['rid']['field'] = 'rid';
   $handler->display->display_options['filters']['rid']['value'] = array(
-    7 => '7',
+    8 => '8',
   );
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'created_by_user');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $translatables['dealer_listing'] = array(
+  $translatables['salesman_listing'] = array(
     t('Master'),
     t('more'),
     t('Apply'),
@@ -89,14 +92,14 @@ function masterprint_dealer_views_default_views() {
     t('Sort by'),
     t('Asc'),
     t('Desc'),
-    t('您尚未创建任何客户经销商。'),
-    t('名称'),
-    t('E-mail'),
-    t('Created date'),
+    t('您尚未创建任何客户销售人员。'),
+    t('账户名'),
+    t('账户邮箱'),
+    t('创建于'),
     t('全部'),
     t('Block'),
   );
-  $export['dealer_listing'] = $view;
+  $export['salesman_listing'] = $view;
 
   return $export;
 }

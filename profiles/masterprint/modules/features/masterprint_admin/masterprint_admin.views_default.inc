@@ -56,7 +56,7 @@ function masterprint_admin_views_default_views() {
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['label'] = '创建于';
   $handler->display->display_options['fields']['created']['date_format'] = 'short';
-  /* Contextual filter: 字段: 创建人 (field_created_by) */
+  /* Contextual filter: 用户: 创建人 (field_created_by) */
   $handler->display->display_options['arguments']['field_created_by_target_id']['id'] = 'field_created_by_target_id';
   $handler->display->display_options['arguments']['field_created_by_target_id']['table'] = 'field_data_field_created_by';
   $handler->display->display_options['arguments']['field_created_by_target_id']['field'] = 'field_created_by_target_id';
