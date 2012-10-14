@@ -44,16 +44,19 @@ function masterprint_ae_views_default_views() {
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'users';
   $handler->display->display_options['fields']['name_1']['field'] = 'name';
+  $handler->display->display_options['fields']['name_1']['label'] = '账户名';
   /* 字段: 用户: E-mail */
   $handler->display->display_options['fields']['mail']['id'] = 'mail';
   $handler->display->display_options['fields']['mail']['table'] = 'users';
   $handler->display->display_options['fields']['mail']['field'] = 'mail';
+  $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
   /* 字段: 用户: Created date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'users';
   $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['date_format'] = 'time ago';
-  /* Contextual filter: 字段: 创建人 (field_created_by) */
+  $handler->display->display_options['fields']['created']['label'] = '创建于';
+  $handler->display->display_options['fields']['created']['date_format'] = 'short';
+  /* Contextual filter: 用户: 创建人 (field_created_by) */
   $handler->display->display_options['arguments']['field_created_by_target_id']['id'] = 'field_created_by_target_id';
   $handler->display->display_options['arguments']['field_created_by_target_id']['table'] = 'field_data_field_created_by';
   $handler->display->display_options['arguments']['field_created_by_target_id']['field'] = 'field_created_by_target_id';
@@ -90,9 +93,9 @@ function masterprint_ae_views_default_views() {
     t('Asc'),
     t('Desc'),
     t('您尚未创建任何AE。'),
-    t('名称'),
-    t('E-mail'),
-    t('Created date'),
+    t('账户名'),
+    t('账户邮箱'),
+    t('创建于'),
     t('全部'),
     t('Block'),
   );
