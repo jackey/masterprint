@@ -310,8 +310,8 @@ files[] = tests/views_view.test
 files[] = tests/views_ui.test
 
 
-; Information added by drush on 2012-10-13
+; Information added by drush on 2012-10-14
 version = "cc9a82a11d393467c0a51e27e5f3937efbf01f5c"
 project = "views"
-datestamp = "1350116737"
+datestamp = "1350216379"
 

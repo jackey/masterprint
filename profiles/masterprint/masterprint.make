@@ -82,7 +82,11 @@ projects[grammar_parser_lib][version] = 1.0
 
 ; Themes
 ; ------------
+projects[rubik][type] = theme
+projects[rubik][type] = 4.0-beta8
 
+projects[tao][type] = theme
+projects[tao][type] = 3.0-beta4
 
 ; Libraries
 ; ------------
