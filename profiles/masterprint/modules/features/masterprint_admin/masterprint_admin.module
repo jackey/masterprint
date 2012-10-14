@@ -1,0 +1,251 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+function masterprint_admin_menu() {
+  $items = array();
+  $items['user/%user/admin'] = array(
+    'title' => '管理员管理',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'masterprint_admin_access',
+    'access arguments' => array(1),
+    'page callback' => 'masterprint_admin_load_managed_admin',
+    'page arguments' => array(1),
+  );
+  $items['user/%user/admin/list'] = array(
+    'title' => '管理员列表',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => '-10',
+  );
+  $items['user/%user/admin/add'] = array(
+    'title' => '添加管理员',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'masterprint_admin_access',
+    'access arguments' => array(1),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_admin_add_admin_form', 1),
+  );
+  return $items;
+}
+
+/**
+ * Access callback
+ */
+function masterprint_admin_access($user) {
+  // @todo We have to limit the admin operation to the super admin user only.
+//   if (!empty($user->uid) && $user->name == 'admin') {
+//     return true;
+//   }
+  return true;
+}
+
+/**
+ * Display a list of all the AEs managed by the current user
+ */
+function masterprint_admin_load_managed_admin($user) {
+  $output = '';
+  $output .= views_embed_view('admin_listing', 'created_by_user', $user->uid);
+  return $output;
+}
+
+/**
+ * Form used for adding/editing an AE
+ */
+function masterprint_admin_add_admin_form($form, &$form_state, $user) {
+  $form = array();
+  // Append the profile2 AE fields
+  $form['account'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('账户信息'),
+  );
+  $form['account']['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('用户名'),
+    '#maxlength' => USERNAME_MAX_LENGTH,
+    '#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+    '#required' => TRUE,
+    '#attributes' => array('class' => array('username')),
+    '#default_value' => '',
+  );
+  $form['account']['mail'] = array(
+    '#type' => 'textfield',
+    '#title' => t('E-mail地址'),
+    '#maxlength' => EMAIL_MAX_LENGTH,
+    '#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
+    '#required' => TRUE,
+    '#default_value' => '',
+  );
+
+  // @todo: admin's password is random generated or specified?
+
+  // Append the profile2 'admin' fields
+  $form['profile_admin'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('资料信息'),
+  );
+  $profile = profile_create(array('type' => 'admin'));
+  $form_state['profiles']['admin'] = $profile;
+  field_attach_form('profile2', $profile, $form['profile_admin'], $form_state);
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('提交'),
+  );
+
+  return $form;
+}
+
+/**
+ * Validation handler
+ */
+function masterprint_admin_add_admin_form_validate(&$form, &$form_state) {
+  // Validate username.
+  if (isset($form_state['values']['name'])) {
+    if ($error = user_validate_name($form_state['values']['name'])) {
+      form_set_error('name', $error);
+    }
+    else {
+      $duplicate = (bool) db_select('users')
+        ->fields('users', array('uid'))
+        ->condition('name', db_like($form_state['values']['name']), 'LIKE')
+        ->range(0, 1)
+        ->execute()
+        ->fetchField();
+
+      if ($duplicate) {
+        form_set_error('name', t('The name %name is already taken.', array('%name' => $form_state['values']['name'])));
+      }
+    }
+  }
+
+  // Trim whitespace from mail, to prevent confusing 'e-mail not valid'
+  // warnings often caused by cutting and pasting.
+  $mail = trim($form_state['values']['mail']);
+  form_set_value($form['account']['mail'], $mail, $form_state);
+
+  // Validate email
+  if ($error = user_validate_mail($form_state['values']['mail'])) {
+    form_set_error('mail', $error);
+  }
+  else {
+    $duplicate = (bool) db_select('users')
+      ->fields('users', array('uid'))
+      ->condition('mail', db_like($form_state['values']['mail']), 'LIKE')
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+
+    if ($duplicate) {
+      form_set_error('mail', t('The e-mail address %email is already taken.', array('%email' => $form_state['values']['mail'])));
+    }
+  }
+
+  // Validate profile2 fields
+  if (isset($form_state['values']['profile_admin'])) {
+    // @see entity_form_field_validate()
+    $pseudo_entity = (object) $form_state['values']['profile_admin'];
+    $pseudo_entity->type = 'admin';
+    field_attach_form_validate('profile2', $pseudo_entity, $form['profile_admin'], $form_state);
+  }
+}
+
+/**
+ * Submission handler
+ */
+function masterprint_admin_add_admin_form_submit(&$form, &$form_state) {
+  global $user;
+  $uid = $user->uid;
+
+  // Get the role id of role 'Client'
+  $role_name = '管理员';
+  $role = user_role_load_by_name($role_name);
+  $rid = $role->rid;
+
+  // Build the user object
+  $pass = masterprint_admin_generate_admin_password();
+  $new_user = array(
+    'name' => $form_state['values']['name'],
+    'pass' => $pass,
+    'mail' => $form_state['values']['mail'],
+    'init' => $form_state['values']['mail'],
+    'status' => 1,
+    'access' => REQUEST_TIME,
+    'roles' => array($rid => $role_name),
+    'field_created_by' => array(
+      LANGUAGE_NONE => array(
+        array('target_id' => $uid)
+      ),
+    ),
+  );
+
+  $account = user_save(NULL, $new_user);
+
+  // Save profile2 fields
+  profile2_form_submit_build_profile($form, $form_state);
+  // This is needed as some submit callbacks like user_register_submit() rely on
+  // clean form values.
+  profile2_form_submit_cleanup($form, $form_state);
+  $profile = $form_state['profiles']['admin'];
+  $profile->uid = $account->uid;
+  profile2_save($profile);
+
+  // Send email
+  $mail_from = variable_get('system_mail', 'Masterprint <admin@masterprint.com>');
+  $mail_to = $account->mail;
+  $mail_subject = 'Test subject';
+  $login_url = url('user', array('absolute' => true));
+
+  // Don't indent the message, it will break the email format.
+  $mail_message = "
+尊敬的用户，你好：
+欢迎使用Masterprint系统！你的账号已经创建好：
+
+用户名： $account->name
+邮箱：$account->mail
+密　码：$pass
+
+请访问 $login_url 登陆系统。
+(如果你无法直接点击链接，请将链接地址复制到浏览器地址栏后访问。)";
+
+  masterprint_admin_send_email($mail_from, $mail_to, $mail_subject, $mail_message);
+
+  drupal_set_message(t('成功添加管理员！'));
+  $form_state['redirect'] = 'user/' . $user->uid . '/admin/list';
+}
+
+/**
+ * Generate a random password
+ */
+function masterprint_admin_generate_admin_password() {
+  $len = mt_rand(6, 8);
+  return user_password($len);
+}
+
+/**
+ * Send a email to the newly created client
+ */
+function masterprint_admin_send_email($from, $to, $subject, $message) {
+  $token = microtime();
+  $message = array(
+    'id' =>'masterprint_admin_' . $token,
+    'to' => $to,
+    'subject' => $subject,
+    'body' => array($message),
+    'headers' => array(
+      'From' => $from,
+      'Sender' => $from,
+      'Return-Path' => $from,
+    ),
+  );
+  $system = drupal_mail_system('masterprint_admin', $token);
+  $message = $system->format($message);
+  if ($system->mail($message)) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+

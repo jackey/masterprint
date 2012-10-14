@@ -1,9 +1,0 @@
-<?php
-
-/**
- * Implements hook_menu()
- */
-function masterprint_admin_menu() {
-  $items = array();
-  return $items;
-}

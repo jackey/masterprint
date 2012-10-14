@@ -78,14 +78,9 @@ function masterprint_profile_create_dummy_users() {
   $users =  array(
     '管理员' => array(
       array(
-        'name' => 'admin_one',
-        'pass' => 'admin_one',
-        'mail' => 'admin_one@test.com',
-      ),
-      array(
-        'name' => 'admin_two',
-        'pass' => 'admin_two',
-        'mail' => 'admin_two@test.com',
+        'name' => 'admin',
+        'pass' => 'password',
+        'mail' => 'admin_1@test.com',
       ),
     ),
     'AE业务经理' => array(
