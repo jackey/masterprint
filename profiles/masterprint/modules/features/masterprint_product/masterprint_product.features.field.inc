@@ -10,8 +10,8 @@
 function masterprint_product_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'node-product_apply-body'.
-  $fields['node-product_apply-body'] = array(
+  // Exported field: 'node-product-body'.
+  $fields['node-product-body'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
@@ -42,7 +42,7 @@ function masterprint_product_field_default_fields() {
       'type' => 'text_with_summary',
     ),
     'field_instance' => array(
-      'bundle' => 'product_apply',
+      'bundle' => 'product',
       'default_value' => NULL,
       'deleted' => '0',
       'description' => '请您说明印刷说明，如:xxx',
@@ -81,19 +81,19 @@ function masterprint_product_field_default_fields() {
           'summary_rows' => 5,
         ),
         'type' => 'text_textarea_with_summary',
-        'weight' => '-4',
+        'weight' => '1',
       ),
     ),
   );
 
-  // Exported field: 'node-product_apply-field_apply_user'.
-  $fields['node-product_apply-field_apply_user'] = array(
+  // Exported field: 'node-product-field_product_applied_by'.
+  $fields['node-product-field_product_applied_by'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_apply_user',
+      'field_name' => 'field_product_applied_by',
       'foreign keys' => array(
         'node' => array(
           'columns' => array(
@@ -129,7 +129,7 @@ function masterprint_product_field_default_fields() {
       'type' => 'entityreference',
     ),
     'field_instance' => array(
-      'bundle' => 'product_apply',
+      'bundle' => 'product',
       'default_value' => NULL,
       'deleted' => '0',
       'description' => '',
@@ -141,7 +141,7 @@ function masterprint_product_field_default_fields() {
             'link' => FALSE,
           ),
           'type' => 'entityreference_label',
-          'weight' => 1,
+          'weight' => 9,
         ),
         'teaser' => array(
           'label' => 'above',
@@ -151,9 +151,9 @@ function masterprint_product_field_default_fields() {
         ),
       ),
       'entity_type' => 'node',
-      'field_name' => 'field_apply_user',
+      'field_name' => 'field_product_applied_by',
       'label' => '申请人',
-      'required' => 1,
+      'required' => 0,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
@@ -166,19 +166,19 @@ function masterprint_product_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'entityreference_autocomplete',
-        'weight' => '-3',
+        'weight' => '8',
       ),
     ),
   );
 
-  // Exported field: 'node-product_apply-field_package_num'.
-  $fields['node-product_apply-field_package_num'] = array(
+  // Exported field: 'node-product-field_product_count'.
+  $fields['node-product-field_product_count'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_package_num',
+      'field_name' => 'field_product_count',
       'foreign keys' => array(),
       'indexes' => array(),
       'locked' => '0',
@@ -190,10 +190,10 @@ function masterprint_product_field_default_fields() {
       'type' => 'number_integer',
     ),
     'field_instance' => array(
-      'bundle' => 'product_apply',
+      'bundle' => 'product',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => '每次打印的最小数量',
+      'description' => '',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -205,7 +205,7 @@ function masterprint_product_field_default_fields() {
             'thousand_separator' => ' ',
           ),
           'type' => 'number_integer',
-          'weight' => 3,
+          'weight' => 7,
         ),
         'teaser' => array(
           'label' => 'above',
@@ -215,14 +215,14 @@ function masterprint_product_field_default_fields() {
         ),
       ),
       'entity_type' => 'node',
-      'field_name' => 'field_package_num',
-      'label' => '最小打包数量',
+      'field_name' => 'field_product_count',
+      'label' => '数量',
       'required' => 0,
       'settings' => array(
         'max' => '',
         'min' => '',
         'prefix' => '',
-        'suffix' => '份',
+        'suffix' => '',
         'user_register_form' => FALSE,
       ),
       'widget' => array(
@@ -230,13 +230,13 @@ function masterprint_product_field_default_fields() {
         'module' => 'number',
         'settings' => array(),
         'type' => 'number',
-        'weight' => '-1',
+        'weight' => '5',
       ),
     ),
   );
 
-  // Exported field: 'node-product_apply-field_product_detail_pdf'.
-  $fields['node-product_apply-field_product_detail_pdf'] = array(
+  // Exported field: 'node-product-field_product_detail_pdf'.
+  $fields['node-product-field_product_detail_pdf'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '-1',
@@ -268,7 +268,7 @@ function masterprint_product_field_default_fields() {
       'type' => 'file',
     ),
     'field_instance' => array(
-      'bundle' => 'product_apply',
+      'bundle' => 'product',
       'deleted' => '0',
       'description' => '',
       'display' => array(
@@ -304,13 +304,141 @@ function masterprint_product_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'file_generic',
-        'weight' => '1',
+        'weight' => '3',
       ),
     ),
   );
 
-  // Exported field: 'node-product_apply-field_product_thumbnail'.
-  $fields['node-product_apply-field_product_thumbnail'] = array(
+  // Exported field: 'node-product-field_product_min_pack_num'.
+  $fields['node-product-field_product_min_pack_num'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_product_min_pack_num',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'locked' => '0',
+      'module' => 'number',
+      'settings' => array(
+        'profile2_private' => FALSE,
+      ),
+      'translatable' => '0',
+      'type' => 'number_integer',
+    ),
+    'field_instance' => array(
+      'bundle' => 'product',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'number',
+          'settings' => array(
+            'decimal_separator' => '.',
+            'prefix_suffix' => TRUE,
+            'scale' => 0,
+            'thousand_separator' => ' ',
+          ),
+          'type' => 'number_integer',
+          'weight' => 8,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_product_min_pack_num',
+      'label' => '最小打包数量',
+      'required' => 0,
+      'settings' => array(
+        'max' => '',
+        'min' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'number',
+        'settings' => array(),
+        'type' => 'number',
+        'weight' => '6',
+      ),
+    ),
+  );
+
+  // Exported field: 'node-product-field_product_serial_number'.
+  $fields['node-product-field_product_serial_number'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_product_serial_number',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'locked' => '0',
+      'module' => 'number',
+      'settings' => array(
+        'profile2_private' => FALSE,
+      ),
+      'translatable' => '0',
+      'type' => 'number_integer',
+    ),
+    'field_instance' => array(
+      'bundle' => 'product',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'number',
+          'settings' => array(
+            'decimal_separator' => '.',
+            'prefix_suffix' => TRUE,
+            'scale' => 0,
+            'thousand_separator' => ' ',
+          ),
+          'type' => 'number_integer',
+          'weight' => 6,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_product_serial_number',
+      'label' => '产品流水号',
+      'required' => 0,
+      'settings' => array(
+        'max' => '',
+        'min' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'number',
+        'settings' => array(),
+        'type' => 'number',
+        'weight' => '4',
+      ),
+    ),
+  );
+
+  // Exported field: 'node-product-field_product_thumbnail'.
+  $fields['node-product-field_product_thumbnail'] = array(
     'field_config' => array(
       'active' => '1',
       'cardinality' => '1',
@@ -341,7 +469,7 @@ function masterprint_product_field_default_fields() {
       'type' => 'image',
     ),
     'field_instance' => array(
-      'bundle' => 'product_apply',
+      'bundle' => 'product',
       'deleted' => '0',
       'description' => '',
       'display' => array(
@@ -385,71 +513,7 @@ function masterprint_product_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'image_image',
-        'weight' => '0',
-      ),
-    ),
-  );
-
-  // Exported field: 'node-product_apply-field_product_total'.
-  $fields['node-product_apply-field_product_total'] = array(
-    'field_config' => array(
-      'active' => '1',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'entity_types' => array(),
-      'field_name' => 'field_product_total',
-      'foreign keys' => array(),
-      'indexes' => array(),
-      'locked' => '0',
-      'module' => 'number',
-      'settings' => array(
-        'profile2_private' => FALSE,
-      ),
-      'translatable' => '0',
-      'type' => 'number_integer',
-    ),
-    'field_instance' => array(
-      'bundle' => 'product_apply',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '您需要多少印刷产品',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'number',
-          'settings' => array(
-            'decimal_separator' => '.',
-            'prefix_suffix' => TRUE,
-            'scale' => 0,
-            'thousand_separator' => ' ',
-          ),
-          'type' => 'number_integer',
-          'weight' => 2,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'field_product_total',
-      'label' => '数量',
-      'required' => 0,
-      'settings' => array(
-        'max' => '',
-        'min' => '',
-        'prefix' => '',
-        'suffix' => '份',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 0,
-        'module' => 'number',
-        'settings' => array(),
-        'type' => 'number',
-        'weight' => '-2',
+        'weight' => '2',
       ),
     ),
   );
@@ -532,12 +596,11 @@ function masterprint_product_field_default_fields() {
   // Translatables
   // Included for use with string extractors like potx.
   t('产品描述PDF');
+  t('产品流水号');
   t('印刷说明');
-  t('您需要多少印刷产品');
   t('所属公司');
   t('数量');
   t('最小打包数量');
-  t('每次打印的最小数量');
   t('申请人');
   t('缩略图');
   t('请您说明印刷说明，如:xxx');

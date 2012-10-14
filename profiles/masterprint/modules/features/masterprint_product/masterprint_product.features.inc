@@ -26,7 +26,7 @@ function masterprint_product_views_api() {
  */
 function masterprint_product_node_info() {
   $items = array(
-    'product_apply' => array(
+    'product' => array(
       'name' => t('印刷产品'),
       'base' => 'node_content',
       'description' => '',
