@@ -204,7 +204,7 @@ function masterprint_admin_add_admin_form_submit(&$form, &$form_state) {
 尊敬的用户，你好：
 欢迎使用Masterprint系统！你的账号已经创建好：
 
-用户名： $account->name
+用户名：$account->name
 邮  箱：$account->mail
 密　码：$pass
 

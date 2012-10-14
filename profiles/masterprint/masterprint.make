@@ -55,6 +55,9 @@ projects[jquery_update][version] = 2.2
 projects[libraries][subdir] = contrib
 projects[libraries][version] = 2.0
 
+projects[print][subdir] = contrib
+projects[print][version] = 1.2
+
 projects[profile2][subdir] = contrib
 projects[profile2][version] = 1.2
 
