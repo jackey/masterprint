@@ -1,5 +1,7 @@
 <?php
 
+include_once 'masterprint_dealer.features.inc';
+
 /**
  * Implements hook_menu()
  */
@@ -46,7 +48,12 @@ function masterprint_dealer_permission() {
  */
 function masterprint_dealer_add_client_form($form, &$form_state, $user) {
   $form = array();
-  $form['name'] = array(
+
+  $form['account'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('客户经销商资料'),
+  );
+  $form['account']['name'] = array(
     '#type' => 'textfield',
     '#title' => t('用户名'),
     '#maxlength' => USERNAME_MAX_LENGTH,
@@ -55,7 +62,7 @@ function masterprint_dealer_add_client_form($form, &$form_state, $user) {
     '#attributes' => array('class' => array('username')),
     '#default_value' => '',
   );
-  $form['mail'] = array(
+  $form['account']['mail'] = array(
     '#type' => 'textfield',
     '#title' => t('E-mail地址'),
     '#maxlength' => EMAIL_MAX_LENGTH,
@@ -66,7 +73,7 @@ function masterprint_dealer_add_client_form($form, &$form_state, $user) {
 
   // Client's password's randomly generated, not specified by creator
 
-  // Append the profile2 AE fields
+  // Append the profile2  fields
   $form['profile_dealer'] = array(
     '#type' => 'fieldset',
     '#title' => t('客户经销商资料'),
@@ -109,7 +116,7 @@ function masterprint_dealer_add_client_form_validate(&$form, &$form_state) {
   // Trim whitespace from mail, to prevent confusing 'e-mail not valid'
   // warnings often caused by cutting and pasting.
   $mail = trim($form_state['values']['mail']);
-  form_set_value($form['mail'], $mail, $form_state);
+  form_set_value($form['account']['mail'], $mail, $form_state);
 
   // Validate email
   if ($error = user_validate_mail($form_state['values']['mail'])) {
@@ -145,8 +152,8 @@ function masterprint_dealer_add_client_form_submit(&$form, &$form_state) {
   $uid = $user->uid;
 
   // Get the role id of role 'Client'
-  $role_name = '客户';
-  $role = user_role_load_by_name('客户');
+  $role_name = '客户的经销商';
+  $role = user_role_load_by_name($role_name);
   $rid = $role->rid;
 
   // Build the user object
@@ -165,8 +172,6 @@ function masterprint_dealer_add_client_form_submit(&$form, &$form_state) {
       ),
     ),
   );
-
-  dpm($pass);
 
   $account = user_save(NULL, $new_user);
 
@@ -197,6 +202,10 @@ function masterprint_dealer_add_client_form_submit(&$form, &$form_state) {
 (如果你无法直接点击链接，请将链接地址复制到浏览器地址栏后访问。)";
 
   masterprint_dealer_send_email($mail_from, $mail_to, $mail_subject, $mail_message);
+
+  // Notify and redirect
+  drupal_set_message(t('客户经销商添加成功！'));
+  $form_state['redirect'] = 'user/' . $user->uid . '/dealer/list';
 }
 
 /**

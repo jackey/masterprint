@@ -1,5 +1,7 @@
 <?php
 
+include_once 'masterprint_client.features.inc';
+
 /**
  * Implements hook_menu()
  */

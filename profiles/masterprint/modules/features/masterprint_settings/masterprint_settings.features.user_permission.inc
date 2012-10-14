@@ -27,7 +27,13 @@ function masterprint_settings_user_default_permissions() {
   // Exported permission: access content.
   $permissions['access content'] = array(
     'name' => 'access content',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'AE业务经理',
+      1 => 'administrator',
+      2 => 'authenticated user',
+      3 => '仓储管理员',
+      4 => '管理员',
+    ),
     'module' => 'node',
   );
 
@@ -63,8 +69,8 @@ function masterprint_settings_user_default_permissions() {
   $permissions['access user profiles'] = array(
     'name' => 'access user profiles',
     'roles' => array(
-      0 => '客户',
-      1 => '客户销售人员',
+      0 => 'administrator',
+      1 => '管理员',
     ),
     'module' => 'user',
   );
