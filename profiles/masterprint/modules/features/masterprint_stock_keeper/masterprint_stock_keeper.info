@@ -1,6 +1,6 @@
 name = Masterprint Stock Keeper
 core = 7.x
-package = Features
+package = Masterprint
 php = 5.2.4
 dependencies[] = ctools
 dependencies[] = features

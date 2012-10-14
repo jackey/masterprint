@@ -1,4 +1,4 @@
-name = masterprint_admin
+name = Masterprint Admin
 description = Masterprint Admin
 core = 7.x
 package = Masterprint
