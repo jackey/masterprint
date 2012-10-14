@@ -12,6 +12,7 @@ function masterprint_admin_menu() {
     'access arguments' => array(1),
     'page callback' => 'masterprint_admin_load_managed_admin',
     'page arguments' => array(1),
+    'weight' => '100',
   );
   $items['user/%user/admin/list'] = array(
     'title' => '管理员列表',
@@ -202,7 +203,7 @@ function masterprint_admin_add_admin_form_submit(&$form, &$form_state) {
 欢迎使用Masterprint系统！你的账号已经创建好：
 
 用户名： $account->name
-邮箱：$account->mail
+邮  箱：$account->mail
 密　码：$pass
 
 请访问 $login_url 登陆系统。
@@ -247,5 +248,3 @@ function masterprint_admin_send_email($from, $to, $subject, $message) {
     return FALSE;
   }
 }
-
-

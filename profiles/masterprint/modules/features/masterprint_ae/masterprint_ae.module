@@ -13,6 +13,7 @@ function masterprint_ae_menu() {
     'access arguments' => array('manage ae accounts'),
     'page callback' => 'masterprint_ae_load_managed_aes',
     'page arguments' => array(1),
+    'weight' => 120,
   );
   $items['user/%user/ae/list'] = array(
     'title' => '我管理的AE',

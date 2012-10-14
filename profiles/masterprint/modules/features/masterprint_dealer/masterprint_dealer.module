@@ -11,6 +11,7 @@ function masterprint_dealer_menu() {
     'access arguments' => array('manage client accounts'),
     'page callback' => 'masterprint_dealer_load_managed_clients',
     'page arguments' => array(1),
+    'weight' => 160,
   );
   $items['user/%user/dealer/list'] = array(
     'title' => '客户经销商列表',

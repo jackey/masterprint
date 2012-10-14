@@ -44,9 +44,7 @@ function masterprint_settings_user_default_permissions() {
   // Exported permission: access devel information.
   $permissions['access devel information'] = array(
     'name' => 'access devel information',
-    'roles' => array(
-      0 => 'authenticated user',
-    ),
+    'roles' => array(),
     'module' => 'devel',
   );
 
