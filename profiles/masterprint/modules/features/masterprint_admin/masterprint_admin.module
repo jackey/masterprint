@@ -40,7 +40,7 @@ function masterprint_admin_access($user) {
   if (!empty($user->uid) && $user->name == 'admin') {
     return true;
   }
-  return true;
+  return false;
 }
 
 /**
