@@ -213,24 +213,27 @@ function masterprint_dealer_add_client_form_submit(&$form, &$form_state) {
  */
 function masterprint_dealer_load_managed_dealers($user) {
   $output = '';
-
-  $role_admin = user_role_load_by_name('管理员');
-  $role_ae    = user_role_load_by_name('AE业务经理');
+  $allowed_roles = array(
+    'administrator',
+    '管理员',
+    'AE业务经理',
+  );
 
   $allowed_rids = array();
-  if (!empty($role_admin->rid)) {
-    $allowed_rids[$role_admin->rid] = $role_admin->name;
-  }
-  if (!empty($role_ae->rid)) {
-    $allowed_rids[$role_ae->rid] = $role_ae->name;
+  foreach ($allowed_roles as $allowed_role) {
+    $role_obj = user_role_load_by_name($allowed_role);
+    if (!empty($role_obj->rid)) {
+      $allowed_rids[$role_obj->rid] = $role_obj->name;
+    }
   }
 
   $user_roles = !empty($user->roles) ? $user->roles : array();
   // For admin & ae, show the whole list
   $intersection = array_intersect_key($allowed_rids, $user_roles);
-  if (!empty($intersection)) {
+  if (!empty($intersection) || $user->uid == 1) {
     $output .= views_embed_view('dealer_listing', 'total_summary', $user->uid);
   }
+  // Otherwise, show part of the list
   else {
     $output .= views_embed_view('dealer_listing', 'client_summary', $user->uid);
   }
