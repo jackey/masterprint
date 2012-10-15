@@ -969,6 +969,82 @@ function masterprint_settings_field_default_fields() {
     ),
   );
 
+  // Exported field: 'profile2-dealer-field_dealer_client_owner'.
+  $fields['profile2-dealer-field_dealer_client_owner'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_dealer_client_owner',
+      'foreign keys' => array(
+        'node' => array(
+          'columns' => array(
+            'target_id' => 'nid',
+          ),
+          'table' => 'node',
+        ),
+      ),
+      'indexes' => array(
+        'target_id' => array(
+          0 => 'target_id',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'entityreference',
+      'settings' => array(
+        'handler' => 'views',
+        'handler_settings' => array(
+          'behaviors' => array(
+            'views-select-list' => array(
+              'status' => 0,
+            ),
+          ),
+          'view' => array(
+            'args' => array(),
+            'display_name' => 'entityreference_main',
+            'view_name' => 'profile2_client_filter',
+          ),
+        ),
+        'profile2_private' => 0,
+        'target_type' => 'user',
+      ),
+      'translatable' => '0',
+      'type' => 'entityreference',
+    ),
+    'field_instance' => array(
+      'bundle' => 'dealer',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'entityreference',
+          'settings' => array(
+            'link' => FALSE,
+          ),
+          'type' => 'entityreference_label',
+          'weight' => 5,
+        ),
+      ),
+      'entity_type' => 'profile2',
+      'field_name' => 'field_dealer_client_owner',
+      'label' => '所属客户',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '9',
+      ),
+    ),
+  );
+
   // Exported field: 'profile2-dealer-field_dealer_contacter'.
   $fields['profile2-dealer-field_dealer_contacter'] = array(
     'field_config' => array(
@@ -1480,6 +1556,80 @@ function masterprint_settings_field_default_fields() {
     ),
   );
 
+  // Exported field: 'profile2-salesman-field_salesman_client_owner'.
+  $fields['profile2-salesman-field_salesman_client_owner'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_salesman_client_owner',
+      'foreign keys' => array(
+        'node' => array(
+          'columns' => array(
+            'target_id' => 'nid',
+          ),
+          'table' => 'node',
+        ),
+      ),
+      'indexes' => array(
+        'target_id' => array(
+          0 => 'target_id',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'entityreference',
+      'settings' => array(
+        'handler' => 'views',
+        'handler_settings' => array(
+          'behaviors' => array(
+            'views-select-list' => array(
+              'status' => 0,
+            ),
+          ),
+          'view' => array(
+            'args' => array(),
+            'display_name' => 'entityreference_main',
+            'view_name' => 'profile2_client_filter',
+          ),
+        ),
+        'target_type' => 'user',
+      ),
+      'translatable' => '0',
+      'type' => 'entityreference',
+    ),
+    'field_instance' => array(
+      'bundle' => 'salesman',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'entityreference',
+          'settings' => array(
+            'link' => FALSE,
+          ),
+          'type' => 'entityreference_label',
+          'weight' => 7,
+        ),
+      ),
+      'entity_type' => 'profile2',
+      'field_name' => 'field_salesman_client_owner',
+      'label' => '所属客户',
+      'required' => FALSE,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_buttons',
+        'weight' => '6',
+      ),
+    ),
+  );
+
   // Exported field: 'profile2-salesman-field_salesman_contacter'.
   $fields['profile2-salesman-field_salesman_contacter'] = array(
     'field_config' => array(
@@ -1756,6 +1906,7 @@ function masterprint_settings_field_default_fields() {
   t('姓名');
   t('年龄');
   t('性别');
+  t('所属客户');
   t('电话');
   t('联系人');
   t('联系电话');

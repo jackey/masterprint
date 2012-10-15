@@ -11,7 +11,7 @@ function masterprint_dealer_menu() {
     'title' => '客户经销商管理',
     'type' => MENU_LOCAL_TASK,
     'access arguments' => array('manage client accounts'),
-    'page callback' => 'masterprint_dealer_load_managed_clients',
+    'page callback' => 'masterprint_dealer_load_managed_dealers',
     'page arguments' => array(1),
     'weight' => 160,
   );
@@ -211,9 +211,29 @@ function masterprint_dealer_add_client_form_submit(&$form, &$form_state) {
 /**
  * Display a list of all the AEs managed by the current user
  */
-function masterprint_dealer_load_managed_clients($user) {
+function masterprint_dealer_load_managed_dealers($user) {
   $output = '';
-  $output .= views_embed_view('dealer_listing', 'created_by_user', $user->uid);
+
+  $role_admin = user_role_load_by_name('管理员');
+  $role_ae    = user_role_load_by_name('AE业务经理');
+
+  $allowed_rids = array();
+  if (!empty($role_admin->rid)) {
+    $allowed_rids[$role_admin->rid] = $role_admin->name;
+  }
+  if (!empty($role_ae->rid)) {
+    $allowed_rids[$role_ae->rid] = $role_ae->name;
+  }
+
+  $user_roles = !empty($user->roles) ? $user->roles : array();
+  // For admin & ae, show the whole list
+  $intersection = array_intersect_key($allowed_rids, $user_roles);
+  if (!empty($intersection)) {
+    $output .= views_embed_view('dealer_listing', 'total_summary', $user->uid);
+  }
+  else {
+    $output .= views_embed_view('dealer_listing', 'client_summary', $user->uid);
+  }
   return $output;
 }
 

@@ -30,8 +30,8 @@ function masterprint_dealer_views_default_views() {
   $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['exposed_form']['options']['reset_button_label'] = '重置';
-  $handler->display->display_options['pager']['type'] = 'some';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '5';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'table';
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
@@ -51,22 +51,19 @@ function masterprint_dealer_views_default_views() {
   $handler->display->display_options['fields']['mail']['table'] = 'users';
   $handler->display->display_options['fields']['mail']['field'] = 'mail';
   $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
+  /* 字段: 用户: 创建人 */
+  $handler->display->display_options['fields']['field_created_by']['id'] = 'field_created_by';
+  $handler->display->display_options['fields']['field_created_by']['table'] = 'field_data_field_created_by';
+  $handler->display->display_options['fields']['field_created_by']['field'] = 'field_created_by';
+  $handler->display->display_options['fields']['field_created_by']['settings'] = array(
+    'link' => 0,
+  );
   /* 字段: 用户: Created date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'users';
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['label'] = '创建于';
   $handler->display->display_options['fields']['created']['date_format'] = 'short';
-  /* Contextual filter: 用户: 创建人 (field_created_by) */
-  $handler->display->display_options['arguments']['field_created_by_target_id']['id'] = 'field_created_by_target_id';
-  $handler->display->display_options['arguments']['field_created_by_target_id']['table'] = 'field_data_field_created_by';
-  $handler->display->display_options['arguments']['field_created_by_target_id']['field'] = 'field_created_by_target_id';
-  $handler->display->display_options['arguments']['field_created_by_target_id']['default_action'] = 'empty';
-  $handler->display->display_options['arguments']['field_created_by_target_id']['exception']['title'] = '全部';
-  $handler->display->display_options['arguments']['field_created_by_target_id']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['field_created_by_target_id']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['field_created_by_target_id']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['field_created_by_target_id']['summary_options']['items_per_page'] = '25';
   /* Filter criterion: 用户: 有效的 */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
@@ -82,9 +79,32 @@ function masterprint_dealer_views_default_views() {
     7 => '7',
   );
 
-  /* Display: Block */
-  $handler = $view->new_display('block', 'Block', 'created_by_user');
+  /* Display: Client Summary */
+  $handler = $view->new_display('block', 'Client Summary', 'client_summary');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: 用户: 创建人 (field_created_by) */
+  $handler->display->display_options['arguments']['field_created_by_target_id']['id'] = 'field_created_by_target_id';
+  $handler->display->display_options['arguments']['field_created_by_target_id']['table'] = 'field_data_field_created_by';
+  $handler->display->display_options['arguments']['field_created_by_target_id']['field'] = 'field_created_by_target_id';
+  $handler->display->display_options['arguments']['field_created_by_target_id']['default_action'] = 'empty';
+  $handler->display->display_options['arguments']['field_created_by_target_id']['exception']['title'] = '全部';
+  $handler->display->display_options['arguments']['field_created_by_target_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_created_by_target_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_created_by_target_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_created_by_target_id']['summary_options']['items_per_page'] = '25';
+
+  /* Display: Total Summary */
+  $handler = $view->new_display('block', 'Total Summary', 'total_summary');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['empty'] = FALSE;
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = '系统未找到任何客户经销商，请先添加。';
+  $handler->display->display_options['empty']['area']['format'] = 'plain_text';
   $translatables['dealer_listing'] = array(
     t('Master'),
     t('more'),
@@ -96,9 +116,12 @@ function masterprint_dealer_views_default_views() {
     t('您尚未创建任何客户经销商。'),
     t('账户名'),
     t('账户邮箱'),
+    t('创建人'),
     t('创建于'),
+    t('Client Summary'),
     t('全部'),
-    t('Block'),
+    t('Total Summary'),
+    t('系统未找到任何客户经销商，请先添加。'),
   );
   $export['dealer_listing'] = $view;
 
