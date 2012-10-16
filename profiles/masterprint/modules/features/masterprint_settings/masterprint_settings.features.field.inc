@@ -1871,13 +1871,10 @@ function masterprint_settings_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
-          'module' => 'entityreference',
-          'settings' => array(
-            'link' => FALSE,
-          ),
-          'type' => 'entityreference_label',
-          'weight' => 0,
+          'label' => 'hidden',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => '0',
         ),
       ),
       'entity_type' => 'user',
@@ -1885,7 +1882,7 @@ function masterprint_settings_field_default_fields() {
       'label' => '创建人',
       'required' => 0,
       'settings' => array(
-        'user_register_form' => 1,
+        'user_register_form' => 0,
       ),
       'widget' => array(
         'active' => 1,

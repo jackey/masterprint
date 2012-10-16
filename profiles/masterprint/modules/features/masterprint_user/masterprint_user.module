@@ -70,12 +70,13 @@ function masterprint_user_update(&$edit, $account, $category) {
  * Log the user has changed his/her password
  */
 function masterprint_user_log_password_change($uid) {
-  $record = array(
-    'uid' => $uid,
-    'changed_date' => REQUEST_TIME,
-    'status' => 1,
-  );
-  drupal_write_record('masterprint_user_password_change', $record);
+  db_merge('masterprint_user_password_change')
+    ->key(array('uid' => $uid))
+    ->fields(array(
+      'changed_date' => REQUEST_TIME,
+      'status' => 1,
+    ))
+    ->execute();
 }
 
 /**
@@ -91,5 +92,38 @@ function masterprint_user_init() {
       drupal_goto($edit_path);
     }
     drupal_set_message('请修改密码！');
+  }
+}
+
+/**
+ * Implements hook_form_alter()
+ */
+function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
+  global $user;
+
+  if ($form_id == 'user_profile_form') {
+    $allowed_roles = array(
+      'administrator',
+      '管理员',
+      'AE业务经理',
+    );
+    $allowed_rids = array();
+    foreach ($allowed_roles as $allowed_role) {
+      $role_obj = user_role_load_by_name($allowed_role);
+      if (!empty($role_obj->rid)) {
+        $allowed_rids[$role_obj->rid] = $role_obj->name;
+      }
+    }
+    $user_roles = !empty($user->roles) ? $user->roles : array();
+    // For admin & ae, show the whole list
+    $intersection = array_intersect_key($allowed_rids, $user_roles);
+
+    if (empty($intersection) || $user->uid !== 1) {
+      unset($form['field_created_by']);
+      unset($form['signature_settings']);
+      unset($form['contact']);
+      unset($form['locale']);
+      unset($form['locale']['language']);
+    }
   }
 }
