@@ -368,6 +368,20 @@ function masterprint_settings_user_default_permissions() {
     'module' => 'features',
   );
 
+  // Exported permission: manage own profile2.
+  $permissions['manage own profile2'] = array(
+    'name' => 'manage own profile2',
+    'roles' => array(
+      0 => 'AE业务经理',
+      1 => '仓储管理员',
+      2 => '客户',
+      3 => '客户的经销商',
+      4 => '客户销售人员',
+      5 => '管理员',
+    ),
+    'module' => 'masterprint_user',
+  );
+
   // Exported permission: revert revisions.
   $permissions['revert revisions'] = array(
     'name' => 'revert revisions',

@@ -15,7 +15,40 @@ function masterprint_user_menu() {
     'weight' => 10,
     'file' => 'masterprint_user.admin.inc',
   );
+  $items['user/%user/profile2'] = array(
+    'title' => '个人资料',
+    'type' => MENU_LOCAL_TASK,
+    'access arguments' => array('manage own profile2'),
+    'page callback' => 'masterprint_user_view_own_profile2',
+    'page arguments' => array(1),
+    'weight' => 90,
+  );
+  $items['user/%user/profile2/view'] = array(
+    'title' => '预览',
+    'access arguments' => array('manage own profile2'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['user/%user/profile2/edit'] = array(
+    'title' => '修改',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_user_edit_own_profile2', 1),
+    'access arguments' => array('manage own profile2'),
+    'weight' => 91,
+  );
   return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function masterprint_user_permission() {
+  return array(
+    'manage own profile2' => array(
+      'title' => t('Manage own profile2'),
+      'restrict access' => TRUE,
+    ),
+  );
 }
 
 /**
@@ -127,3 +160,139 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
     }
   }
 }
+
+/**
+ * Page callback for displaying profile2
+ */
+function masterprint_user_view_own_profile2($user) {
+  $output = '';
+
+  // Get the current user's role
+  $types = array(
+    'admin' => '管理员',
+    'ae' => 'AE业务经理',
+    'client' => '客户',
+    'dealer'=> '客户的经销商',
+    'salesman' => '客户销售人员',
+    'stock_keeper' => '仓储管理员',
+  );
+  $intesection = array();
+  if (!empty($user->roles)) {
+    $intesection = array_intersect($types, $user->roles);
+  }
+
+  if (!empty($intesection)) {
+    reset($intesection);
+    $type = key($intesection);
+
+    $profile = profile2_load_by_user($user, $type);
+
+    if (!$profile) {
+      $profile = profile2_create(array('type' => $type));
+      $profile->setUser($user);
+      $profile->is_new = TRUE;
+    }
+    unset($profile->label);
+    $result = $profile->view('page');
+    $output .= drupal_render($result);
+  }
+
+  return $output;
+}
+
+/**
+ * Page callback for editing profile2
+ */
+function masterprint_user_edit_own_profile2($form, &$form_state, $user) {
+  $output = '';
+
+  // Get the current user's role
+  $types = array(
+    'admin' => '管理员',
+    'ae' => 'AE业务经理',
+    'client' => '客户',
+    'dealer'=> '客户的经销商',
+    'salesman' => '客户销售人员',
+    'stock_keeper' => '仓储管理员',
+  );
+  $intesection = array();
+  if (!empty($user->roles)) {
+    $intesection = array_intersect($types, $user->roles);
+  }
+
+  if (!empty($intesection)) {
+    reset($intesection);
+    $type = key($intesection);
+
+    $profile = profile2_load_by_user($user, $type);
+
+    if (!$profile) {
+      $profile = profile2_create(array('type' => $type));
+      $profile->setUser($user);
+      $profile->is_new = TRUE;
+      //unset($profile->label);
+    }
+    $form['profile_type'] = array(
+      '#type' => 'value',
+      '#value' => $type,
+    );
+    $form['profile_user'] = array(
+      '#type' => 'value',
+      '#value' => $user,
+    );
+  }
+
+  $form['profile_' . $type] = array(
+    '#type' => 'fieldset',
+    //'#title' => t(''),
+  );
+  $form_state['profile2_skip_hook'] = TRUE;
+  $form_state['profiles'][$type] = $profile;
+
+  field_attach_form('profile2', $profile, $form['profile_' . $type], $form_state);
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('提交'),
+    '#weight' => 40,
+  );
+  return $form;
+}
+
+/**
+ * Validation handler
+ */
+function masterprint_user_edit_own_profile2_validate(&$form, &$form_state) {
+  $values = $form_state['values'];
+  $type = $values['profile_type'];
+
+  if (isset($form_state['values']['profile_' . $type])) {
+    // @see entity_form_field_validate()
+    $pseudo_entity = (object) $form_state['values']['profile_' . $type];
+    $pseudo_entity->type = $form[$type];
+    field_attach_form_validate('profile2', $pseudo_entity, $form['profile_' . $type], $form_state);
+  }
+}
+
+/**
+ * Submission handler
+ */
+function masterprint_user_edit_own_profile2_submit(&$form, &$form_state) {
+  $values = $form_state['values'];
+  $type = $values['profile_type'];
+
+  // Save profile2 fields
+  profile2_form_submit_build_profile($form, $form_state);
+  // This is needed as some submit callbacks like user_register_submit() rely on
+  // clean form values.
+  profile2_form_submit_cleanup($form, $form_state);
+  $profile = $form_state['profiles'][$type];
+  //$profile->uid = $form_state['values']['profile_user']->uid;
+  profile2_save($profile);
+
+  drupal_set_message(t('资料更新成功！'));
+}
+
+function masterprint_user_get_client_dealer() {}
+
+function masterprint_user_get_client_salesman() {}
