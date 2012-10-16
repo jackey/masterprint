@@ -10,22 +10,22 @@ function masterprint_dealer_menu() {
   $items['user/%user/dealer'] = array(
     'title' => '客户经销商管理',
     'type' => MENU_LOCAL_TASK,
-    'access arguments' => array('manage client accounts'),
+    'access arguments' => array('manage dealer accounts'),
     'page callback' => 'masterprint_dealer_load_managed_dealers',
     'page arguments' => array(1),
     'weight' => 160,
   );
   $items['user/%user/dealer/list'] = array(
     'title' => '客户经销商列表',
-    'access arguments' => array('manage client accounts'),
+    'access arguments' => array('manage dealer accounts'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['user/%user/dealer/add'] = array(
     'title' => '添加客户经销商',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('masterprint_dealer_add_client_form', 1),
-    'access arguments' => array('manage client accounts'),
+    'page arguments' => array('masterprint_dealer_add_dealer_form', 1),
+    'access arguments' => array('manage dealer accounts'),
   );
   return $items;
 }
@@ -46,7 +46,7 @@ function masterprint_dealer_permission() {
 /**
  * Form used for adding/editing an AE
  */
-function masterprint_dealer_add_client_form($form, &$form_state, $user) {
+function masterprint_dealer_add_dealer_form($form, &$form_state, $user) {
   $form = array();
 
   $form['account'] = array(
@@ -93,7 +93,7 @@ function masterprint_dealer_add_client_form($form, &$form_state, $user) {
 /**
  * Validation handler
  */
-function masterprint_dealer_add_client_form_validate(&$form, &$form_state) {
+function masterprint_dealer_add_dealer_form_validate(&$form, &$form_state) {
   // Validate username.
   if (isset($form_state['values']['name'])) {
     if ($error = user_validate_name($form_state['values']['name'])) {
@@ -147,7 +147,7 @@ function masterprint_dealer_add_client_form_validate(&$form, &$form_state) {
 /**
  * Submission handler
  */
-function masterprint_dealer_add_client_form_submit(&$form, &$form_state) {
+function masterprint_dealer_add_dealer_form_submit(&$form, &$form_state) {
   global $user;
   $uid = $user->uid;
 
@@ -273,3 +273,5 @@ function masterprint_dealer_send_email($from, $to, $subject, $message) {
     return FALSE;
   }
 }
+
+

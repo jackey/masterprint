@@ -16,6 +16,8 @@ function masterprint_dealer_user_default_permissions() {
     'roles' => array(
       0 => 'AE业务经理',
       1 => 'administrator',
+      2 => '客户',
+      3 => '管理员',
     ),
     'module' => 'masterprint_dealer',
   );

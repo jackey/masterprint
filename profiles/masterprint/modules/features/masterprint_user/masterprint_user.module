@@ -159,6 +159,21 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
       unset($form['locale']['language']);
     }
   }
+
+  // For client, hide the 'field_dealer_client_owner' field, and set it as the
+  // current client
+  if ($form_id == 'masterprint_dealer_add_dealer_form') {
+    if (masterprint_user_is_user_client($user->uid)) {
+      $form['profile_dealer']['field_dealer_client_owner']['und']['#default_value'] = $user->uid;
+      $form['profile_dealer']['field_dealer_client_owner']['#attributes']['style'][] = 'display:none;';
+    }
+  }
+  if ($form_id == 'masterprint_salesman_add_salesman_form') {
+    if (masterprint_user_is_user_client($user->uid)) {
+      $form['profile_salesman']['field_salesman_client_owner']['und']['#default_value'] = $user->uid;
+      $form['profile_salesman']['field_salesman_client_owner']['#attributes']['style'][] = 'display:none;';
+    }
+  }
 }
 
 /**
@@ -296,3 +311,18 @@ function masterprint_user_edit_own_profile2_submit(&$form, &$form_state) {
 function masterprint_user_get_client_dealer() {}
 
 function masterprint_user_get_client_salesman() {}
+
+/**
+ * Check if a user is a client
+ */
+function masterprint_user_is_user_client($uid) {
+  $user = user_load($uid);
+  $user_roles = (!empty($user->roles)) ? $user->roles : array();
+  $client_role = user_role_load_by_name('客户');
+  if (!empty($client_role->rid)) {
+    if (array_key_exists($client_role->rid, $user_roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}

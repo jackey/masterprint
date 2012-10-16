@@ -82,6 +82,8 @@ function masterprint_dealer_views_default_views() {
   /* Display: Client Summary */
   $handler = $view->new_display('block', 'Client Summary', 'client_summary');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['access'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'none';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: 用户: 创建人 (field_created_by) */
   $handler->display->display_options['arguments']['field_created_by_target_id']['id'] = 'field_created_by_target_id';
