@@ -31,7 +31,44 @@ function masterprint_apply_menu() {
 		'page callback' => 'client_approve_apply',
 		'page arguments' => array(1)
 	);
+	$items['user/%/applydetail/%'] = array(
+		'title' => '申请详情',
+		'type' => MENU_CALLBACK,
+		'access arguments' => array('view apply'),
+		'page callback' => 'page_show_apply_detail',
+		'page arguments' => array(1, 3),
+	);
 	return $items;
+}
+
+function page_show_apply_detail($uid, $id) {
+	$apply_product = db_select('product_apply', 'ap')
+		->fields('ap')
+		->condition('id', $id, '=')
+		->execute()
+		->fetchAssoc();
+
+	$product = node_load($apply_product['product_id']);
+	$breadcrumbs = array();
+	$breadcrumbs[] = l('网站', '<front>');
+	$breadcrumbs[] = l('用户', 'user');
+	$breadcrumbs[] = l('申请列表', 'user/'.$uid.'/applyproductlist');
+	drupal_set_breadcrumb($breadcrumbs);
+
+	return theme('productapply', array('product' => $product, 'apply' => $apply_product));
+}
+
+function masterprint_apply_theme() {
+	$hooks = array();
+	$hooks['productapply'] = array(
+		'variables' => array('product' => new stdclass, 'apply' => array()),
+		'template' => 'productapply',
+	);
+	return $hooks;
+}
+
+function masterprint_apply_process_productapply(&$vars) {
+	$vars['product_view'] = node_view($vars['product']);
 }
 
 function client_approve_apply($id) {
@@ -55,6 +92,14 @@ function user_product_apply_list($user) {
 	$apply_product = array();
 	$table_rows = array();
 	while ($data = $query->fetchAssoc()) {
+		$op = '';
+		if ($data['status'] == 0) {
+			$op .= l('通过', 'approve/'.$data['id']);
+		}
+		else {
+			$op = '<span>审核已通过</span>';
+		}
+		$op .= '|'.l('详情', 'user/'.arg(1).'/applydetail/'. $data['id']);
 		$node = node_load($data['product_id']);
 		$table_row = array(
 			$node->title, 
@@ -62,7 +107,7 @@ function user_product_apply_list($user) {
 			$data['count'],
 			$user->name,
 			$data['status'] == 0 ? '待审核': '审核通过',
-			$data['status'] == 0 ? l('通过', 'approve/'.$data['id']): '审核已通过');
+			$op);
 		$table_rows[] = $table_row;
 	}
 	return theme('table', array('header' => $header, 'rows' => $table_rows));
@@ -221,6 +266,9 @@ function masterprint_apply_product_submit($form, &$form_state) {
 		);
 		$status = drupal_write_record('product_apply', $data);
 		if ($status) {
+			$apply_account = user_load($uid);
+			$client_account = get_client_account_from_saler($apply_account);
+			dpm($client_account);
 			drupal_set_message("产品申请成功，请等待您所属客户审核");
 			drupal_mail(
 				'masterprint_apply',
@@ -248,6 +296,9 @@ function masterprint_apply_permission() {
     'list all products' => array(
     	'title' => t('查看所有产品'),
     ),
+    'view apply' => array(
+    	'title' => t('查看产品申请'),
+    ),
   );
 }
 
@@ -257,6 +308,10 @@ function user_is_saler($user) {
 
 function user_is_dealer($user) {
 	return isset($user->roles[DEALER_ROLE_ID]);	
+}
+
+function get_client_account_from_saler($saler_account) {
+	dpm($saler_account);
 }
 
 /**
