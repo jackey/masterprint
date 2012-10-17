@@ -3,6 +3,7 @@
 define('SALER_ROLE_ID', 8);
 define('DEALER_ROLE_ID', 7);
 define('CLIENT_ROLE_ID', 6);
+define('WAREHOUSE_ROLE_ID', 5);
 define('ADDRESS_SPLITER', '------------');
 
 function masterprint_apply_menu() {
@@ -34,8 +35,17 @@ function masterprint_apply_menu() {
 }
 
 function client_approve_apply($id) {
-	db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
+	//审核状态修改
+	//db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
+	// 需要通知仓库管理员
+	$warehousr_manager = list_warehouse_manager();
+	foreach ($warehousr_manager as $uid => $user) {
+		drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array());
+	}
+	//修改库存
+	//TODO:
 	drupal_goto($_SERVER['HTTP_REFERER']);
+	return '';
 }
 
 function user_product_apply_list($user) {
@@ -123,11 +133,14 @@ function masterprint_apply_product() {
 	$form = array();
 	$rows = array();
 	foreach ($product_nodes as $product) {
+		$result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ?", array($product_id))->fetchAssoc();
+		$cost_total = $result['cost_total'];
 		$rows[] = array(
 			$product->title, 
-			$product->field_product_count[LANGUAGE_NONE][0]['value'], 
+			$product->field_product_count[LANGUAGE_NONE][0]['value'] - $cost_total, 
 			$product->field_product_min_pack_num[LANGUAGE_NONE][0]['value']);
 	}
+
 	$header = array('产品名称', '产品库存', '产品最小打包数量');
 	$product_list_table = theme('table', array('header' => $header, 'rows' => $rows));
 
@@ -254,4 +267,20 @@ function masterprint_apply_mail($key, &$message, $params) {
 		$message['subject'] = 'Hello world';
 		$message['body'][] = 'jackey';
 	}
+	else if ($key == 'notify_warehouse_manager_when_approve') {
+		$message['subject'] = 'Hello world';
+		$message['body'][] = 'jackey';
+	}
+}
+
+function list_warehouse_manager() {
+	$result = db_select('users_roles', 'ur')
+		->fields('ur')
+		->condition('rid', WAREHOUSE_ROLE_ID, '=')
+		->execute();
+	$uids = array();
+	while ($row = $result->fetchAssoc()) {
+		$uids[] = $row['uid'];
+	}
+	return $managers = user_load_multiple($uids);
 }
