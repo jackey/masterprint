@@ -36,9 +36,54 @@ function masterprint_user_menu() {
     'access arguments' => array('manage own profile2'),
     'weight' => 91,
   );
+  $items['profile2/%user/view'] = array(
+    'title' => '查看资料',
+    'title arguments' => array(1, 'view'),
+    'title callback' => 'masterprint_user_profile_title',
+    'type' => MENU_CALLBACK,
+    'access callback' => 'materprint_user_access_other_profile2',
+    'access arguments' => array(1, 'view'),
+    'page callback' => 'masterprint_user_view_own_profile2',
+    'page arguments' => array(1),
+  );
+  $items['profile2/%user/edit'] = array(
+    'title' => '更新资料',
+    'title arguments' => array(1, 'edit'),
+    'title callback' => 'masterprint_user_profile_title',
+    'type' => MENU_CALLBACK,
+    'access callback' => 'materprint_user_access_other_profile2',
+    'access arguments' => array(1, 'edit'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_user_edit_own_profile2', 1),
+  );
   return $items;
 }
 
+
+/**
+ * Implements hook_admin_paths_alter().
+ */
+function masterprint_user_admin_paths_alter(&$paths) {
+  $paths['profile2/*/edit'] = TRUE;
+}
+
+/**
+ * Title callback
+ */
+function masterprint_user_profile_title($user, $op) {
+  $title = '';
+  $role_rid = masterprint_user_get_masterprint_role($user->uid);
+  $role = user_role_load($role_rid);
+  $role_name = $role->name;
+
+  if ($op == 'view') {
+    $title .= '查看[' . $role_name .' - ' . $user->name . ']的资料';
+  }
+  if ($op == 'edit') {
+    $title .= '编辑[' . $role_name .' - ' . $user->name . ']的资料';
+  }
+  return $title;
+}
 /**
  * Implements hook_permission().
  */
@@ -49,6 +94,47 @@ function masterprint_user_permission() {
       'restrict access' => TRUE,
     ),
   );
+}
+
+/**
+ * Access callback
+ */
+function materprint_user_access_other_profile2($profile_user, $op) {
+  global $user;
+
+  if ($user->uid == 1) return TRUE;
+
+  // Get the profile2 type of the user going to be edited
+  $profile_type = masterprint_user_get_user_profile_type($profile_user->uid);
+
+  // Get the current user's masterprint role
+  $crt_user_rid = masterprint_user_get_masterprint_role($user->uid);
+  $crt_user = user_role_load($crt_user_rid);
+  $crt_user_role_name = $crt_user->name;
+
+  if ($op == 'edit') {
+    switch ($crt_user_role_name) {
+      case '管理员':
+      case 'AE业务经理':
+        // Admin, AE can  edit 'Client', 'Client dealer', 'Client salesman'
+        if (in_array($profile_type , array('client', 'dealer', 'salesman'))) {
+          return TRUE;
+        }
+      case '客户':
+        // Client can edit 'dealer' & 'salesman'
+        if (in_array($profile_type, array('dealer', 'salesman'))) {
+          return TRUE;
+        }
+      default:
+        return false;
+    }
+  }
+
+  if ($op == 'view') {
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 /**
@@ -86,6 +172,12 @@ function masterprint_user_check_user_change_password_status($uid) {
  * Implements hook_user_login()
  */
 function masterprint_user_login(&$edit, $account) {
+  $role_name = '仓储管理员';
+  $role = user_role_load_by_name($role_name);
+  if (!empty($role->rid)) {
+
+
+  }
 
 }
 
@@ -180,6 +272,10 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
  * Page callback for displaying profile2
  */
 function masterprint_user_view_own_profile2($user) {
+  if (substr(current_path(), 0, strlen('profile2')) == 'profile2') {
+    //menu_set_active_item('user/5/dealer');
+  }
+
   $output = '';
 
   // Get the current user's role
@@ -255,16 +351,17 @@ function masterprint_user_edit_own_profile2($form, &$form_state, $user) {
       '#type' => 'value',
       '#value' => $user,
     );
+    $form['profile_' . $type] = array(
+      '#type' => 'fieldset',
+      //'#title' => t(''),
+    );
+    $form_state['profile2_skip_hook'] = TRUE;
+    $form_state['profiles'][$type] = $profile;
+
+    field_attach_form('profile2', $profile, $form['profile_' . $type], $form_state);
   }
 
-  $form['profile_' . $type] = array(
-    '#type' => 'fieldset',
-    //'#title' => t(''),
-  );
-  $form_state['profile2_skip_hook'] = TRUE;
-  $form_state['profiles'][$type] = $profile;
 
-  field_attach_form('profile2', $profile, $form['profile_' . $type], $form_state);
 
   $form['submit'] = array(
     '#type' => 'submit',
@@ -308,9 +405,13 @@ function masterprint_user_edit_own_profile2_submit(&$form, &$form_state) {
   drupal_set_message(t('资料更新成功！'));
 }
 
-function masterprint_user_get_client_dealer() {}
+function masterprint_user_get_client_dealer($uid) {
 
-function masterprint_user_get_client_salesman() {}
+}
+
+function masterprint_user_get_client_salesman($uid) {
+
+}
 
 /**
  * Check if a user is a client
@@ -325,4 +426,54 @@ function masterprint_user_is_user_client($uid) {
     }
   }
   return FALSE;
+}
+
+/**
+ * Get the profile2 type the user is binding to
+ */
+function masterprint_user_get_user_profile_type($uid) {
+  $user = user_load($uid);
+
+  $mp_role_rid = masterprint_user_get_masterprint_role($uid);
+  $mp_role = user_role_load($mp_role_rid);
+  $mp_role_name = $mp_role->name;
+
+  $type_mapping = array(
+    '管理员' => 'admin',
+    'AE业务经理' => 'ae',
+    '客户' => 'client',
+    '客户的经销商' => 'dealer',
+    '客户销售人员' => 'salesman',
+    '仓储管理员' => 'stock_keeper',
+  );
+
+  if (array_key_exists($mp_role_name, $type_mapping)) {
+    return $type_mapping[$mp_role_name];
+  }
+
+  return FALSE;
+}
+
+/**
+ * Get user's role in masterprint (excluding 'authenticated user')
+ */
+function masterprint_user_get_masterprint_role($uid) {
+  $user = user_load($uid);
+
+  if (!empty($user->roles)) {
+    $roles = $user->roles;
+
+    $mp_roles = array();
+    foreach ($roles as $rid => $name) {
+      if ($name == 'authenticated user') continue;
+      $mp_roles[$rid] = $name;
+    }
+
+    if (!empty($mp_roles)) {
+      reset($mp_roles);
+      return key($mp_roles);
+    }
+    return FALSE;
+  }
+
 }

@@ -36,6 +36,8 @@ function masterprint_admin_menu() {
  * Access callback
  */
 function masterprint_admin_access($user) {
+  if ($user->uid == '1') return TRUE;
+
   // @todo We have to limit the admin operation to the super admin user only.
   if (!empty($user->uid) && $user->name == 'admin') {
     return true;
