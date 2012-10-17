@@ -1,0 +1,52 @@
+<?php
+
+function masterprint_apply_install() {
+	//TODO:
+}
+
+function masterprint_apply_schema() {
+
+	$schema['product_apply'] = array(
+		'fields' => array(
+			'id' => array(
+        		'type' => 'serial', 
+        		'unsigned' => TRUE, 
+        		'not null' => TRUE,
+			),
+			'apply_time' => array(
+		        'type' => 'int',
+		        'not null' => TRUE,
+		        'default' => 0,
+			),
+			'product_id' => array(
+				'type' => 'int',
+				'not null' => TRUE,
+				'default' => 0,
+			),
+			'count' => array(
+				'type' => 'int',
+				'not null' => TRUE,
+				'default' => 0
+			),
+			'uid' => array(
+				'type' => 'int',
+				'not null' => TRUE,
+				'default' => 0,
+			),
+			'status' => array(
+				'type' => 'int',
+				'not null' => TRUE,
+				'default' => 0,
+			),
+			'address' => array(
+				'type' => 'varchar',
+				'length' => '255',
+				'default' => '',
+				'not null' => TRUE
+			),
+		),
+		'primary key' => array('id'),
+	);
+
+	return $schema;
+}

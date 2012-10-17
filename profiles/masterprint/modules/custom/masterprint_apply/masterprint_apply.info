@@ -1,0 +1,4 @@
+name = Masterprint 产品申请
+package = masterprint
+description = 产品申请模块.
+core = 7.x
