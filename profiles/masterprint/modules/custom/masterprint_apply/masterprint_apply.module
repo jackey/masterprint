@@ -1,0 +1,257 @@
+<?php
+
+define('SALER_ROLE_ID', 8);
+define('DEALER_ROLE_ID', 7);
+define('CLIENT_ROLE_ID', 6);
+define('ADDRESS_SPLITER', '------------');
+
+function masterprint_apply_menu() {
+	$items = array();
+	$items['user/%user/applyproduct'] = array(
+		'title' => '产品申请',
+		'type' => MENU_LOCAL_TASK,
+		'access arguments' => array('apply product'),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('masterprint_apply_product', '1'),
+		'weight' => 120,
+	);
+	$items['user/%/applyproductlist'] = array(
+		'title' => '产品申请审核',
+		'type' => MENU_LOCAL_TASK,
+		'access arguments' => array('approve apply'),
+		'page callback' => 'user_product_apply_list',
+		'page arguments' => array('1'),
+		'weight' => 120,
+	);
+	$items['approve/%'] = array(
+		'title' => '产品申请通过',
+		'type' => MENU_CALLBACK,
+		'access arguments' => array('approve apply'),
+		'page callback' => 'client_approve_apply',
+		'page arguments' => array(1)
+	);
+	return $items;
+}
+
+function client_approve_apply($id) {
+	db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
+	drupal_goto($_SERVER['HTTP_REFERER']);
+}
+
+function user_product_apply_list($user) {
+	$user = user_load(arg(1));
+	$header = array('产品名称', '申请时间', '申请数量', '申请人',  '申请状态', '操作');
+	$query = db_query("SELECT * FROM {product_apply} WHERE uid=?", array($user->uid));
+	$apply_product = array();
+	$table_rows = array();
+	while ($data = $query->fetchAssoc()) {
+		$node = node_load($data['product_id']);
+		$table_row = array(
+			$node->title, 
+			date('Y m d h:i:s', $data['apply_time']), 
+			$data['count'],
+			$user->name,
+			$data['status'] == 0 ? '待审核': '审核通过',
+			$data['status'] == 0 ? l('通过', 'approve/'.$data['id']): '审核已通过');
+		$table_rows[] = $table_row;
+	}
+	return theme('table', array('header' => $header, 'rows' => $table_rows));
+}
+
+function masterprint_apply_product() {
+	global $user;
+	$uid = NULL;
+	$loaded_user = profile2_load_by_user($user);
+	if (isset($user->roles[SALER_ROLE_ID])) {
+		$profile_user = $loaded_user['salesman'];
+	}
+	else if (isset($user->roles[DEALER_ROLE_ID])) {
+		$profile_user = $loaded_user['dealer'];
+	}
+	else {
+		$profile_user = NULL;
+	}
+	//选择出当前客户的产品.
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')->propertyCondition('type', 'product');
+	if (!user_access('list all products', $user)) {
+		$uid = 0;
+		//如果是客户销售人员或者经销商 则载入所属客户下的产品
+		if (isset($user->roles[SALER_ROLE_ID]) || isset($user->roles[DEALER_ROLE_ID])) {
+			if (isset($user->roles[SALER_ROLE_ID])) {
+				if ($profile_user->field_salesman_client_owner[LANGUAGE_NONE][0]['target_id']) {
+					$uid = $profile_user->field_salesman_client_owner[LANGUAGE_NONE][0]['target_id'];
+				}
+			}
+			else if (isset($user->roles[DEALER_ROLE_ID])) {
+				if ($profile_user->field_dealer_client_owner[LANGUAGE_NONE][0]['target_id']) {
+					$uid = $profile_user->field_dealer_client_owner[LANGUAGE_NONE][0]['target_id'];
+				}
+			}
+		}
+		else if ($user->roles[CLIENT_ROLE_ID]) {
+			$uid = $user->uid;
+		}
+		$query->fieldCondition('field_product_applied_by', 'target_id', $uid, '=');
+	}
+	$result = $query->execute();
+
+	$address_options = array();
+	if ($profile_user) {
+		if (user_is_saler($user)) {
+			$address_in_user = $profile_user->field_salesman_addresses[LANGUAGE_NONE];
+		}
+		else {
+			$address_in_user = $profile_user->field_address[LANGUAGE_NONE];
+		}
+		foreach ($address_in_user as $profile_item) {
+			$address_options[$profile_item['value']] = $profile_item['value'];
+		}
+	}
+	$nids = array();
+	$options = array();
+	if (!isset($result['node'])) $result['node'] = array();
+	foreach ($result['node'] as $tmp) {
+		$nids[] = $tmp->nid;
+	}
+	$product_nodes = node_load_multiple($nids);
+	if (!$product_nodes) $product_nodes = array();
+	$product_options = array();
+	foreach ($product_nodes as $node) {
+		$options[$node->nid] = $node->title;
+	}
+	$form = array();
+	$rows = array();
+	foreach ($product_nodes as $product) {
+		$rows[] = array(
+			$product->title, 
+			$product->field_product_count[LANGUAGE_NONE][0]['value'], 
+			$product->field_product_min_pack_num[LANGUAGE_NONE][0]['value']);
+	}
+	$header = array('产品名称', '产品库存', '产品最小打包数量');
+	$product_list_table = theme('table', array('header' => $header, 'rows' => $rows));
+
+	$form['product'] = array(
+		'#type' => 'select',
+		'#title' => t('选择需要的产品'),
+		'#options' => $options,
+		'#required' => TRUE,
+	);
+	$form['product_list'] = array(
+		'#markup' => $product_list_table,
+		'#title' => '您的产品列表',
+	);
+	$form['product_count'] = array(
+		'#type' => 'textfield',
+		'#title' => '申请产品数量',
+		'#default_value' => '0',
+		'#maxlength' => 12,
+		'#size' => 12,
+		'#required' => TRUE,
+	);
+	$form['apply_uid'] = array(
+		'#type' => 'hidden',
+		'#default_value' => $uid,
+	);
+	$form['deliver_address'] = array(
+		'#type' => 'checkboxes',
+		'#title' => '送货地址',
+		'#required' => TRUE,
+		'#options' => $address_options,
+	);
+
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => '申请产品',
+	);
+
+
+	return $form;
+}
+
+function masterprint_apply_product_validate($form, &$form_state) {
+	$count = $form_state['values']['product_count'];
+	$product_id = $form_state['values']['product'];
+	$node = node_load($product_id);
+	$total_count = $node->field_product_count[LANGUAGE_NONE][0]['value'];
+	$result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ?", array($product_id))->fetchAssoc();
+	$cost_total = $result['cost_total'];
+	$pack_count = $node->field_product_min_pack_num[LANGUAGE_NONE][0]['value'];
+	if (!is_numeric($count)) {
+		form_set_error('product_count', '产品数量必须是数字');
+		return FALSE;
+	}
+	if (intval($count) <= 0) {
+		form_set_error('product_count', '产品申请数量不小于0个');
+		return FALSE;
+	}
+	if (intval($count) > $total_count - $cost_total) {
+		drupal_set_message('当前库存量为'. ($total_count - $cost_total), 'error');
+		form_set_error('product_count', '申请数量不能大于库存数量');
+		return FALSE;
+	}
+}
+
+function masterprint_apply_product_submit($form, &$form_state) {
+	$product_id = $form_state['values']['product'];
+	$count = $form_state['values']['product_count'];
+	$uid = $form_state['values']['apply_uid'];
+	$time = time();
+	$address_str = implode(ADDRESS_SPLITER, $form_state['values']['deliver_address']);
+	if ($product_id && $count) {
+		$data = array(
+			'apply_time' => REQUEST_TIME,
+			'uid' => $uid,
+			'product_id' => $product_id,
+			'count' => $count,
+			'address' => $address_str
+		);
+		$status = drupal_write_record('product_apply', $data);
+		if ($status) {
+			drupal_set_message("产品申请成功，请等待您所属客户审核");
+			drupal_mail(
+				'masterprint_apply',
+				'submit_product_apply',
+				'397420507@qq.com',
+				language_default(),
+				array());
+		}
+	}
+}
+
+/**
+ * Implementation of hook_permission()
+ */
+function masterprint_apply_permission() {
+  return array(
+    'apply product' => array(
+      'title' => t('产品申请权限'),
+      'description' => t('.'),
+    ),
+    'approve apply' => array(
+    	'title' => t('审核产品申请'),
+    	'description' => t('.'),
+    ),
+    'list all products' => array(
+    	'title' => t('查看所有产品'),
+    ),
+  );
+}
+
+function user_is_saler($user) {
+	return isset($user->roles[SALER_ROLE_ID]);
+}
+
+function user_is_dealer($user) {
+	return isset($user->roles[DEALER_ROLE_ID]);	
+}
+
+/**
+ * Impelements hook_mail()
+ */
+function masterprint_apply_mail($key, &$message, $params) {
+	if ($key == 'submit_product_apply') {
+		$message['subject'] = 'Hello world';
+		$message['body'][] = 'jackey';
+	}
+}
