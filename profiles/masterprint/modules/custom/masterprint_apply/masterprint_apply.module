@@ -176,11 +176,12 @@ function user_product_apply_list($user) {
 		}
 		$op .= '|'.l('详情', 'user/'.arg(1).'/applydetail/'. $data['id']);
 		$node = node_load($data['product_id']);
+		$apply_user = user_load($data['uid']);
 		$table_row = array(
 			$node->title, 
 			date('Y m d h:i:s', $data['apply_time']), 
 			$data['count'],
-			$user->name,
+			$apply_user->name,
 			$data['status'] == 0 ? '待审核': '审核通过',
 			$op);
 		$table_rows[] = $table_row;
