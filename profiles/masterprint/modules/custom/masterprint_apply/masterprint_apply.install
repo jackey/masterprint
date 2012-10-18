@@ -48,5 +48,27 @@ function masterprint_apply_schema() {
 		'primary key' => array('id'),
 	);
 
+	$schema['hash_delivery'] = array(
+		'fields' => array(
+			'hash_key' => array(
+				'type' => 'varchar',
+				'length' => '255',
+				'defualt' => '',
+				'not null' => TRUE, 	
+			),
+			'avaible' => array(
+				'type' => 'int',
+				'default' => 1,
+				'not null' => TRUE
+			),
+			'access time' => array(
+				'type' => 'int',
+				'default' => 0,
+				'not null' => TRUE
+			),
+		),
+		'primary key' => array('hash_key'),
+	);
+
 	return $schema;
 }

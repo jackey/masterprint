@@ -38,7 +38,73 @@ function masterprint_apply_menu() {
 		'page callback' => 'page_show_apply_detail',
 		'page arguments' => array(1, 3),
 	);
+	$items['warehousr_manager/%/ensure/%'] = array(
+		'title' => '确认发货',
+		'type' => MENU_CALLBACK,
+		'access callback' => TRUE,
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('page_delivery_product_sure'),
+	);
 	return $items;
+}
+
+function page_delivery_product_sure() {
+	$apply_id = arg(1);
+	$access_key = arg(3);
+	$apply_product = db_select('product_apply', 'ap')
+		->fields('ap')
+		->condition('id', $apply_id, '=')
+		->execute()
+		->fetchAssoc();
+	if (!$apply_product) {
+		 return array(
+		 	'error' => array('#markup' => '申请没有找到'),
+		 );	
+	}
+	$product = node_load($apply_product['product_id']);
+	$form = array();
+	$render_product = node_show($product);
+	$form['product_display'] = array(
+		'#markup' => drupal_render($render_product)
+	);
+	$address = explode(ADDRESS_SPLITER, $apply_product['address']);
+	$address_str = array();
+	foreach ($address as $add) {
+		$address_str[] = '<span class="address">'.$add.'</span>';
+	}
+	$form['address'] = array(
+		'#markup' => '送货地址:'. implode("</br>", $address_str),
+	);
+	$form['apply_id'] = array(
+		'#type' => 'hidden',
+		'#default_value' => $apply_id
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => '确认发货',
+	);
+	return $form;
+}
+
+function page_delivery_product_sure_submit($form, &$form_state) {
+	$apply_id = $form_state['values']['apply_id'];
+	db_update("product_apply")->fields(array('status' => 2))->condition('id', $apply_id, '=')->execute();
+
+	//TODO:发送邮件给客户/申请人
+	$apply_product = db_select('product_apply', 'ap')
+		->fields('ap')
+		->condition('id', $apply_id, '=')
+		->execute()
+		->fetchAssoc();
+
+	//申请人ID
+	$uid = $apply_product['uid'];
+	$apply_account = user_load($uid);
+	drupal_mail('masterprint_apply', 'notify_apply_account_when_delivery', $apply_account->mail, language_default(), array());
+
+	//客户ID
+	$client_account = get_client_account_from_user($apply_account);
+	drupal_mail('masterprint_apply', 'notify_client_when_delivery', $client_account->mail, language_default(), array());
 }
 
 function page_show_apply_detail($uid, $id) {
@@ -73,7 +139,7 @@ function masterprint_apply_process_productapply(&$vars) {
 
 function client_approve_apply($id) {
 	//审核状态修改
-	//db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
+	db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
 	// 需要通知仓库管理员
 	$warehousr_manager = list_warehouse_manager();
 	foreach ($warehousr_manager as $uid => $user) {
@@ -178,7 +244,7 @@ function masterprint_apply_product() {
 	$form = array();
 	$rows = array();
 	foreach ($product_nodes as $product) {
-		$result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ?", array($product_id))->fetchAssoc();
+		$result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ?", array($product->nid))->fetchAssoc();
 		$cost_total = $result['cost_total'];
 		$rows[] = array(
 			$product->title, 
@@ -188,7 +254,7 @@ function masterprint_apply_product() {
 
 	$header = array('产品名称', '产品库存', '产品最小打包数量');
 	$product_list_table = theme('table', array('header' => $header, 'rows' => $rows));
-
+	global $user;
 	$form['product'] = array(
 		'#type' => 'select',
 		'#title' => t('选择需要的产品'),
@@ -209,7 +275,7 @@ function masterprint_apply_product() {
 	);
 	$form['apply_uid'] = array(
 		'#type' => 'hidden',
-		'#default_value' => $uid,
+		'#default_value' => $user->uid,
 	);
 	$form['deliver_address'] = array(
 		'#type' => 'checkboxes',
@@ -267,13 +333,14 @@ function masterprint_apply_product_submit($form, &$form_state) {
 		$status = drupal_write_record('product_apply', $data);
 		if ($status) {
 			$apply_account = user_load($uid);
-			$client_account = get_client_account_from_saler($apply_account);
-			dpm($client_account);
+			$client_account = get_client_account_from_user($apply_account);
 			drupal_set_message("产品申请成功，请等待您所属客户审核");
+
+			//然后发送邮件到客户，请求审核通过
 			drupal_mail(
 				'masterprint_apply',
 				'submit_product_apply',
-				'397420507@qq.com',
+				$client_account->mail,
 				language_default(),
 				array());
 		}
@@ -310,8 +377,16 @@ function user_is_dealer($user) {
 	return isset($user->roles[DEALER_ROLE_ID]);	
 }
 
-function get_client_account_from_saler($saler_account) {
-	dpm($saler_account);
+function get_client_account_from_user($saler_account) {
+	$loaded_user = profile2_load_by_user($saler_account);
+	if (isset($loaded_user[0]['salesman'])) {
+		$client_uid = $loaded_user[0]['salesman']['field_salesman_client_owner'];
+	}
+	else if (isset($loaded_user[0]['dealer'])) {
+		$client_uid = $loaded_user[0]['salesman']['field_dealer_client_owner'];
+	}
+
+	return user_load($client_uid);
 }
 
 /**
@@ -320,11 +395,19 @@ function get_client_account_from_saler($saler_account) {
 function masterprint_apply_mail($key, &$message, $params) {
 	if ($key == 'submit_product_apply') {
 		$message['subject'] = 'Hello world';
-		$message['body'][] = 'jackey';
+		$message['body'][] = 'submit_product_apply';
 	}
 	else if ($key == 'notify_warehouse_manager_when_approve') {
 		$message['subject'] = 'Hello world';
-		$message['body'][] = 'jackey';
+		$message['body'][] = 'notify_warehouse_manager_when_approve';
+	}
+	else if ($key == 'notify_client_when_delivery') {
+		$message['subject'] = 'Hello world';
+		$message['body'][] = 'notify_client_when_delivery';
+	}
+	else if ($key == 'notify_apply_account_when_delivery') {
+		$message['subject'] = 'Hello world';
+		$message['body'][] = 'notify_apply_account_when_delivery';
 	}
 }
 
