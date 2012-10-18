@@ -17,9 +17,9 @@ function masterprint_apply_menu() {
 		'weight' => 120,
 	);
 	$items['user/%/applyproductlist'] = array(
-		'title' => '产品申请审核',
+		'title' => '产品申请列表',
 		'type' => MENU_LOCAL_TASK,
-		'access arguments' => array('approve apply'),
+		'access arguments' => array('view apply'),
 		'page callback' => 'user_product_apply_list',
 		'page arguments' => array('1'),
 		'weight' => 120,
@@ -154,14 +154,20 @@ function client_approve_apply($id) {
 function user_product_apply_list($user) {
 	$user = user_load(arg(1));
 	$search_uids = array();
-	$query = db_query("select * from field_revision_field_dealer_client_owner left join profile on entity_id=pid where field_dealer_client_owner_target_id=:uid", array(':uid' => $user->uid));
-	while ($row = $query->fetchAssoc()) {
-		$search_uids[] = $row['uid'];
+	if (user_is_saler($user) || user_is_dealer($user)) {
+		$search_uids[] = $user->uid;
 	}
-	$query = db_query("select * from field_revision_field_salesman_client_owner left join profile on entity_id=pid where field_salesman_client_owner_target_id=:uid", array(':uid' => $user->uid));
-	while ($row = $query->fetchAssoc()) {
-		$search_uids[] = $row['uid'];
+	else {
+		$query = db_query("select * from field_revision_field_dealer_client_owner left join profile on entity_id=pid where field_dealer_client_owner_target_id=:uid", array(':uid' => $user->uid));
+		while ($row = $query->fetchAssoc()) {
+			$search_uids[] = $row['uid'];
+		}
+		$query = db_query("select * from field_revision_field_salesman_client_owner left join profile on entity_id=pid where field_salesman_client_owner_target_id=:uid", array(':uid' => $user->uid));
+		while ($row = $query->fetchAssoc()) {
+			$search_uids[] = $row['uid'];
+		}
 	}
+
 	if ($search_uids == array()) {
 		$search_uids[] = -1;
 	}
@@ -178,6 +184,9 @@ function user_product_apply_list($user) {
 			$op = '<span>审核已通过</span>';
 		}
 		$op .= '|'.l('详情', 'user/'.arg(1).'/applydetail/'. $data['id']);
+		if (!user_access('approve apply')) {
+			$op = '无';
+		}
 		$node = node_load($data['product_id']);
 		$apply_user = user_load($data['uid']);
 		$table_row = array(
