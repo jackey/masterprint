@@ -96,63 +96,72 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = '系统未找到任何客户，请先添加。';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
-  /* Field: User: Uid */
+  /* 字段: 用户: Uid */
   $handler->display->display_options['fields']['uid']['id'] = 'uid';
   $handler->display->display_options['fields']['uid']['table'] = 'users';
   $handler->display->display_options['fields']['uid']['field'] = 'uid';
   $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
-  /* Field: User: Name */
+  /* 字段: Global: PHP */
+  $handler->display->display_options['fields']['php']['id'] = 'php';
+  $handler->display->display_options['fields']['php']['table'] = 'views';
+  $handler->display->display_options['fields']['php']['field'] = 'php';
+  $handler->display->display_options['fields']['php']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
+  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
+  /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'users';
   $handler->display->display_options['fields']['name_1']['field'] = 'name';
   $handler->display->display_options['fields']['name_1']['label'] = '账户名';
   $handler->display->display_options['fields']['name_1']['link_to_user'] = FALSE;
-  /* Field: User: E-mail */
+  /* 字段: 用户: E-mail */
   $handler->display->display_options['fields']['mail']['id'] = 'mail';
   $handler->display->display_options['fields']['mail']['table'] = 'users';
   $handler->display->display_options['fields']['mail']['field'] = 'mail';
   $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
-  /* Field: User: 创建人 */
+  /* 字段: 用户: 创建人 */
   $handler->display->display_options['fields']['field_created_by']['id'] = 'field_created_by';
   $handler->display->display_options['fields']['field_created_by']['table'] = 'field_data_field_created_by';
   $handler->display->display_options['fields']['field_created_by']['field'] = 'field_created_by';
   $handler->display->display_options['fields']['field_created_by']['settings'] = array(
     'link' => 0,
   );
-  /* Field: User: Created date */
+  /* 字段: 用户: Created date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'users';
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['label'] = '创建于';
   $handler->display->display_options['fields']['created']['date_format'] = 'short';
-  /* Field: Global: Custom text */
+  /* 字段: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = '资料操作';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '查看';
   $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'profile2/[uid]/view';
-  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'profile2/[uid]/view?destination=[php]';
+  /* 字段: Global: Custom text */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
   $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing_1']['label'] = '资料操作';
   $handler->display->display_options['fields']['nothing_1']['alter']['text'] = '编辑';
   $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'profile2/[uid]/edit';
-  /* Sort criterion: User: Created date */
+  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'profile2/[uid]/edit?destination=[php]';
+  /* Sort criterion: 用户: Created date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'users';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
-  /* Filter criterion: User: Active */
+  /* Filter criterion: 用户: 有效的 */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: User: Roles */
+  /* Filter criterion: 用户: 角色 */
   $handler->display->display_options['filters']['rid']['id'] = 'rid';
   $handler->display->display_options['filters']['rid']['table'] = 'users_roles';
   $handler->display->display_options['filters']['rid']['field'] = 'rid';
@@ -173,6 +182,7 @@ function masterprint_client_views_default_views() {
     t('Desc'),
     t('系统未找到任何客户，请先添加。'),
     t('Uid'),
+    t('PHP'),
     t('账户名'),
     t('账户邮箱'),
     t('创建人'),
@@ -209,7 +219,7 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['pager']['options']['tags']['last'] = '末页 »';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Field: User: Name */
+  /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'users';
   $handler->display->display_options['fields']['name']['field'] = 'name';
@@ -218,18 +228,18 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['name']['link_to_user'] = FALSE;
-  /* Sort criterion: User: Name */
+  /* Sort criterion: 用户: 名称 */
   $handler->display->display_options['sorts']['name']['id'] = 'name';
   $handler->display->display_options['sorts']['name']['table'] = 'users';
   $handler->display->display_options['sorts']['name']['field'] = 'name';
-  /* Filter criterion: User: Active */
+  /* Filter criterion: 用户: 有效的 */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: User: Roles */
+  /* Filter criterion: 用户: 角色 */
   $handler->display->display_options['filters']['rid']['id'] = 'rid';
   $handler->display->display_options['filters']['rid']['table'] = 'users_roles';
   $handler->display->display_options['filters']['rid']['field'] = 'rid';
