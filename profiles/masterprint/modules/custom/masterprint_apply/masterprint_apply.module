@@ -153,8 +153,17 @@ function client_approve_apply($id) {
 
 function user_product_apply_list($user) {
 	$user = user_load(arg(1));
+	$search_uids = array();
+	$query = db_query("select * from field_revision_field_dealer_client_owner left join profile on entity_id=pid where field_dealer_client_owner_target_id=:uid", array(':uid' => $user->uid));
+	while ($row = $query->fetchAssoc()) {
+		$search_uids[] = $row['uid'];
+	}
+	$query = db_query("select * from field_revision_field_salesman_client_owner left join profile on entity_id=pid where field_salesman_client_owner_target_id=:uid", array(':uid' => $user->uid));
+	while ($row = $query->fetchAssoc()) {
+		$search_uids[] = $row['uid'];
+	}
 	$header = array('产品名称', '申请时间', '申请数量', '申请人',  '申请状态', '操作');
-	$query = db_query("SELECT * FROM {product_apply} WHERE uid=?", array($user->uid));
+	$query = db_select("product_apply", 'pa')->fields('pa')->condition('uid', $search_uids, 'in')->execute();
 	$apply_product = array();
 	$table_rows = array();
 	while ($data = $query->fetchAssoc()) {
