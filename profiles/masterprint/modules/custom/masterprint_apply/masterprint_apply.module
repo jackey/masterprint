@@ -379,11 +379,11 @@ function user_is_dealer($user) {
 
 function get_client_account_from_user($saler_account) {
 	$loaded_user = profile2_load_by_user($saler_account);
-	if (isset($loaded_user[0]['salesman'])) {
-		$client_uid = $loaded_user[0]['salesman']['field_salesman_client_owner'];
+	if (isset($loaded_user['salesman'])) {
+		$client_uid = $loaded_user['salesman']['field_salesman_client_owner'];
 	}
-	else if (isset($loaded_user[0]['dealer'])) {
-		$client_uid = $loaded_user[0]['salesman']['field_dealer_client_owner'];
+	else if (isset($loaded_user['dealer'])) {
+		$client_uid = $loaded_user['salesman']['field_dealer_client_owner'];
 	}
 
 	return user_load($client_uid);
