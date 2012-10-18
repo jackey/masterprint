@@ -162,6 +162,9 @@ function user_product_apply_list($user) {
 	while ($row = $query->fetchAssoc()) {
 		$search_uids[] = $row['uid'];
 	}
+	if ($search_uids == array()) {
+		$search_uids[] = -1;
+	}
 	$header = array('产品名称', '申请时间', '申请数量', '申请人',  '申请状态', '操作');
 	$query = db_select("product_apply", 'pa')->fields('pa')->condition('uid', $search_uids, 'in')->execute();
 	$apply_product = array();
