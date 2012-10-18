@@ -152,7 +152,7 @@ function masterprint_product_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'field_product_applied_by',
-      'label' => '申请人',
+      'label' => '客户',
       'required' => 0,
       'settings' => array(
         'user_register_form' => FALSE,
@@ -437,6 +437,70 @@ function masterprint_product_field_default_fields() {
     ),
   );
 
+  // Exported field: 'node-product-field_product_stock'.
+  $fields['node-product-field_product_stock'] = array(
+    'field_config' => array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_product_stock',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'locked' => '0',
+      'module' => 'number',
+      'settings' => array(
+        'profile2_private' => FALSE,
+      ),
+      'translatable' => '0',
+      'type' => 'number_integer',
+    ),
+    'field_instance' => array(
+      'bundle' => 'product',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'number',
+          'settings' => array(
+            'decimal_separator' => '.',
+            'prefix_suffix' => TRUE,
+            'scale' => 0,
+            'thousand_separator' => ' ',
+          ),
+          'type' => 'number_integer',
+          'weight' => 10,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_product_stock',
+      'label' => '库存量',
+      'required' => 0,
+      'settings' => array(
+        'max' => '',
+        'min' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 0,
+        'module' => 'number',
+        'settings' => array(),
+        'type' => 'number',
+        'weight' => '9',
+      ),
+    ),
+  );
+
   // Exported field: 'node-product-field_product_thumbnail'.
   $fields['node-product-field_product_thumbnail'] = array(
     'field_config' => array(
@@ -523,9 +587,10 @@ function masterprint_product_field_default_fields() {
   t('产品描述PDF');
   t('产品流水号');
   t('印刷说明');
+  t('客户');
+  t('库存量');
   t('数量');
   t('最小打包数量');
-  t('申请人');
   t('缩略图');
   t('请您说明印刷说明，如:xxx');
 

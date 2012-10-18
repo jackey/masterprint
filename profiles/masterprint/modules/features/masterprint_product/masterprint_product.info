@@ -20,6 +20,7 @@ features[field][] = node-product-field_product_count
 features[field][] = node-product-field_product_detail_pdf
 features[field][] = node-product-field_product_min_pack_num
 features[field][] = node-product-field_product_serial_number
+features[field][] = node-product-field_product_stock
 features[field][] = node-product-field_product_thumbnail
 features[node][] = product
 features[variable][] = field_bundle_settings_node__product
