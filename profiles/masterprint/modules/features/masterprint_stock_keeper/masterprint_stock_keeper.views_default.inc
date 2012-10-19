@@ -37,7 +37,7 @@ function masterprint_stock_keeper_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = '您尚未创建任何仓储管理员。';
+  $handler->display->display_options['empty']['area']['content'] = '系统未找到任何仓储管理员，请先添加。';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
   /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
@@ -92,7 +92,7 @@ function masterprint_stock_keeper_views_default_views() {
     t('Sort by'),
     t('Asc'),
     t('Desc'),
-    t('您尚未创建任何仓储管理员。'),
+    t('系统未找到任何仓储管理员，请先添加。'),
     t('账户名'),
     t('账户邮箱'),
     t('创建于'),

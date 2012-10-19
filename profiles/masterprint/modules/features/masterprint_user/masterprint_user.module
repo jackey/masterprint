@@ -116,6 +116,13 @@ function materprint_user_access_other_profile2($profile_user, $op) {
     switch ($crt_user_role_name) {
       case '管理员':
       case 'AE业务经理':
+
+
+        // Admin can edit each other's profile2
+        if ($crt_user_role_name == '管理员') {
+          return TRUE;
+        }
+
         // Admin, AE can  edit 'Client', 'Client dealer', 'Client salesman'
         if (in_array($profile_type , array('client', 'dealer', 'salesman'))) {
           return TRUE;
@@ -264,6 +271,18 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
     if (masterprint_user_is_user_client($user->uid)) {
       $form['profile_salesman']['field_salesman_client_owner']['und']['#default_value'] = $user->uid;
       $form['profile_salesman']['field_salesman_client_owner']['#attributes']['style'][] = 'display:none;';
+    }
+  }
+
+  if ($form_id == 'masterprint_user_edit_own_profile2') {
+    if (masterprint_user_is_user_client($user->uid)) {
+      if (!empty($form['profile_dealer']) && !empty($form['profile_dealer']['field_dealer_client_owner'])) {
+        $form['profile_dealer']['field_dealer_client_owner']['#attributes']['style'][] = 'display:none;';
+      }
+
+      if (!empty($form['profile_salesman']) && !empty($form['profile_salesman']['field_salesman_client_owner'])) {
+        $form['profile_salesman']['field_salesman_client_owner']['#attributes']['style'][] = 'display:none;';
+      }
     }
   }
 }
