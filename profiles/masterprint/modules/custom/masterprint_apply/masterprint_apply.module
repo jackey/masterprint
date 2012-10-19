@@ -4,6 +4,7 @@ define('SALER_ROLE_ID', 8);
 define('DEALER_ROLE_ID', 7);
 define('CLIENT_ROLE_ID', 6);
 define('WAREHOUSE_ROLE_ID', 5);
+define('AE_ROLE_ID', 3);
 define('ADDRESS_SPLITER', '------------');
 
 function masterprint_apply_menu() {
@@ -46,6 +47,36 @@ function masterprint_apply_menu() {
 		'page arguments' => array('page_delivery_product_sure'),
 	);
 	return $items;
+}
+
+/**
+ * 创建产品后 邮件通知仓库管理员.
+ * Implements hook_form_alter()
+ */
+function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
+	// $form['send_warehouse_manager'] = array(
+	// 	'#title' => '发送给仓库管理员',
+	// 	'#type' => 'checkbox',
+	// 	'#option' => array(1 => '发送'),
+	// 	'#required' => TRUE,
+	// 	'#default_value' => '1',
+	// 	'#weight' => 10
+	// );
+}
+
+/**
+ * hook_node_insert()
+ */
+function masterprint_apply_node_insert($node) {
+	//成功添加产品后，需要告之仓库管理员入库
+	$managers = list_warehouse_manager();
+	foreach ($managers as $manager) {
+		drupal_mail('masterprint_apply', 
+			'notify_warehouse_when_product_insert', 
+			$manager->mail, 
+			language_default(), 
+			array());
+	}
 }
 
 function page_delivery_product_sure() {
@@ -105,6 +136,22 @@ function page_delivery_product_sure_submit($form, &$form_state) {
 	//客户ID
 	$client_account = get_client_account_from_user($apply_account);
 	drupal_mail('masterprint_apply', 'notify_client_when_delivery', $client_account->mail, language_default(), array());
+
+	//发货后，检查库存，如果库存少于20个则发送邮件给对应的客户和AE
+	//发送邮件告警
+	drupal_mail('masterprint_apply', 
+		'notify_warning_when_product_less', 
+		$client_account->mail, 
+		language_default(), 
+		array());
+	$ae_accounts = list_ae_account();
+	foreach ($ae_accounts as $ae) {
+		drupal_mail('masterprint_apply', 
+			'notify_warning_when_product_less', 
+			$ae->mail, 
+			language_default(), 
+			array());
+	}
 }
 
 function page_show_apply_detail($uid, $id) {
@@ -431,6 +478,14 @@ function masterprint_apply_mail($key, &$message, $params) {
 		$message['subject'] = 'Hello world';
 		$message['body'][] = 'notify_apply_account_when_delivery';
 	}
+	else if ($key == 'notify_warehouse_when_product_insert') {
+		$message['subject'] = 'Hello world';
+		$message['body'][] = 'notify_warehouse_when_product_insert';
+	}
+	else if ($key == 'notify_warning_when_product_less') {
+		$message['subject'] = 'Hello world';
+		$message['body'][] = 'notify_warning_when_product_less';
+	}
 }
 
 function list_warehouse_manager() {
@@ -443,4 +498,16 @@ function list_warehouse_manager() {
 		$uids[] = $row['uid'];
 	}
 	return $managers = user_load_multiple($uids);
+}
+
+function list_ae_account() {
+	$result = db_select('users_roles', 'ur')
+		->fields('ur')
+		->condition('rid', AE_ROLE_ID, '=')
+		->execute();
+	$uids = array();
+	while ($row = $result->fetchAssoc()) {
+		$uids[] = $row['uid'];
+	}
+	return $ae = user_load_multiple($uids);
 }
