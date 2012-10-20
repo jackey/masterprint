@@ -1031,7 +1031,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_dealer_client_owner',
       'label' => '所属客户',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
@@ -1593,6 +1593,7 @@ function masterprint_settings_field_default_fields() {
             'view_name' => 'profile2_client_filter',
           ),
         ),
+        'profile2_private' => 0,
         'target_type' => 'user',
       ),
       'translatable' => '0',
@@ -1617,11 +1618,12 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_salesman_client_owner',
       'label' => '所属客户',
-      'required' => FALSE,
+      'required' => 1,
       'settings' => array(
         'user_register_form' => FALSE,
       ),
       'widget' => array(
+        'active' => 1,
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_buttons',

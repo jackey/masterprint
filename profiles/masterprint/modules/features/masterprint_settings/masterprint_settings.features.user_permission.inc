@@ -70,7 +70,8 @@ function masterprint_settings_user_default_permissions() {
     'name' => 'access user profiles',
     'roles' => array(
       0 => 'administrator',
-      1 => '管理员',
+      1 => 'authenticated user',
+      2 => '管理员',
     ),
     'module' => 'user',
   );

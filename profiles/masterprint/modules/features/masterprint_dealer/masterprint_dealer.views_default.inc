@@ -127,11 +127,12 @@ function masterprint_dealer_views_default_views() {
   $handler->display->display_options['fields']['mail']['table'] = 'users';
   $handler->display->display_options['fields']['mail']['field'] = 'mail';
   $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
-  /* 字段: 用户: 创建人 */
-  $handler->display->display_options['fields']['field_created_by']['id'] = 'field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['table'] = 'field_data_field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['field'] = 'field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['settings'] = array(
+  /* 字段: 个人资料: 所属客户 */
+  $handler->display->display_options['fields']['field_dealer_client_owner']['id'] = 'field_dealer_client_owner';
+  $handler->display->display_options['fields']['field_dealer_client_owner']['table'] = 'field_data_field_dealer_client_owner';
+  $handler->display->display_options['fields']['field_dealer_client_owner']['field'] = 'field_dealer_client_owner';
+  $handler->display->display_options['fields']['field_dealer_client_owner']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_dealer_client_owner']['settings'] = array(
     'link' => 0,
   );
   /* 字段: 用户: Created date */
@@ -243,13 +244,6 @@ function masterprint_dealer_views_default_views() {
   $handler->display->display_options['fields']['field_dealer_client_owner']['settings'] = array(
     'link' => 0,
   );
-  /* 字段: 用户: 创建人 */
-  $handler->display->display_options['fields']['field_created_by']['id'] = 'field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['table'] = 'field_data_field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['field'] = 'field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['settings'] = array(
-    'link' => 0,
-  );
   /* 字段: 用户: Created date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'users';
@@ -285,7 +279,7 @@ function masterprint_dealer_views_default_views() {
     t('Uid'),
     t('账户名'),
     t('账户邮箱'),
-    t('创建人'),
+    t('所属客户'),
     t('创建于'),
     t('PHP'),
     t('资料操作'),
@@ -295,7 +289,6 @@ function masterprint_dealer_views_default_views() {
     t('全部'),
     t('Total Summary'),
     t('系统未找到任何客户经销商，请先添加。'),
-    t('所属客户'),
   );
   $export['dealer_listing'] = $view;
 

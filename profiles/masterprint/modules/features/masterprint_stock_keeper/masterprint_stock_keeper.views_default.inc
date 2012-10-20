@@ -84,6 +84,7 @@ function masterprint_stock_keeper_views_default_views() {
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'created_by_user');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
   $translatables['stock_keeper_listing'] = array(
     t('Master'),
     t('more'),

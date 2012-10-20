@@ -74,7 +74,7 @@ function masterprint_apply_node_insert($node) {
 		drupal_mail('masterprint_apply', 
 			'notify_warehouse_when_product_insert', 
 			$manager->mail, 
-			language_default(), 
+			language_default(),
 			array());
 	}
 }
@@ -141,7 +141,7 @@ function page_delivery_product_sure_submit($form, &$form_state) {
 	//发送邮件告警
 	drupal_mail('masterprint_apply', 
 		'notify_warning_when_product_less', 
-		$client_account->mail, 
+		$client_account->mail,
 		language_default(), 
 		array());
 	$ae_accounts = list_ae_account();

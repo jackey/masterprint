@@ -159,13 +159,13 @@ function masterprint_product_field_default_fields() {
       ),
       'widget' => array(
         'active' => 1,
-        'module' => 'entityreference',
+        'module' => 'options',
         'settings' => array(
           'match_operator' => 'CONTAINS',
           'path' => '',
           'size' => '60',
         ),
-        'type' => 'entityreference_autocomplete',
+        'type' => 'options_select',
         'weight' => '8',
       ),
     ),
@@ -293,7 +293,7 @@ function masterprint_product_field_default_fields() {
       'settings' => array(
         'description_field' => 0,
         'file_directory' => '',
-        'file_extensions' => 'pdf ppt xsl xls txt jpg jepg jpeg png',
+        'file_extensions' => 'pdf',
         'max_filesize' => '',
         'user_register_form' => FALSE,
       ),
