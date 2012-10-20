@@ -17,7 +17,7 @@ function masterprint_salesman_menu() {
     'page callback' => 'masterprint_salesman_load_managed_salesman',
     'page arguments' => array(1),
     'access arguments' => array('manage salesman accounts'),
-    'weight' => 160,
+    'weight' => 158,
   );
   $items['user/%user/salesman/list'] = array(
     'title' => '客户销售人员列表',

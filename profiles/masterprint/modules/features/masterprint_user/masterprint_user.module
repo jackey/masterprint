@@ -19,22 +19,26 @@ function masterprint_user_menu() {
     'title' => '个人资料',
     'type' => MENU_LOCAL_TASK,
     'access arguments' => array('manage own profile2'),
-    'page callback' => 'masterprint_user_view_own_profile2',
-    'page arguments' => array(1),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_user_edit_own_profile2', 1),
     'weight' => 90,
-  );
-  $items['user/%user/profile2/view'] = array(
-    'title' => '预览',
-    'access arguments' => array('manage own profile2'),
-    'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['user/%user/profile2/edit'] = array(
     'title' => '修改',
-    'type' => MENU_LOCAL_TASK,
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('masterprint_user_edit_own_profile2', 1),
     'access arguments' => array('manage own profile2'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 91,
+  );
+  $items['user/%user/profile2/edit_account'] = array(
+    'title' => '账号编辑',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('user_profile_form', 1),
+    'access callback' => 'user_edit_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 92,
+    'file path' => drupal_get_path('module', 'user'),
+    'file' => 'user.pages.inc',
   );
   $items['profile2/%user/view'] = array(
     'title' => '查看资料',
@@ -254,9 +258,10 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
       unset($form['field_created_by']);
       unset($form['signature_settings']);
       unset($form['contact']);
-      unset($form['locale']);
-      unset($form['locale']['language']);
     }
+
+    unset($form['locale']);
+    unset($form['locale']['language']);
   }
 
   // For client, hide the 'field_dealer_client_owner' field, and set it as the
@@ -285,6 +290,13 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_menu_alter()
+ */
+function masterprint_user_menu_alter(&$items) {
+  $items['user/%user/edit']['access callback'] = FALSE;
 }
 
 /**
