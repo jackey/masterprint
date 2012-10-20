@@ -184,7 +184,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_address',
       'label' => '地址',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -193,7 +193,7 @@ function masterprint_settings_field_default_fields() {
         'active' => 1,
         'module' => 'text',
         'settings' => array(
-          'rows' => '5',
+          'rows' => '2',
         ),
         'type' => 'text_textarea',
         'weight' => '8',
@@ -246,7 +246,7 @@ function masterprint_settings_field_default_fields() {
         'max' => '130',
         'min' => '0',
         'prefix' => '',
-        'suffix' => '',
+        'suffix' => '岁',
         'user_register_form' => FALSE,
       ),
       'widget' => array(
@@ -312,7 +312,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_entry_date',
       'label' => '入职时间',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'default_value' => 'blank',
         'default_value2' => 'same',
@@ -331,7 +331,7 @@ function masterprint_settings_field_default_fields() {
           'text_parts' => array(),
           'year_range' => '-10:+0',
         ),
-        'type' => 'date_select',
+        'type' => 'date_popup',
         'weight' => '5',
       ),
     ),
@@ -384,7 +384,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_fullname',
       'label' => '姓名',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -570,7 +570,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_tel',
       'label' => '联系电话',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -633,7 +633,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_address',
       'label' => '地址',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -697,7 +697,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_client_contacter',
       'label' => '联系人',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -761,7 +761,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_client_name',
       'label' => '名称',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -773,7 +773,7 @@ function masterprint_settings_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '0',
+        'weight' => 0,
       ),
     ),
   );
@@ -889,7 +889,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_tel',
       'label' => '电话',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -952,7 +952,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_address',
       'label' => '地址',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -961,7 +961,7 @@ function masterprint_settings_field_default_fields() {
         'active' => 1,
         'module' => 'text',
         'settings' => array(
-          'rows' => '5',
+          'rows' => '2',
         ),
         'type' => 'text_textarea',
         'weight' => '3',
@@ -1092,7 +1092,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_dealer_contacter',
       'label' => '联系人',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -1156,7 +1156,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_dealer_name',
       'label' => '名称',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -1284,7 +1284,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_tel',
       'label' => '电话',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -1539,7 +1539,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_salesman_addresses',
       'label' => '地址',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -1548,7 +1548,7 @@ function masterprint_settings_field_default_fields() {
         'active' => 1,
         'module' => 'text',
         'settings' => array(
-          'rows' => '5',
+          'rows' => '2',
         ),
         'type' => 'text_textarea',
         'weight' => '1',
@@ -1679,7 +1679,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_salesman_contacter',
       'label' => '联系人',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -1743,7 +1743,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_salesman_name',
       'label' => '名称',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
@@ -1755,7 +1755,7 @@ function masterprint_settings_field_default_fields() {
           'size' => '60',
         ),
         'type' => 'text_textfield',
-        'weight' => '0',
+        'weight' => 0,
       ),
     ),
   );
@@ -1807,7 +1807,7 @@ function masterprint_settings_field_default_fields() {
       'entity_type' => 'profile2',
       'field_name' => 'field_tel',
       'label' => '电话',
-      'required' => 0,
+      'required' => 1,
       'settings' => array(
         'text_processing' => '0',
         'user_register_form' => FALSE,
