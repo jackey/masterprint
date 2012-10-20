@@ -135,14 +135,6 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['fields']['created']['label'] = '创建于';
   $handler->display->display_options['fields']['created']['date_format'] = 'short';
   /* 字段: Global: Custom text */
-  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['label'] = '资料操作';
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = '查看';
-  $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'profile2/[uid]/view?destination=[php]';
-  /* 字段: Global: Custom text */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
   $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
@@ -188,7 +180,6 @@ function masterprint_client_views_default_views() {
     t('创建人'),
     t('创建于'),
     t('资料操作'),
-    t('查看'),
     t('编辑'),
     t('Block'),
   );

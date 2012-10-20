@@ -142,14 +142,6 @@ function masterprint_admin_views_default_views() {
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* 字段: Global: Custom text */
-  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['label'] = '资料操作';
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = '查看';
-  $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'profile2/[uid]/view?destination=[php]';
-  /* 字段: Global: Custom text */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
   $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
@@ -195,7 +187,6 @@ function masterprint_admin_views_default_views() {
     t('Uid'),
     t('Current Path'),
     t('资料操作'),
-    t('查看'),
     t('编辑'),
     t('Block'),
   );
