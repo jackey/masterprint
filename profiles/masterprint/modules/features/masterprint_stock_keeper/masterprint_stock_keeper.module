@@ -31,6 +31,15 @@ function masterprint_stock_keeper_menu() {
     'page arguments' => array('masterprint_stock_keeper_add_stock_keeper_form', 1),
     'access arguments' => array('manage stock_keeper accounts'),
   );
+  $items['stock_keeper/%user/edit'] = array(
+    'title' => '编辑仓库管理员',
+    'title callback' => 'masterprint_stock_keeper_edit_title',
+    'title arguments' => array(1),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('masterprint_stock_keeper_edit_stock_keeper_form', 1),
+    'access arguments' => array('manage stock_keeper accounts'),
+  );
   return $items;
 }
 
@@ -44,6 +53,13 @@ function masterprint_stock_keeper_permission() {
       'restrict access' => TRUE,
     ),
   );
+}
+
+/**
+ * Title callback
+ */
+function masterprint_stock_keeper_edit_title($user) {
+  return t('编辑仓库管理员!user', array('!user' => $user->name));
 }
 
 /**
@@ -206,6 +222,88 @@ function masterprint_stock_keeper_send_email($from, $to, $subject, $message) {
   }
   else {
     return FALSE;
+  }
+}
+
+/**
+ * Form to edit stock-keeper
+ */
+function masterprint_stock_keeper_edit_stock_keeper_form($form, $form_state, $user) {
+  $form['stock_keeper_uid'] = array(
+    '#type' => 'value',
+    '#value' => $user->uid,
+  );
+  $form['stock_keeper_old_mail'] = array(
+    '#type' => 'value',
+    '#value' => $user->mail,
+  );
+  $form['mail'] = array(
+    '#type' => 'textfield',
+    '#title' => t('E-mail地址'),
+    '#maxlength' => EMAIL_MAX_LENGTH,
+    '#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
+    '#required' => TRUE,
+    '#default_value' => $user->mail,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('保存'),
+  );
+  return $form;
+}
+
+/**
+ * Validation handler
+ */
+function masterprint_stock_keeper_edit_stock_keeper_form_validate(&$form, &$form_state) {
+  $values = $form_state['values'];
+
+  // Trim whitespace from mail, to prevent confusing 'e-mail not valid'
+  // warnings often caused by cutting and pasting.
+  $mail = trim($form_state['values']['mail']);
+  form_set_value($form['mail'], $mail, $form_state);
+
+  // Validate email
+  if ($error = user_validate_mail($form_state['values']['mail'])) {
+    form_set_error('mail', $error);
+  }
+  else {
+    // Make sure it's not used by other user
+    $duplicate = (bool) db_select('users')
+      ->fields('users', array('uid'))
+      ->condition('mail', db_like($form_state['values']['mail']), 'LIKE')
+      ->condition('uid', $values['stock_keeper_uid'], '<>')
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+
+    if ($duplicate) {
+      form_set_error('mail', t('The e-mail address %email is already taken.', array('%email' => $form_state['values']['mail'])));
+    }
+  }
+}
+
+/**
+ * Submission handler
+ */
+function masterprint_stock_keeper_edit_stock_keeper_form_submit(&$form, &$form_state) {
+  $values = $form_state['values'];
+  $stock_keeper = user_load($values['stock_keeper_uid']);
+
+  if ((!empty($values['mail'])) && ($values['stock_keeper_old_mail'] == $values['mail'])) {
+    drupal_set_message(t('您未对仓库管理员<strong>%user</strong>的邮件地址做修改。', array(
+        '%user'=> $stock_keeper->name)));
+  }
+  else {
+    $stock_keeper_updated = user_save($stock_keeper, array('mail' => $values['mail']));
+    if (!empty($stock_keeper_updated)) {
+      drupal_set_message(t('仓库管理员<strong>%user</strong>的邮件地址被更新为：%new_email 。', array(
+          '%user'=> $stock_keeper->name, '%new_email'=> $values['mail'])));
+    }
+    else {
+      drupal_set_message(t('更新仓库管理员<strong>%user</strong>的邮件地址操作失败！', array(
+          '%user'=> $stock_keeper->name), 'error'));
+    }
   }
 }
 

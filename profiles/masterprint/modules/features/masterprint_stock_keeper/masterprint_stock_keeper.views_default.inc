@@ -32,6 +32,63 @@ function masterprint_stock_keeper_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['pager']['options']['items_per_page'] = '5';
   $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'uid' => 'uid',
+    'php' => 'php',
+    'name_1' => 'name_1',
+    'mail' => 'mail',
+    'field_created_by' => 'field_created_by',
+    'created' => 'created',
+    'nothing' => 'nothing',
+  );
+  $handler->display->display_options['style_options']['default'] = 'name_1';
+  $handler->display->display_options['style_options']['info'] = array(
+    'uid' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'php' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'name_1' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'mail' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_created_by' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'created' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'nothing' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
   $handler->display->display_options['empty']['area']['table'] = 'views';
@@ -39,6 +96,20 @@ function masterprint_stock_keeper_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = '系统未找到任何仓储管理员，请先添加。';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
+  /* 字段: 用户: Uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'users';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
+  /* 字段: Global: PHP */
+  $handler->display->display_options['fields']['php']['id'] = 'php';
+  $handler->display->display_options['fields']['php']['table'] = 'views';
+  $handler->display->display_options['fields']['php']['field'] = 'php';
+  $handler->display->display_options['fields']['php']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
+  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'users';
@@ -50,12 +121,27 @@ function masterprint_stock_keeper_views_default_views() {
   $handler->display->display_options['fields']['mail']['table'] = 'users';
   $handler->display->display_options['fields']['mail']['field'] = 'mail';
   $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
+  /* 字段: 用户: 创建人 */
+  $handler->display->display_options['fields']['field_created_by']['id'] = 'field_created_by';
+  $handler->display->display_options['fields']['field_created_by']['table'] = 'field_data_field_created_by';
+  $handler->display->display_options['fields']['field_created_by']['field'] = 'field_created_by';
+  $handler->display->display_options['fields']['field_created_by']['settings'] = array(
+    'link' => 0,
+  );
   /* 字段: 用户: Created date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'users';
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['label'] = '创建于';
   $handler->display->display_options['fields']['created']['date_format'] = 'short';
+  /* 字段: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = '账户操作';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '编辑';
+  $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['nothing']['alter']['path'] = 'stock_keeper/[uid]/edit?destination=[php]';
   /* Contextual filter: 用户: 创建人 (field_created_by) */
   $handler->display->display_options['arguments']['field_created_by_target_id']['id'] = 'field_created_by_target_id';
   $handler->display->display_options['arguments']['field_created_by_target_id']['table'] = 'field_data_field_created_by';
@@ -94,9 +180,14 @@ function masterprint_stock_keeper_views_default_views() {
     t('Asc'),
     t('Desc'),
     t('系统未找到任何仓储管理员，请先添加。'),
+    t('Uid'),
+    t('PHP'),
     t('账户名'),
     t('账户邮箱'),
+    t('创建人'),
     t('创建于'),
+    t('账户操作'),
+    t('编辑'),
     t('全部'),
     t('Block'),
   );
