@@ -75,16 +75,18 @@ function masterprint_user_admin_paths_alter(&$paths) {
  * Title callback
  */
 function masterprint_user_profile_title($user, $op) {
-  $title = '';
   $role_rid = masterprint_user_get_masterprint_role($user->uid);
   $role = user_role_load($role_rid);
   $role_name = $role->name;
 
-  if ($op == 'view') {
-    $title .= '查看[' . $role_name .' - ' . $user->name . ']的资料';
+  $name = masterprint_user_get_profile2_fullname($user->uid);
+  if (empty($name)) {
+    $name = t('未命名');
   }
+
   if ($op == 'edit') {
-    $title .= '编辑[' . $role_name .' - ' . $user->name . ']的资料';
+    $title =  t('资料编辑 - !name(!role_name)', array(
+        '!role_name' => $role_name, '!name' => $name));
   }
   return $title;
 }
@@ -506,5 +508,49 @@ function masterprint_user_get_masterprint_role($uid) {
     }
     return FALSE;
   }
+}
 
+/**
+ * Get a user's name in the profile2
+ */
+function masterprint_user_get_profile2_fullname($uid) {
+  $profile2_type = masterprint_user_get_user_profile_type($uid);
+
+  $user = user_load($uid);
+  $profile2 = profile2_load_by_user($uid);
+
+  if (!empty($profile2[$profile2_type])) {
+    // Different profile types use different fields:
+    // Admin    - field_fullname
+    // AE       - field_fullname
+    // Client   - field_client_name
+    // Salesman - field_salesman_name
+    // Dealer   - field_salesman_name
+
+    $field_name = '';
+    switch ($profile2_type) {
+      case 'admin':
+      case 'ae':
+        $field_name = 'field_fullname';
+        break;
+      case 'client':
+        $field_name = 'field_client_name';
+        break;
+      case 'salesman':
+        $field_name = 'field_salesman_name';
+        break;
+      case 'dealer':
+        $field_name = 'field_salesman_name';
+        break;
+    }
+
+    if ((!empty($field_name)) && (!empty($profile2[$profile2_type]->$field_name))) {
+      $profile = $profile2[$profile2_type]->$field_name;
+      if (!empty($profile['und'][0]['value'])) {
+        return $profile['und'][0]['value'];
+      }
+    }
+  }
+
+  return FALSE;
 }
