@@ -29,8 +29,15 @@ function masterprint_ae_views_default_views() {
   $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['exposed_form']['options']['reset_button_label'] = '重置';
-  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '20';
   $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['pager']['options']['tags']['first'] = '« 第一页';
+  $handler->display->display_options['pager']['options']['tags']['previous'] = '‹ 前一页';
+  $handler->display->display_options['pager']['options']['tags']['next'] = '下一页 ›';
+  $handler->display->display_options['pager']['options']['tags']['last'] = '末页 »';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'uid' => 'uid',
@@ -201,6 +208,13 @@ function masterprint_ae_views_default_views() {
     t('Sort by'),
     t('Asc'),
     t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« 第一页'),
+    t('‹ 前一页'),
+    t('下一页 ›'),
+    t('末页 »'),
     t('系统AE列表为空，请先添加。'),
     t('个人资料'),
     t('Uid'),
