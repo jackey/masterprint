@@ -6,6 +6,9 @@ define('CLIENT_ROLE_ID', 6);
 define('WAREHOUSE_ROLE_ID', 5);
 define('AE_ROLE_ID', 3);
 define('ADDRESS_SPLITER', '------------');
+define("PRODUCT_APPLYING", 0);
+define("PRODUCT_PASSED", 1);
+define("PRODUCT_SENT", 2);
 
 function masterprint_apply_menu() {
 	$items = array();
@@ -62,6 +65,13 @@ function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
 	// 	'#default_value' => '1',
 	// 	'#weight' => 10
 	// );
+	if ($form_id == 'product_node_form') {
+		global $user;
+		if (user_is_client($user)) {
+			$form['field_product_applied_by']['#access'] = FALSE;
+			$form['field_product_applied_by'][LANGUAGE_NONE]['#default_value'] = $user->uid;
+		}
+	}
 }
 
 /**
@@ -106,6 +116,16 @@ function page_delivery_product_sure() {
 	$form['address'] = array(
 		'#markup' => '送货地址:'. implode("</br>", $address_str),
 	);
+	$form['product_count'] = array(
+		'#title' => t('发货数量'),
+		'#type' => 'textfield',
+		'#maxlength' => 12,
+		'#size' => 12,
+		'#description' => t('只能填写数字'),
+	);
+	$form['product_stock'] = array(
+		'#markup' => '<span class="product-stock-element">' . t('产品库存: %stock', array('%stock' => get_product_stock_number($product))). '</span></br>',
+	);
 	$form['apply_id'] = array(
 		'#type' => 'hidden',
 		'#default_value' => $apply_id
@@ -117,9 +137,46 @@ function page_delivery_product_sure() {
 	return $form;
 }
 
+function page_delivery_product_sure_validate($form, &$form_state) {
+	if (!is_numeric($form_state['values']['product_count'])) {
+		form_set_error('product_count', t('发货数量 只能填写数字'));
+	}
+	$apply_id = $form_state['values']['apply_id'];
+
+	//TODO:发送邮件给客户/申请人
+	$apply_product = db_select('product_apply', 'ap')
+		->fields('ap')
+		->condition('id', $apply_id, '=')
+		->execute()
+		->fetchAssoc();
+	$product = node_load($apply_product['product_id']);
+	$stock_number = get_product_stock_number($product);
+	if ($stock_number < $form_state['values']['product_count']) {
+		form_set_error('product_count', '抱歉：库存不足!');
+	}
+}
+
+//返回产品的库存
+function get_product_stock_number($product) {
+	$total_count = $product->field_product_count[LANGUAGE_NONE][0]['value'];
+	if (!$total_count) {
+		return 0;
+	}
+	else {
+		$result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ? AND status = ?", array($product->nid, PRODUCT_SENT))->fetchAssoc();
+		$cost_total = $result['cost_total'];
+		return ($total_count - $cost_total > 0) ? ($total_count - $cost_total) : 0;
+	}
+}
+
 function page_delivery_product_sure_submit($form, &$form_state) {
 	$apply_id = $form_state['values']['apply_id'];
-	db_update("product_apply")->fields(array('status' => 2))->condition('id', $apply_id, '=')->execute();
+	//更新申请状态/更新发货数量
+	db_update("product_apply")
+			->fields(array('status' => 2))
+			->fields(array('sent_count' => $form_state['values']['product_count']))
+			->condition('id', $apply_id, '=')
+			->execute();
 
 	//TODO:发送邮件给客户/申请人
 	$apply_product = db_select('product_apply', 'ap')
@@ -128,22 +185,29 @@ function page_delivery_product_sure_submit($form, &$form_state) {
 		->execute()
 		->fetchAssoc();
 
-	//申请人ID
+	//申请人ID.
 	$uid = $apply_product['uid'];
+	$product = node_load($apply_product['product_id']);
 	$apply_account = user_load($uid);
 	drupal_mail('masterprint_apply', 'notify_apply_account_when_delivery', $apply_account->mail, language_default(), array());
 
 	//客户ID
 	$client_account = get_client_account_from_user($apply_account);
+	//发邮件给客户
 	drupal_mail('masterprint_apply', 'notify_client_when_delivery', $client_account->mail, language_default(), array());
 
 	//发货后，检查库存，如果库存少于20个则发送邮件给对应的客户和AE
-	//发送邮件告警
-	drupal_mail('masterprint_apply', 
-		'notify_warning_when_product_less', 
-		$client_account->mail,
-		language_default(), 
-		array());
+	$product_stock = get_product_stock_number($product);
+	$total_count = $product->field_product_count[LANGUAGE_NONE][0]['value'];
+	if (round($product_stock / $total_count, 1) > 0.8) {
+		drupal_mail('masterprint_apply', 
+			'notify_warning_when_product_less', 
+			$client_account->mail,
+			language_default(), 
+			array());
+	}
+
+	//发邮件给AE
 	$ae_accounts = list_ae_account();
 	foreach ($ae_accounts as $ae) {
 		drupal_mail('masterprint_apply', 
@@ -347,10 +411,11 @@ function masterprint_apply_product() {
 		'#default_value' => $user->uid,
 	);
 	$form['deliver_address'] = array(
-		'#type' => 'checkboxes',
+		'#type' => 'select',
 		'#title' => '送货地址',
 		'#required' => TRUE,
 		'#options' => $address_options,
+		'#multiple' => FALSE,
 	);
 
 	$form['submit'] = array(
@@ -444,6 +509,10 @@ function user_is_saler($user) {
 
 function user_is_dealer($user) {
 	return isset($user->roles[DEALER_ROLE_ID]);	
+}
+
+function user_is_client($user) {
+	return isset($user->roles[CLIENT_ROLE_ID]);
 }
 
 function get_client_account_from_user($saler_account) {

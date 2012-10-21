@@ -28,6 +28,12 @@ function masterprint_apply_schema() {
 				'not null' => TRUE,
 				'default' => 0
 			),
+			//实际发货数量
+			'sent_count' => array(
+				'type' => 'int',
+				'not null' => TRUE,
+				'default' => 0
+			),
 			'uid' => array(
 				'type' => 'int',
 				'not null' => TRUE,

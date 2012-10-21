@@ -70,3 +70,17 @@ function masterprint_product_product_create_submit($form, &$form_state) {
   global $user;
   $form_state['redirect']  = 'user/' . $user->uid . '/product/list';
 }
+
+function masterprint_product_views_query_alter(&$view, &$query) {
+  if ($view->name = 'product_listing' && $view->current_display == 'main_list') {
+    foreach ($query->where as $key => $conditions) {
+      if (strpos($conditions['conditions'][0]['field'], 'field_data_field_product_applied_by') !== FALSE) {
+        $client_id = $conditions['conditions'][0]['value'][':field_data_field_product_applied_by_field_product_applied_by_target_id'];
+        global $user;
+        if (!user_is_client($user)) {
+          unset($query->where[$key]);
+        }
+      }
+    }
+  }
+}
