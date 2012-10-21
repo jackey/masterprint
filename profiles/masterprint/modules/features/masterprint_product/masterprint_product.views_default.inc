@@ -314,6 +314,13 @@ function masterprint_product_views_default_views() {
       'empty_column' => 0,
     ),
   );
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = '系统未找到任何产品，请先添加。';
+  $handler->display->display_options['empty']['area']['format'] = 'plain_text';
   /* 字段: 内容: 标题 */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
@@ -416,6 +423,7 @@ function masterprint_product_views_default_views() {
     t('‹ 前一页'),
     t('下一页 ›'),
     t('末页 »'),
+    t('系统未找到任何产品，请先添加。'),
     t('名称'),
     t('PHP'),
     t('产品流水号'),

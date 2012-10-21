@@ -35,14 +35,15 @@ function masterprint_ae_views_default_views() {
   $handler->display->display_options['style_options']['columns'] = array(
     'uid' => 'uid',
     'php' => 'php',
+    'field_fullname' => 'field_fullname',
+    'field_tel' => 'field_tel',
     'name_1' => 'name_1',
     'mail' => 'mail',
     'field_created_by' => 'field_created_by',
     'created' => 'created',
-    'nothing' => 'nothing',
-    'nothing_1' => 'nothing',
+    'nothing_1' => 'nothing_1',
   );
-  $handler->display->display_options['style_options']['default'] = 'name_1';
+  $handler->display->display_options['style_options']['default'] = 'field_fullname';
   $handler->display->display_options['style_options']['info'] = array(
     'uid' => array(
       'sortable' => 0,
@@ -52,6 +53,20 @@ function masterprint_ae_views_default_views() {
       'empty_column' => 0,
     ),
     'php' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_fullname' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_tel' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -84,11 +99,6 @@ function masterprint_ae_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'nothing' => array(
-      'align' => '',
-      'separator' => ' | ',
-      'empty_column' => 0,
-    ),
     'nothing_1' => array(
       'align' => '',
       'separator' => '',
@@ -102,6 +112,13 @@ function masterprint_ae_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = '系统AE列表为空，请先添加。';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
+  /* Relationship: 用户: 个人资料 */
+  $handler->display->display_options['relationships']['profile']['id'] = 'profile';
+  $handler->display->display_options['relationships']['profile']['table'] = 'users';
+  $handler->display->display_options['relationships']['profile']['field'] = 'profile';
+  $handler->display->display_options['relationships']['profile']['bundle_types'] = array(
+    'ae' => 'ae',
+  );
   /* 字段: 用户: Uid */
   $handler->display->display_options['fields']['uid']['id'] = 'uid';
   $handler->display->display_options['fields']['uid']['table'] = 'users';
@@ -116,6 +133,16 @@ function masterprint_ae_views_default_views() {
   $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
+  /* 字段: 个人资料: 姓名 */
+  $handler->display->display_options['fields']['field_fullname']['id'] = 'field_fullname';
+  $handler->display->display_options['fields']['field_fullname']['table'] = 'field_data_field_fullname';
+  $handler->display->display_options['fields']['field_fullname']['field'] = 'field_fullname';
+  $handler->display->display_options['fields']['field_fullname']['relationship'] = 'profile';
+  /* 字段: 个人资料: 电话 */
+  $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
+  $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';
+  $handler->display->display_options['fields']['field_tel']['field'] = 'field_tel';
+  $handler->display->display_options['fields']['field_tel']['relationship'] = 'profile';
   /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'users';
@@ -175,8 +202,11 @@ function masterprint_ae_views_default_views() {
     t('Asc'),
     t('Desc'),
     t('系统AE列表为空，请先添加。'),
+    t('个人资料'),
     t('Uid'),
     t('PHP'),
+    t('姓名'),
+    t('电话'),
     t('账户名'),
     t('账户邮箱'),
     t('创建人'),
