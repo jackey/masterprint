@@ -110,17 +110,18 @@ function masterprint_product_field_default_fields() {
       'locked' => '0',
       'module' => 'entityreference',
       'settings' => array(
-        'handler' => 'base',
+        'handler' => 'views',
         'handler_settings' => array(
           'behaviors' => array(
             'views-select-list' => array(
               'status' => 0,
             ),
           ),
-          'sort' => array(
-            'type' => 'none',
+          'view' => array(
+            'args' => array(),
+            'display_name' => 'entityreference_main',
+            'view_name' => 'profile2_client_filter',
           ),
-          'target_bundles' => array(),
         ),
         'profile2_private' => FALSE,
         'target_type' => 'user',
@@ -160,11 +161,7 @@ function masterprint_product_field_default_fields() {
       'widget' => array(
         'active' => 1,
         'module' => 'options',
-        'settings' => array(
-          'match_operator' => 'CONTAINS',
-          'path' => '',
-          'size' => '60',
-        ),
+        'settings' => array(),
         'type' => 'options_select',
         'weight' => '8',
       ),

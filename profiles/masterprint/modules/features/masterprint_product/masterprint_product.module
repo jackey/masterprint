@@ -1,7 +1,72 @@
 <?php
+
 /**
  * @file
  * Code for the masterprint_product feature.
  */
 
 include_once 'masterprint_product.features.inc';
+/**
+ * Implements hook_menu()
+ */
+function masterprint_product_menu() {
+  $items = array();
+  $items['user/%user/product'] = array(
+    'title' => '产品管理',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'masterprint_product_load_managed_products',
+    'page arguments' => array(1),
+    'access arguments' => array('manage masterprint products'),
+    'weight' => 200,
+  );
+  $items['user/%user/product/list'] = array(
+    'title' => '产品列表',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'access arguments' => array('manage masterprint products'),
+  );
+  $items['user/%user/product/add'] = array(
+    'title' => '添加产品',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'node_add',
+    'page arguments' => array('product'),
+    'access arguments' => array('manage masterprint products'),
+    'file path' => drupal_get_path('module', 'node'),
+    'file' => 'node.pages.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function masterprint_product_permission() {
+  return array(
+    'manage masterprint products' => array(
+      'title' => t('Manage masterprint products'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Page callback
+ */
+function masterprint_product_load_managed_products($user) {
+  $output= '';
+  $output .= views_embed_view('product_listing', 'main_list');
+  return $output;
+}
+
+/**
+ *
+ */
+function masterprint_product_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'product_node_form') {
+    $form['actions']['submit']['#submit'][] = 'masterprint_product_product_create_submit';
+  }
+}
+
+function masterprint_product_product_create_submit($form, &$form_state) {
+  global $user;
+  $form_state['redirect']  = 'user/' . $user->uid . '/product/list';
+}
