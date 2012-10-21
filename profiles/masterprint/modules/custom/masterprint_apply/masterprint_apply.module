@@ -551,7 +551,7 @@ function masterprint_apply_mail($key, &$message, $params) {
   // 产品被客户通过后，发送的邮件.
   else if ($key == 'notify_warehouse_manager_when_approve') {
     $message['subject'] = 'Hello world';
-    $message['body'][] = '您有新的送货申请，请'.l('点击', 'warehousr_manager/'.$params['apply_product']['id'].'/ensure/key').'完成发货';
+    $message['body'][] = '您有新的送货申请，请到下列地址完成发货:'.url('warehousr_manager/'.$params['apply_product']['id'].'/ensure/key', array('absolute' => TRUE));
   }
   //仓库管理员发出产品后，给客户发的邮件
   else if ($key == 'notify_client_when_delivery') {
