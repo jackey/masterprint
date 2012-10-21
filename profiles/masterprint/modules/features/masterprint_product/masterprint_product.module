@@ -84,3 +84,13 @@ function masterprint_product_views_query_alter(&$view, &$query) {
     }
   }
 }
+
+/**
+ * Implements hook_views_pre_render()
+ */
+function masterprint_product_views_pre_render(&$views) {
+  foreach ($views->result as $key => &$row) {
+    $product = node_load($row->nid);
+    $row->nid = get_product_stock_number($product);
+  }
+}
