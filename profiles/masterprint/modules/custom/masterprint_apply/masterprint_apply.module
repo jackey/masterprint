@@ -118,12 +118,18 @@ function page_delivery_product_sure() {
   $form['address'] = array(
     '#markup' => '送货地址:'. implode("</br>", $address_str),
   );
+  $form['product_request_count'] = array(
+    '#markup' => '</br><span class="product_request_count">' . t('产品申请数量: %stock', array('%stock' => $apply_product['count'])). '</span></br>',
+  );
   $form['product_count'] = array(
     '#title' => t('发货数量'),
     '#type' => 'textfield',
     '#maxlength' => 12,
     '#size' => 12,
     '#description' => t('只能填写数字'),
+  );
+  $form['product_stock'] = array(
+    '#markup' => '<span class="product-stock-element">' . t('产品库存: %stock', array('%stock' => get_product_stock_number($product))). '</span></br>',
   );
   $form['product_stock'] = array(
     '#markup' => '<span class="product-stock-element">' . t('产品库存: %stock', array('%stock' => get_product_stock_number($product))). '</span></br>',
@@ -253,10 +259,15 @@ function masterprint_apply_process_productapply(&$vars) {
 function client_approve_apply($id) {
   //审核状态修改
   db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
+  $apply_product = db_select('product_apply', 'ap')
+    ->fields('ap')
+    ->condition('id', $id, '=')
+    ->execute()
+    ->fetchAssoc();
   // 需要通知仓库管理员
   $warehousr_manager = list_warehouse_manager();
   foreach ($warehousr_manager as $uid => $user) {
-    drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array());
+    drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array('apply_product' => $apply_product));
   }
   //修改库存
   //TODO:
@@ -540,7 +551,7 @@ function masterprint_apply_mail($key, &$message, $params) {
   // 产品被客户通过后，发送的邮件.
   else if ($key == 'notify_warehouse_manager_when_approve') {
     $message['subject'] = 'Hello world';
-    $message['body'][] = 'notify_warehouse_manager_when_approve';
+    $message['body'][] = '您有新的送货申请，请'.l('点击', 'warehousr_manager/'.$params['apply_product']['id'].'/ensure/key').'完成发货';
   }
   //仓库管理员发出产品后，给客户发的邮件
   else if ($key == 'notify_client_when_delivery') {
