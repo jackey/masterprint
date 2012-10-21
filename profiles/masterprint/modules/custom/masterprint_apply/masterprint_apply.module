@@ -531,26 +531,32 @@ function get_client_account_from_user($saler_account) {
  * Impelements hook_mail()
  */
 function masterprint_apply_mail($key, &$message, $params) {
+	// 经销商/销售员申请产品时候，发送邮件.
 	if ($key == 'submit_product_apply') {
 		$message['subject'] = 'Hello world';
 		$message['body'][] = 'submit_product_apply';
 	}
+	// 产品被客户通过后，发送的邮件.
 	else if ($key == 'notify_warehouse_manager_when_approve') {
 		$message['subject'] = 'Hello world';
 		$message['body'][] = 'notify_warehouse_manager_when_approve';
 	}
+	//仓库管理员发出产品后，给客户发的邮件
 	else if ($key == 'notify_client_when_delivery') {
 		$message['subject'] = 'Hello world';
 		$message['body'][] = 'notify_client_when_delivery';
 	}
+	//仓库管理员发出产品后，给产品申请人发的邮件
 	else if ($key == 'notify_apply_account_when_delivery') {
 		$message['subject'] = 'Hello world';
 		$message['body'][] = 'notify_apply_account_when_delivery';
 	}
+	// 当产品被添加后，发给仓库管理员的邮件
 	else if ($key == 'notify_warehouse_when_product_insert') {
 		$message['subject'] = 'Hello world';
 		$message['body'][] = 'notify_warehouse_when_product_insert';
 	}
+	// 库存告警的邮件
 	else if ($key == 'notify_warning_when_product_less') {
 		$message['subject'] = 'Hello world';
 		$message['body'][] = 'notify_warning_when_product_less';
