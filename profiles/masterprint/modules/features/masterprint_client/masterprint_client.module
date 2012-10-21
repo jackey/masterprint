@@ -13,7 +13,7 @@ function masterprint_client_menu() {
     'access arguments' => array('manage client accounts'),
     'page callback' => 'masterprint_client_load_managed_clients',
     'page arguments' => array(1),
-    'weight' => 140,
+    'weight' => 150,
   );
   $items['user/%user/client/list'] = array(
     'title' => '客户列表',
