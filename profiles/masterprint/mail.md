@@ -9,3 +9,16 @@
 * client_saler_1@163.cn / abcdefg
 
 * client_dealer_1@163.cn / abcdefg
+
+
+## test account
+
+* AE: ae_test / admin
+
+* 客户: client_test / admin
+
+* 客户销售: client_saler / admin
+
+* 客户经销商: client_sealer / admin
+
+* 管理员: admin / admin 
