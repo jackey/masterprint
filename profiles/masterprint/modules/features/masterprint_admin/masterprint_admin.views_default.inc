@@ -50,7 +50,7 @@ function masterprint_admin_views_default_views() {
     'created' => 'created',
     'nothing_1' => 'nothing_1',
   );
-  $handler->display->display_options['style_options']['default'] = 'field_fullname';
+  $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
     'uid' => array(
       'sortable' => 0,
@@ -65,42 +65,42 @@ function masterprint_admin_views_default_views() {
       'empty_column' => 0,
     ),
     'field_fullname' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_tel' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'name_1' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'mail' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_created_by' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'created' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
@@ -162,24 +162,17 @@ function masterprint_admin_views_default_views() {
   $handler->display->display_options['fields']['mail']['table'] = 'users';
   $handler->display->display_options['fields']['mail']['field'] = 'mail';
   $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
-  /* 字段: 用户: 创建人 */
-  $handler->display->display_options['fields']['field_created_by']['id'] = 'field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['table'] = 'field_data_field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['field'] = 'field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['settings'] = array(
-    'link' => 0,
-  );
   /* 字段: 用户: Created date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'users';
   $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['label'] = '创建于';
+  $handler->display->display_options['fields']['created']['label'] = '创建日期';
   $handler->display->display_options['fields']['created']['date_format'] = 'short';
   /* 字段: Global: Custom text */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
   $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing_1']['label'] = '资料操作';
+  $handler->display->display_options['fields']['nothing_1']['label'] = '操作';
   $handler->display->display_options['fields']['nothing_1']['alter']['text'] = '编辑';
   $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'profile2/[uid]/edit?destination=[php]';
@@ -228,9 +221,8 @@ function masterprint_admin_views_default_views() {
     t('电话'),
     t('账户名'),
     t('账户邮箱'),
-    t('创建人'),
-    t('创建于'),
-    t('资料操作'),
+    t('创建日期'),
+    t('操作'),
     t('编辑'),
     t('Block'),
   );
