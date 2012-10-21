@@ -29,8 +29,15 @@ function masterprint_dealer_views_default_views() {
   $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['exposed_form']['options']['reset_button_label'] = '重置';
-  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
   $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['pager']['options']['tags']['first'] = '« 第一页';
+  $handler->display->display_options['pager']['options']['tags']['previous'] = '‹ 前一页';
+  $handler->display->display_options['pager']['options']['tags']['next'] = '下一页 ›';
+  $handler->display->display_options['pager']['options']['tags']['last'] = '末页 »';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'uid' => 'uid',
@@ -178,6 +185,64 @@ function masterprint_dealer_views_default_views() {
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['access'] = FALSE;
   $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* 字段: 用户: Uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'users';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
+  /* 字段: Global: PHP */
+  $handler->display->display_options['fields']['php']['id'] = 'php';
+  $handler->display->display_options['fields']['php']['table'] = 'views';
+  $handler->display->display_options['fields']['php']['field'] = 'php';
+  $handler->display->display_options['fields']['php']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
+  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
+  /* 字段: 个人资料: 名称 */
+  $handler->display->display_options['fields']['field_dealer_name']['id'] = 'field_dealer_name';
+  $handler->display->display_options['fields']['field_dealer_name']['table'] = 'field_data_field_dealer_name';
+  $handler->display->display_options['fields']['field_dealer_name']['field'] = 'field_dealer_name';
+  $handler->display->display_options['fields']['field_dealer_name']['relationship'] = 'profile';
+  /* 字段: 个人资料: 电话 */
+  $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
+  $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';
+  $handler->display->display_options['fields']['field_tel']['field'] = 'field_tel';
+  $handler->display->display_options['fields']['field_tel']['relationship'] = 'profile';
+  /* 字段: 用户: 名称 */
+  $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
+  $handler->display->display_options['fields']['name_1']['table'] = 'users';
+  $handler->display->display_options['fields']['name_1']['field'] = 'name';
+  $handler->display->display_options['fields']['name_1']['label'] = '账户名';
+  $handler->display->display_options['fields']['name_1']['link_to_user'] = FALSE;
+  /* 字段: 用户: E-mail */
+  $handler->display->display_options['fields']['mail']['id'] = 'mail';
+  $handler->display->display_options['fields']['mail']['table'] = 'users';
+  $handler->display->display_options['fields']['mail']['field'] = 'mail';
+  $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
+  /* 字段: 个人资料: 所属客户 */
+  $handler->display->display_options['fields']['field_dealer_client_owner']['id'] = 'field_dealer_client_owner';
+  $handler->display->display_options['fields']['field_dealer_client_owner']['table'] = 'field_data_field_dealer_client_owner';
+  $handler->display->display_options['fields']['field_dealer_client_owner']['field'] = 'field_dealer_client_owner';
+  $handler->display->display_options['fields']['field_dealer_client_owner']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_dealer_client_owner']['settings'] = array(
+    'link' => 0,
+  );
+  /* 字段: 用户: Created date */
+  $handler->display->display_options['fields']['created']['id'] = 'created';
+  $handler->display->display_options['fields']['created']['table'] = 'users';
+  $handler->display->display_options['fields']['created']['field'] = 'created';
+  $handler->display->display_options['fields']['created']['label'] = '创建于';
+  $handler->display->display_options['fields']['created']['date_format'] = 'short';
+  /* 字段: Global: Custom text */
+  $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
+  $handler->display->display_options['fields']['nothing_1']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing_1']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing_1']['label'] = '资料操作';
+  $handler->display->display_options['fields']['nothing_1']['alter']['text'] = '编辑';
+  $handler->display->display_options['fields']['nothing_1']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['nothing_1']['alter']['path'] = 'profile2/[uid]/edit?destination=[php]';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: 个人资料: 所属客户 (field_dealer_client_owner) */
   $handler->display->display_options['arguments']['field_dealer_client_owner_target_id']['id'] = 'field_dealer_client_owner_target_id';
@@ -217,6 +282,16 @@ function masterprint_dealer_views_default_views() {
   $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
+  /* 字段: 个人资料: 名称 */
+  $handler->display->display_options['fields']['field_dealer_name']['id'] = 'field_dealer_name';
+  $handler->display->display_options['fields']['field_dealer_name']['table'] = 'field_data_field_dealer_name';
+  $handler->display->display_options['fields']['field_dealer_name']['field'] = 'field_dealer_name';
+  $handler->display->display_options['fields']['field_dealer_name']['relationship'] = 'profile';
+  /* 字段: 个人资料: 电话 */
+  $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
+  $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';
+  $handler->display->display_options['fields']['field_tel']['field'] = 'field_tel';
+  $handler->display->display_options['fields']['field_tel']['relationship'] = 'profile';
   /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'users';
@@ -258,6 +333,13 @@ function masterprint_dealer_views_default_views() {
     t('Sort by'),
     t('Asc'),
     t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« 第一页'),
+    t('‹ 前一页'),
+    t('下一页 ›'),
+    t('末页 »'),
     t('您尚未创建任何客户经销商。'),
     t('个人资料'),
     t('Uid'),
@@ -269,6 +351,8 @@ function masterprint_dealer_views_default_views() {
     t('资料操作'),
     t('编辑'),
     t('Client Summary'),
+    t('名称'),
+    t('电话'),
     t('全部'),
     t('Total Summary'),
     t('系统未找到任何客户经销商，请先添加。'),

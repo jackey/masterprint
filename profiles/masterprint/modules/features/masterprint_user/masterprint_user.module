@@ -17,10 +17,7 @@ function masterprint_user_menu() {
   );
   $items['user/%user/profile2'] = array(
     'title' => '个人资料',
-    'type' => MENU_LOCAL_TASK,
-    'access arguments' => array('manage own profile2'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('masterprint_user_edit_own_profile2', 1),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 90,
   );
   $items['user/%user/profile2/edit'] = array(
@@ -299,6 +296,13 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
  */
 function masterprint_user_menu_alter(&$items) {
   $items['user/%user/edit']['access callback'] = FALSE;
+
+  $items['user/%user/view']['type'] = MENU_CALLBACK;
+
+  $items['user/%user']['title'] = '个人资料';
+  $items['user/%user']['access callback'] = TRUE;
+  $items['user/%user']['page callback'] = 'drupal_get_form';
+  $items['user/%user']['page arguments'] = array('masterprint_user_edit_own_profile2', 1);
 }
 
 /**

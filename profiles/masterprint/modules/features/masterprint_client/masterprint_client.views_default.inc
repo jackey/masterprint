@@ -29,19 +29,29 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['exposed_form']['options']['reset_button_label'] = '重置';
-  $handler->display->display_options['pager']['type'] = 'some';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '5';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['pager']['options']['tags']['first'] = '« 第一页';
+  $handler->display->display_options['pager']['options']['tags']['previous'] = '‹ 前一页';
+  $handler->display->display_options['pager']['options']['tags']['next'] = '下一页 ›';
+  $handler->display->display_options['pager']['options']['tags']['last'] = '末页 »';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'uid' => 'uid',
+    'php' => 'php',
+    'field_client_name' => 'field_client_name',
+    'field_tel' => 'field_tel',
+    'field_client_contacter' => 'field_client_contacter',
     'name_1' => 'name_1',
     'mail' => 'mail',
     'field_created_by' => 'field_created_by',
     'created' => 'created',
-    'nothing' => 'nothing',
-    'nothing_1' => 'nothing',
+    'nothing_1' => 'nothing_1',
   );
-  $handler->display->display_options['style_options']['default'] = '-1';
+  $handler->display->display_options['style_options']['default'] = 'field_client_name';
   $handler->display->display_options['style_options']['info'] = array(
     'uid' => array(
       'sortable' => 0,
@@ -50,37 +60,58 @@ function masterprint_client_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
+    'php' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_client_name' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_tel' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_client_contacter' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
     'name_1' => array(
-      'sortable' => 0,
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'mail' => array(
-      'sortable' => 0,
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_created_by' => array(
-      'sortable' => 0,
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'created' => array(
-      'sortable' => 0,
+      'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
-      'empty_column' => 0,
-    ),
-    'nothing' => array(
-      'align' => '',
-      'separator' => ' | ',
       'empty_column' => 0,
     ),
     'nothing_1' => array(
@@ -96,6 +127,13 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = '系统未找到任何客户，请先添加。';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
+  /* Relationship: 用户: 个人资料 */
+  $handler->display->display_options['relationships']['profile']['id'] = 'profile';
+  $handler->display->display_options['relationships']['profile']['table'] = 'users';
+  $handler->display->display_options['relationships']['profile']['field'] = 'profile';
+  $handler->display->display_options['relationships']['profile']['bundle_types'] = array(
+    'client' => 'client',
+  );
   /* 字段: 用户: Uid */
   $handler->display->display_options['fields']['uid']['id'] = 'uid';
   $handler->display->display_options['fields']['uid']['table'] = 'users';
@@ -110,6 +148,21 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
+  /* 字段: 个人资料: 名称 */
+  $handler->display->display_options['fields']['field_client_name']['id'] = 'field_client_name';
+  $handler->display->display_options['fields']['field_client_name']['table'] = 'field_data_field_client_name';
+  $handler->display->display_options['fields']['field_client_name']['field'] = 'field_client_name';
+  $handler->display->display_options['fields']['field_client_name']['relationship'] = 'profile';
+  /* 字段: 个人资料: 电话 */
+  $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
+  $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';
+  $handler->display->display_options['fields']['field_tel']['field'] = 'field_tel';
+  $handler->display->display_options['fields']['field_tel']['relationship'] = 'profile';
+  /* 字段: 个人资料: 联系人 */
+  $handler->display->display_options['fields']['field_client_contacter']['id'] = 'field_client_contacter';
+  $handler->display->display_options['fields']['field_client_contacter']['table'] = 'field_data_field_client_contacter';
+  $handler->display->display_options['fields']['field_client_contacter']['field'] = 'field_client_contacter';
+  $handler->display->display_options['fields']['field_client_contacter']['relationship'] = 'profile';
   /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'users';
@@ -172,9 +225,20 @@ function masterprint_client_views_default_views() {
     t('Sort by'),
     t('Asc'),
     t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« 第一页'),
+    t('‹ 前一页'),
+    t('下一页 ›'),
+    t('末页 »'),
     t('系统未找到任何客户，请先添加。'),
+    t('个人资料'),
     t('Uid'),
     t('PHP'),
+    t('名称'),
+    t('电话'),
+    t('联系人'),
     t('账户名'),
     t('账户邮箱'),
     t('创建人'),
