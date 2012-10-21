@@ -245,6 +245,14 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'title' => 'title',
+    'php' => 'php',
+    'field_product_serial_number' => 'field_product_serial_number',
+    'field_product_stock' => 'field_product_stock',
+    'field_product_count' => 'field_product_count',
+    'field_product_min_pack_num' => 'field_product_min_pack_num',
+    'nid' => 'nid',
+    'delete_node' => 'delete_node',
+    'edit_node' => 'delete_node',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
@@ -255,31 +263,74 @@ function masterprint_product_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-  );
-  /* Relationship: Entity Reference: Referenced Entity */
-  $handler->display->display_options['relationships']['field_product_applied_by_target_id']['id'] = 'field_product_applied_by_target_id';
-  $handler->display->display_options['relationships']['field_product_applied_by_target_id']['table'] = 'field_data_field_product_applied_by';
-  $handler->display->display_options['relationships']['field_product_applied_by_target_id']['field'] = 'field_product_applied_by_target_id';
-  /* Relationship: 用户: 个人资料 */
-  $handler->display->display_options['relationships']['profile']['id'] = 'profile';
-  $handler->display->display_options['relationships']['profile']['table'] = 'users';
-  $handler->display->display_options['relationships']['profile']['field'] = 'profile';
-  $handler->display->display_options['relationships']['profile']['relationship'] = 'field_product_applied_by_target_id';
-  $handler->display->display_options['relationships']['profile']['bundle_types'] = array(
-    'client' => 'client',
+    'php' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_product_serial_number' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_product_stock' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_product_count' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_product_min_pack_num' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'nid' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'delete_node' => array(
+      'align' => '',
+      'separator' => ' | ',
+      'empty_column' => 0,
+    ),
+    'edit_node' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
   );
   /* 字段: 内容: 标题 */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '产品';
+  $handler->display->display_options['fields']['title']['label'] = '名称';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* 字段: 内容: Nid */
-  $handler->display->display_options['fields']['nid']['id'] = 'nid';
-  $handler->display->display_options['fields']['nid']['table'] = 'node';
-  $handler->display->display_options['fields']['nid']['field'] = 'nid';
-  $handler->display->display_options['fields']['nid']['label'] = '库存';
+  $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+  /* 字段: Global: PHP */
+  $handler->display->display_options['fields']['php']['id'] = 'php';
+  $handler->display->display_options['fields']['php']['table'] = 'views';
+  $handler->display->display_options['fields']['php']['field'] = 'php';
+  $handler->display->display_options['fields']['php']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
+  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* 字段: 内容: 产品流水号 */
   $handler->display->display_options['fields']['field_product_serial_number']['id'] = 'field_product_serial_number';
   $handler->display->display_options['fields']['field_product_serial_number']['table'] = 'field_data_field_product_serial_number';
@@ -288,28 +339,50 @@ function masterprint_product_views_default_views() {
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
   );
-  /* 字段: 个人资料: 名称 */
-  $handler->display->display_options['fields']['field_client_name']['id'] = 'field_client_name';
-  $handler->display->display_options['fields']['field_client_name']['table'] = 'field_data_field_client_name';
-  $handler->display->display_options['fields']['field_client_name']['field'] = 'field_client_name';
-  $handler->display->display_options['fields']['field_client_name']['relationship'] = 'profile';
-  $handler->display->display_options['fields']['field_client_name']['label'] = '客户';
-  $handler->display->display_options['fields']['field_client_name']['element_label_colon'] = FALSE;
+  /* 字段: 内容: 库存量 */
+  $handler->display->display_options['fields']['field_product_stock']['id'] = 'field_product_stock';
+  $handler->display->display_options['fields']['field_product_stock']['table'] = 'field_data_field_product_stock';
+  $handler->display->display_options['fields']['field_product_stock']['field'] = 'field_product_stock';
+  $handler->display->display_options['fields']['field_product_stock']['settings'] = array(
+    'thousand_separator' => ' ',
+    'prefix_suffix' => 1,
+  );
+  /* 字段: 内容: 数量 */
+  $handler->display->display_options['fields']['field_product_count']['id'] = 'field_product_count';
+  $handler->display->display_options['fields']['field_product_count']['table'] = 'field_data_field_product_count';
+  $handler->display->display_options['fields']['field_product_count']['field'] = 'field_product_count';
+  $handler->display->display_options['fields']['field_product_count']['settings'] = array(
+    'thousand_separator' => ' ',
+    'prefix_suffix' => 1,
+  );
+  /* 字段: 内容: 最小打包数量 */
+  $handler->display->display_options['fields']['field_product_min_pack_num']['id'] = 'field_product_min_pack_num';
+  $handler->display->display_options['fields']['field_product_min_pack_num']['table'] = 'field_data_field_product_min_pack_num';
+  $handler->display->display_options['fields']['field_product_min_pack_num']['field'] = 'field_product_min_pack_num';
+  $handler->display->display_options['fields']['field_product_min_pack_num']['settings'] = array(
+    'thousand_separator' => ' ',
+    'prefix_suffix' => 1,
+  );
+  /* 字段: 内容: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
+  /* 字段: 内容: Edit link */
+  $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
+  $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
+  $handler->display->display_options['fields']['edit_node']['field'] = 'edit_node';
+  $handler->display->display_options['fields']['edit_node']['label'] = '操作';
+  /* 字段: 内容: Delete link */
+  $handler->display->display_options['fields']['delete_node']['id'] = 'delete_node';
+  $handler->display->display_options['fields']['delete_node']['table'] = 'views_entity_node';
+  $handler->display->display_options['fields']['delete_node']['field'] = 'delete_node';
+  $handler->display->display_options['fields']['delete_node']['label'] = '操作';
   /* Sort criterion: 内容: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: 内容: 客户 (field_product_applied_by) */
-  $handler->display->display_options['arguments']['field_product_applied_by_target_id']['id'] = 'field_product_applied_by_target_id';
-  $handler->display->display_options['arguments']['field_product_applied_by_target_id']['table'] = 'field_data_field_product_applied_by';
-  $handler->display->display_options['arguments']['field_product_applied_by_target_id']['field'] = 'field_product_applied_by_target_id';
-  $handler->display->display_options['arguments']['field_product_applied_by_target_id']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['field_product_applied_by_target_id']['exception']['title'] = '全部';
-  $handler->display->display_options['arguments']['field_product_applied_by_target_id']['default_argument_type'] = 'current_user';
-  $handler->display->display_options['arguments']['field_product_applied_by_target_id']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['field_product_applied_by_target_id']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['field_product_applied_by_target_id']['summary_options']['items_per_page'] = '25';
   /* Filter criterion: 内容: 已发表 */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
@@ -343,13 +416,14 @@ function masterprint_product_views_default_views() {
     t('‹ 前一页'),
     t('下一页 ›'),
     t('末页 »'),
-    t('用户 entity referenced from field_product_applied_by'),
-    t('个人资料'),
-    t('产品'),
-    t('库存'),
+    t('名称'),
+    t('PHP'),
     t('产品流水号'),
-    t('客户'),
-    t('全部'),
+    t('库存量'),
+    t('数量'),
+    t('最小打包数量'),
+    t('Nid'),
+    t('操作'),
     t('区块'),
   );
   $export['product_listing'] = $view;

@@ -1,4 +1,11 @@
-name = Masterprint 产品申请
-package = masterprint
+name = masterprint_apply
 description = 产品申请模块.
 core = 7.x
+package = masterprint
+php = 5.2.4
+dependencies[] = features
+features[features_api][] = api:1
+features[user_permission][] = apply product
+features[user_permission][] = approve apply
+features[user_permission][] = list all products
+features[user_permission][] = view apply
