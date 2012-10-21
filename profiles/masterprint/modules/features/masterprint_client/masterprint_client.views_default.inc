@@ -51,7 +51,7 @@ function masterprint_client_views_default_views() {
     'created' => 'created',
     'nothing_1' => 'nothing_1',
   );
-  $handler->display->display_options['style_options']['default'] = 'field_client_name';
+  $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
     'uid' => array(
       'sortable' => 0,
@@ -66,49 +66,49 @@ function masterprint_client_views_default_views() {
       'empty_column' => 0,
     ),
     'field_client_name' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_tel' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_client_contacter' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'name_1' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'mail' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_created_by' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'created' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
@@ -153,6 +153,11 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['fields']['field_client_name']['table'] = 'field_data_field_client_name';
   $handler->display->display_options['fields']['field_client_name']['field'] = 'field_client_name';
   $handler->display->display_options['fields']['field_client_name']['relationship'] = 'profile';
+  /* 字段: 个人资料: 地址 */
+  $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
+  $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
+  $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
+  $handler->display->display_options['fields']['field_address']['relationship'] = 'profile';
   /* 字段: 个人资料: 电话 */
   $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
   $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';
@@ -163,6 +168,11 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['fields']['field_client_contacter']['table'] = 'field_data_field_client_contacter';
   $handler->display->display_options['fields']['field_client_contacter']['field'] = 'field_client_contacter';
   $handler->display->display_options['fields']['field_client_contacter']['relationship'] = 'profile';
+  /* 字段: 个人资料: 邮编 */
+  $handler->display->display_options['fields']['field_postal_code']['id'] = 'field_postal_code';
+  $handler->display->display_options['fields']['field_postal_code']['table'] = 'field_data_field_postal_code';
+  $handler->display->display_options['fields']['field_postal_code']['field'] = 'field_postal_code';
+  $handler->display->display_options['fields']['field_postal_code']['relationship'] = 'profile';
   /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'users';
@@ -174,18 +184,11 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['fields']['mail']['table'] = 'users';
   $handler->display->display_options['fields']['mail']['field'] = 'mail';
   $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
-  /* 字段: 用户: 创建人 */
-  $handler->display->display_options['fields']['field_created_by']['id'] = 'field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['table'] = 'field_data_field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['field'] = 'field_created_by';
-  $handler->display->display_options['fields']['field_created_by']['settings'] = array(
-    'link' => 0,
-  );
   /* 字段: 用户: Created date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'users';
   $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['label'] = '创建于';
+  $handler->display->display_options['fields']['created']['label'] = '创建日期';
   $handler->display->display_options['fields']['created']['date_format'] = 'short';
   /* 字段: Global: Custom text */
   $handler->display->display_options['fields']['nothing_1']['id'] = 'nothing_1';
@@ -237,12 +240,13 @@ function masterprint_client_views_default_views() {
     t('Uid'),
     t('PHP'),
     t('名称'),
+    t('地址'),
     t('电话'),
     t('联系人'),
+    t('邮编'),
     t('账户名'),
     t('账户邮箱'),
-    t('创建人'),
-    t('创建于'),
+    t('创建日期'),
     t('资料操作'),
     t('编辑'),
     t('Block'),

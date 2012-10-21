@@ -329,7 +329,7 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* 字段: Broken/missing handler */
+  /* 字段: Global: PHP */
   $handler->display->display_options['fields']['php']['id'] = 'php';
   $handler->display->display_options['fields']['php']['table'] = 'views';
   $handler->display->display_options['fields']['php']['field'] = 'php';
@@ -413,7 +413,7 @@ function masterprint_product_views_default_views() {
     t('末页 »'),
     t('系统未找到任何产品，请先添加。'),
     t('名称'),
-    t('Broken handler views.php'),
+    t('PHP'),
     t('流水号'),
     t('库存量'),
     t('数量'),
