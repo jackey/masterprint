@@ -45,7 +45,7 @@ function masterprint_product_field_default_fields() {
       'bundle' => 'product',
       'default_value' => NULL,
       'deleted' => '0',
-      'description' => '请您说明印刷说明，如:xxx',
+      'description' => '',
       'display' => array(
         'default' => array(
           'label' => 'hidden',
@@ -163,7 +163,7 @@ function masterprint_product_field_default_fields() {
         'module' => 'options',
         'settings' => array(),
         'type' => 'options_select',
-        'weight' => '8',
+        'weight' => '7',
       ),
     ),
   );
@@ -301,7 +301,7 @@ function masterprint_product_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'file_generic',
-        'weight' => '3',
+        'weight' => '4',
       ),
     ),
   );
@@ -378,15 +378,27 @@ function masterprint_product_field_default_fields() {
       'deleted' => '0',
       'entity_types' => array(),
       'field_name' => 'field_product_serial_number',
-      'foreign keys' => array(),
-      'indexes' => array(),
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
       'locked' => '0',
-      'module' => 'number',
+      'module' => 'text',
       'settings' => array(
+        'max_length' => '50',
         'profile2_private' => FALSE,
       ),
       'translatable' => '0',
-      'type' => 'number_integer',
+      'type' => 'text',
     ),
     'field_instance' => array(
       'bundle' => 'product',
@@ -396,15 +408,10 @@ function masterprint_product_field_default_fields() {
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'number',
-          'settings' => array(
-            'decimal_separator' => '.',
-            'prefix_suffix' => TRUE,
-            'scale' => 0,
-            'thousand_separator' => ' ',
-          ),
-          'type' => 'number_integer',
-          'weight' => 6,
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 11,
         ),
         'teaser' => array(
           'label' => 'above',
@@ -415,21 +422,20 @@ function masterprint_product_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'field_product_serial_number',
-      'label' => '产品流水号',
-      'required' => 0,
+      'label' => '流水号',
+      'required' => 1,
       'settings' => array(
-        'max' => '',
-        'min' => '',
-        'prefix' => '',
-        'suffix' => '',
+        'text_processing' => '0',
         'user_register_form' => FALSE,
       ),
       'widget' => array(
-        'active' => 0,
-        'module' => 'number',
-        'settings' => array(),
-        'type' => 'number',
-        'weight' => '4',
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '2',
       ),
     ),
   );
@@ -493,7 +499,7 @@ function masterprint_product_field_default_fields() {
         'module' => 'number',
         'settings' => array(),
         'type' => 'number',
-        'weight' => '9',
+        'weight' => '8',
       ),
     ),
   );
@@ -574,7 +580,7 @@ function masterprint_product_field_default_fields() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'image_image',
-        'weight' => '2',
+        'weight' => '3',
       ),
     ),
   );
@@ -582,14 +588,13 @@ function masterprint_product_field_default_fields() {
   // Translatables
   // Included for use with string extractors like potx.
   t('产品描述PDF');
-  t('产品流水号');
   t('印刷说明');
   t('客户');
   t('库存量');
   t('数量');
   t('最小打包数量');
+  t('流水号');
   t('缩略图');
-  t('请您说明印刷说明，如:xxx');
 
   return $fields;
 }

@@ -65,8 +65,10 @@ function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
 	// 	'#default_value' => '1',
 	// 	'#weight' => 10
 	// );
+
 	if ($form_id == 'product_node_form') {
 		global $user;
+		$form['field_product_stock']['#access'] = FALSE;
 		if (user_is_client($user)) {
 			$form['field_product_applied_by']['#access'] = FALSE;
 			$form['field_product_applied_by'][LANGUAGE_NONE]['#default_value'] = $user->uid;

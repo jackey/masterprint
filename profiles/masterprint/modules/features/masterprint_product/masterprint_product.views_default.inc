@@ -322,16 +322,12 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* 字段: Global: PHP */
+  /* 字段: Broken/missing handler */
   $handler->display->display_options['fields']['php']['id'] = 'php';
   $handler->display->display_options['fields']['php']['table'] = 'views';
   $handler->display->display_options['fields']['php']['field'] = 'php';
   $handler->display->display_options['fields']['php']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
-  $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
-  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
-  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
-  /* 字段: 内容: 产品流水号 */
+  /* 字段: 内容: 流水号 */
   $handler->display->display_options['fields']['field_product_serial_number']['id'] = 'field_product_serial_number';
   $handler->display->display_options['fields']['field_product_serial_number']['table'] = 'field_data_field_product_serial_number';
   $handler->display->display_options['fields']['field_product_serial_number']['field'] = 'field_product_serial_number';
@@ -339,14 +335,11 @@ function masterprint_product_views_default_views() {
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
   );
-  /* 字段: 内容: 库存量 */
-  $handler->display->display_options['fields']['field_product_stock']['id'] = 'field_product_stock';
-  $handler->display->display_options['fields']['field_product_stock']['table'] = 'field_data_field_product_stock';
-  $handler->display->display_options['fields']['field_product_stock']['field'] = 'field_product_stock';
-  $handler->display->display_options['fields']['field_product_stock']['settings'] = array(
-    'thousand_separator' => ' ',
-    'prefix_suffix' => 1,
-  );
+  /* 字段: 内容: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['label'] = '库存量';
   /* 字段: 内容: 数量 */
   $handler->display->display_options['fields']['field_product_count']['id'] = 'field_product_count';
   $handler->display->display_options['fields']['field_product_count']['table'] = 'field_data_field_product_count';
@@ -363,11 +356,6 @@ function masterprint_product_views_default_views() {
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
   );
-  /* 字段: 内容: Nid */
-  $handler->display->display_options['fields']['nid']['id'] = 'nid';
-  $handler->display->display_options['fields']['nid']['table'] = 'node';
-  $handler->display->display_options['fields']['nid']['field'] = 'nid';
-  $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
   /* 字段: 内容: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
@@ -417,12 +405,11 @@ function masterprint_product_views_default_views() {
     t('下一页 ›'),
     t('末页 »'),
     t('名称'),
-    t('PHP'),
-    t('产品流水号'),
+    t('Broken handler views.php'),
+    t('流水号'),
     t('库存量'),
     t('数量'),
     t('最小打包数量'),
-    t('Nid'),
     t('操作'),
     t('区块'),
   );
