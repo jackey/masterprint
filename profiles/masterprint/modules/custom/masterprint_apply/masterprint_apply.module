@@ -455,7 +455,7 @@ function masterprint_apply_product_submit($form, &$form_state) {
   $count = $form_state['values']['product_count'];
   $uid = $form_state['values']['apply_uid'];
   $time = time();
-  $address_str = implode(ADDRESS_SPLITER, $form_state['values']['deliver_address']);
+  $address_str = $form_state['values']['deliver_address'];
   if ($product_id && $count) {
     $data = array(
       'apply_time' => REQUEST_TIME,
@@ -465,19 +465,18 @@ function masterprint_apply_product_submit($form, &$form_state) {
       'address' => $address_str
     );
     $status = drupal_write_record('product_apply', $data);
-    if ($status) {
-      $apply_account = user_load($uid);
-      $client_account = get_client_account_from_user($apply_account);
-      drupal_set_message("产品申请成功，请等待您所属客户审核");
+    $apply_account = user_load($uid);
+    $client_account = get_client_account_from_user($apply_account);
+    dpm($client_account);
+    drupal_set_message("产品申请成功，请等待您所属客户审核");
 
       //然后发送邮件到客户，请求审核通过
-      drupal_mail(
-        'masterprint_apply',
-        'submit_product_apply',
-        $client_account->mail,
-        language_default(),
-        array());
-    }
+    drupal_mail(
+      'masterprint_apply',
+      'submit_product_apply',
+      $client_account->mail,
+      language_default(),
+      array());
   }
 }
 
