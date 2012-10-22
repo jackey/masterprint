@@ -32,3 +32,6 @@ function masterprint_preprocess_page(&$vars) {
   }
 }
 
+/**
+ * Implements hook_menu()
+ */

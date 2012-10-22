@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the masterprint_mail feature.
+ */
+
+include_once 'masterprint_mail.features.inc';
