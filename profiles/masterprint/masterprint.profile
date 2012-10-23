@@ -21,7 +21,7 @@ function masterprint_install_tasks($install_state) {
 function masterprint_form_install_configure_form_alter(&$form, $form_state) {
   // Site information.
   $form['site_information']['site_name']['#default_value'] = 'Master Print';
-  $form['site_information']['site_mail']['#default_value'] = 'info@admin.com';
+  $form['site_information']['site_mail']['#default_value'] = 'shanghai@hf-ps.com';
 
   // Admin account.
   $form['admin_account']['account']['name']['#default_value'] = 'administrator';
