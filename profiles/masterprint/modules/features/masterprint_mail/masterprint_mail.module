@@ -74,12 +74,22 @@ function masterprint_mail_pet_template_edit($pet) {
  * Implements hook_form_alter()
  */
 function masterprint_mail_form_alter(&$form, &$form_state) {
+  global $user;
   if ($form['#form_id'] == 'pet_form') {
     $form['#submit'][] = 'masterprint_mail_pet_form_submit_handler';
+    // Hide the Mimemail section, not needed
+    unset($form['mimemail']);
+    if(isset($form['#redirect'])) {
+      unset($form['#redirect']);
+    }
+
+    if (!empty($form['actions']['cancel'])) {
+      $form['actions']['cancel']['#href'] = 'user/' . $user->uid . '/mail_templates';
+    }
   }
-  unset($form['mimemail']);
 }
 
 function masterprint_mail_pet_form_submit_handler(&$form, &$form_state) {
-  // Seems not needed when there is destination query set.
+  global $user;
+  $form_state['redirect'] = 'user/' . $user->uid . '/mail_templates';
 }

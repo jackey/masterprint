@@ -57,23 +57,23 @@ function masterprint_apply_menu() {
  * Implements hook_form_alter()
  */
 function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
-	// $form['send_warehouse_manager'] = array(
-	// 	'#title' => '发送给仓库管理员',
-	// 	'#type' => 'checkbox',
-	// 	'#option' => array(1 => '发送'),
-	// 	'#required' => TRUE,
-	// 	'#default_value' => '1',
-	// 	'#weight' => 10
-	// );
+  // $form['send_warehouse_manager'] = array(
+  // 	'#title' => '发送给仓库管理员',
+  // 	'#type' => 'checkbox',
+  // 	'#option' => array(1 => '发送'),
+  // 	'#required' => TRUE,
+  // 	'#default_value' => '1',
+  // 	'#weight' => 10
+  // );
 
-	if ($form_id == 'product_node_form') {
-		global $user;
-		$form['field_product_stock']['#access'] = FALSE;
-		if (user_is_client($user)) {
-			$form['field_product_applied_by']['#access'] = FALSE;
-			$form['field_product_applied_by'][LANGUAGE_NONE]['#default_value'] = $user->uid;
-		}
-	}
+  if ($form_id == 'product_node_form') {
+    global $user;
+    $form['field_product_stock']['#access'] = FALSE;
+    if (user_is_client($user)) {
+      $form['field_product_applied_by']['#access'] = FALSE;
+      $form['field_product_applied_by'][LANGUAGE_NONE]['#default_value'] = $user->uid;
+    }
+  }
 }
 
 /**
