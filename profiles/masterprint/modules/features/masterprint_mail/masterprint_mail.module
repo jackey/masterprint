@@ -5,3 +5,81 @@
  */
 
 include_once 'masterprint_mail.features.inc';
+
+/**
+ * Implements hook_menu()
+ */
+function masterprint_mail_menu() {
+  $items['user/%user/mail_templates'] = array(
+    'title' => '邮件设置',
+    'type' => MENU_LOCAL_TASK,
+    'access arguments' => array('manage mail templates'),
+    'page callback' => 'masterprint_mail_load_managed_mail_templates',
+    'weight' => 300,
+  );
+  $items['user/%user/mail_templates/list'] = array(
+    'title' => '邮件模板列表',
+    'access arguments' => array('manage mail templates'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['mail_templates/%pet/edit'] = array(
+    'title' => '邮件模板编辑',
+    'title callback' => 'masterprint_mail_pet_template_edit_title',
+    'title arguments' => array(1),
+    'page callback' => 'masterprint_mail_pet_template_edit',
+    'page arguments' => array(1),
+    'access arguments' => array('manage mail templates'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function masterprint_mail_permission() {
+  return array(
+    'manage mail templates' => array(
+      'title' => t('Manage mail templates'),
+      'description' => t('Manage mail templates.'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Page callback
+ */
+function masterprint_mail_load_managed_mail_templates() {
+  $output = '';
+  $output .= views_embed_view('masterprint_email_templates', 'list_block');
+  return $output;
+}
+
+/**
+ * Title callback
+ */
+function masterprint_mail_pet_template_edit_title($pet) {
+  $title = !empty($pet->title) ? $pet->title : '';
+  return $title ;
+}
+/**
+ * Page callback
+ */
+function masterprint_mail_pet_template_edit($pet) {
+  return entity_form('pet', $pet);
+}
+
+/**
+ * Implements hook_form_alter()
+ */
+function masterprint_mail_form_alter(&$form, &$form_state) {
+  if ($form['#form_id'] == 'pet_form') {
+    $form['#submit'][] = 'masterprint_mail_pet_form_submit_handler';
+  }
+  unset($form['mimemail']);
+}
+
+function masterprint_mail_pet_form_submit_handler(&$form, &$form_state) {
+  // Seems not needed when there is destination query set.
+}

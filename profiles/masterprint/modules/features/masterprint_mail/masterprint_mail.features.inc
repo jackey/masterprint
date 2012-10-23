@@ -5,6 +5,13 @@
  */
 
 /**
+ * Implements hook_views_api().
+ */
+function masterprint_mail_views_api() {
+  return array("version" => "3.0");
+}
+
+/**
  * Implements hook_default_pet().
  */
 function masterprint_mail_default_pet() {
@@ -13,7 +20,7 @@ function masterprint_mail_default_pet() {
     "name" : "notify_client_on_delivery",
     "title" : "\\u4ed3\\u5e93\\u7ba1\\u7406\\u5458\\u53d1\\u51fa\\u4ea7\\u54c1\\u540e\\u81f4\\u5ba2\\u6237\\u63d0\\u9192\\u90ae\\u4ef6",
     "subject" : "Masterprint\\u4ea7\\u54c1\\u5df2\\u53d1\\u51fa",
-    "mail_body" : "xxxx\\u4ea7\\u54c1\\u5df2\\u53d1\\u51fa\\uff0c\\u8bf7\\u6ce8\\u610f\\u3002",
+    "mail_body" : "xxxx\\u4ea7\\u54c1\\u5df2\\u53d1\\u51fa\\uff0c\\u8bf7\\u6ce8\\u610f\\u3002sasa",
     "mail_body_plain" : null,
     "send_plain" : "0",
     "from_override" : "",
