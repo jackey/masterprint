@@ -63,13 +63,34 @@ function masterprint_product_load_managed_products($user) {
 function masterprint_product_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'product_node_form') {
     $form['actions']['submit']['#submit'][] = 'masterprint_product_product_create_submit';
+    $form['#validate'][] = 'masterprint_product_product_node_form_validate';
   }
 }
 
+/**
+ * Custom form submission handler for #product_node_form
+ */
 function masterprint_product_product_create_submit($form, &$form_state) {
   global $user;
   // @todo: Do this in the views
   $form_state['redirect']  = 'user/' . $user->uid . '/product/list';
+}
+
+/**
+ * Custom form submission handler for #product_node_form
+ */
+function masterprint_product_product_node_form_validate($form, &$form_state) {
+  $values = $form_state['values'];
+
+  // Make sure the product count is smaller that the min package num
+  $product_count = !empty($values['field_product_count'][LANGUAGE_NONE][0]['value']) ?
+    $values['field_product_count'][LANGUAGE_NONE][0]['value'] : 0;
+  $product_min_pack_num = !empty($values['field_product_min_pack_num'][LANGUAGE_NONE][0]['value']) ?
+    $values['field_product_min_pack_num'][LANGUAGE_NONE][0]['value'] : 0;
+
+  if ($product_count < $product_min_pack_num) {
+    form_set_error('field_product_count', t('产品数量不能低于最小打包数量。'));
+  }
 }
 
 function masterprint_product_views_query_alter(&$view, &$query) {
