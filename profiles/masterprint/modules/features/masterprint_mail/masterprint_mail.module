@@ -7,6 +7,15 @@
 include_once 'masterprint_mail.features.inc';
 
 /**
+ * Implements hook_init()
+ */
+function masterprint_mail_init() {
+  // This is just for testing
+  require_once drupal_get_path('module', 'pet') . '/includes/pet.admin.inc';
+  pet_send_mail('account_created_notify_for_client', array('kurtzhong520@gmail.com'), array());
+}
+
+/**
  * Implements hook_menu()
  */
 function masterprint_mail_menu() {
