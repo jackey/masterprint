@@ -334,6 +334,10 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['fields']['php']['table'] = 'views';
   $handler->display->display_options['fields']['php']['field'] = 'php';
   $handler->display->display_options['fields']['php']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
+  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* 字段: 内容: 产品编号 */
   $handler->display->display_options['fields']['field_product_serial_number']['id'] = 'field_product_serial_number';
   $handler->display->display_options['fields']['field_product_serial_number']['table'] = 'field_data_field_product_serial_number';
