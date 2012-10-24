@@ -91,6 +91,22 @@ function masterprint_product_product_node_form_validate($form, &$form_state) {
   if ($product_count < $product_min_pack_num) {
     form_set_error('field_product_count', t('产品数量不能低于最小打包数量。'));
   }
+
+  // Make sure the serial num is unique
+  $serial_number = !empty($values['field_product_serial_number']['und'][0]['value']) ?
+    $values['field_product_serial_number']['und'][0]['value'] : '';
+  if (!empty($serial_number)) {
+    $query = new EntityFieldQuery();
+    $query
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'product')
+      ->fieldCondition('field_product_serial_number', 'value', $serial_number);
+    $result = $query->execute();
+
+    if (!empty($result)) {
+      form_set_error('field_product_serial_number', t('系统已经存在与该产品序列号一样的产品。'));
+    }
+  }
 }
 
 function masterprint_product_views_query_alter(&$view, &$query) {
