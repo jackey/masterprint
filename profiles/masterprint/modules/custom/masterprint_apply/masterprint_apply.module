@@ -1,10 +1,12 @@
 <?php
 
+// @todo: it's not safe to set role ids like this
 define('SALER_ROLE_ID', 8);
 define('DEALER_ROLE_ID', 7);
 define('CLIENT_ROLE_ID', 6);
 define('WAREHOUSE_ROLE_ID', 5);
 define('AE_ROLE_ID', 3);
+
 define('ADDRESS_SPLITER', '------------');
 define("PRODUCT_APPLYING", 0);
 define("PRODUCT_PASSED", 1);
@@ -89,7 +91,7 @@ function masterprint_apply_node_insert($node) {
       language_default(),
       array());
   }
-}
+  }
 
 function page_delivery_product_sure() {
   $apply_id = arg(1);

@@ -1,80 +1,79 @@
 <?php
 
 function masterprint_apply_install() {
-	//TODO:
+  //TODO:
 }
 
 function masterprint_apply_schema() {
+  $schema['product_apply'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'apply_time' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'product_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'count' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      //实际发货数量
+      'sent_count' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'address' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'default' => '',
+        'not null' => TRUE
+      ),
+    ),
+    'primary key' => array('id'),
+  );
 
-	$schema['product_apply'] = array(
-		'fields' => array(
-			'id' => array(
-        		'type' => 'serial', 
-        		'unsigned' => TRUE, 
-        		'not null' => TRUE,
-			),
-			'apply_time' => array(
-		        'type' => 'int',
-		        'not null' => TRUE,
-		        'default' => 0,
-			),
-			'product_id' => array(
-				'type' => 'int',
-				'not null' => TRUE,
-				'default' => 0,
-			),
-			'count' => array(
-				'type' => 'int',
-				'not null' => TRUE,
-				'default' => 0
-			),
-			//实际发货数量
-			'sent_count' => array(
-				'type' => 'int',
-				'not null' => TRUE,
-				'default' => 0
-			),
-			'uid' => array(
-				'type' => 'int',
-				'not null' => TRUE,
-				'default' => 0,
-			),
-			'status' => array(
-				'type' => 'int',
-				'not null' => TRUE,
-				'default' => 0,
-			),
-			'address' => array(
-				'type' => 'varchar',
-				'length' => '255',
-				'default' => '',
-				'not null' => TRUE
-			),
-		),
-		'primary key' => array('id'),
-	);
+  $schema['hash_delivery'] = array(
+    'fields' => array(
+      'hash_key' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'defualt' => '',
+        'not null' => TRUE,
+      ),
+      'avaible' => array(
+        'type' => 'int',
+        'default' => 1,
+        'not null' => TRUE
+      ),
+      'access time' => array(
+        'type' => 'int',
+        'default' => 0,
+        'not null' => TRUE
+      ),
+    ),
+    'primary key' => array('hash_key'),
+  );
 
-	$schema['hash_delivery'] = array(
-		'fields' => array(
-			'hash_key' => array(
-				'type' => 'varchar',
-				'length' => '255',
-				'defualt' => '',
-				'not null' => TRUE, 	
-			),
-			'avaible' => array(
-				'type' => 'int',
-				'default' => 1,
-				'not null' => TRUE
-			),
-			'access time' => array(
-				'type' => 'int',
-				'default' => 0,
-				'not null' => TRUE
-			),
-		),
-		'primary key' => array('hash_key'),
-	);
-
-	return $schema;
+  return $schema;
 }

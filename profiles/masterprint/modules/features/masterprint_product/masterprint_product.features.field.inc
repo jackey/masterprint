@@ -422,7 +422,7 @@ function masterprint_product_field_default_fields() {
       ),
       'entity_type' => 'node',
       'field_name' => 'field_product_serial_number',
-      'label' => '流水号',
+      'label' => '产品编号',
       'required' => 1,
       'settings' => array(
         'text_processing' => '0',
@@ -588,12 +588,12 @@ function masterprint_product_field_default_fields() {
   // Translatables
   // Included for use with string extractors like potx.
   t('产品描述PDF');
+  t('产品编号');
   t('印刷说明');
   t('客户');
   t('库存量');
   t('数量');
   t('最小打包数量');
-  t('流水号');
   t('缩略图');
 
   return $fields;

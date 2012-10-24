@@ -186,7 +186,7 @@ function masterprint_client_add_client_form_submit(&$form, &$form_state) {
   profile2_save($profile);
 
   // Send email
-  $mail_from = variable_get('system_mail', 'Masterprint <admin@masterprint.com>');
+  $mail_from = variable_get('site_mail', 'Masterprint <shanghai@hf-ps.com>');
   $mail_to = $account->mail;
   $mail_subject = 'Test subject';
   $login_url = url('user', array('absolute' => true));

@@ -334,7 +334,7 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['fields']['php']['table'] = 'views';
   $handler->display->display_options['fields']['php']['field'] = 'php';
   $handler->display->display_options['fields']['php']['exclude'] = TRUE;
-  /* 字段: 内容: 流水号 */
+  /* 字段: 内容: 产品编号 */
   $handler->display->display_options['fields']['field_product_serial_number']['id'] = 'field_product_serial_number';
   $handler->display->display_options['fields']['field_product_serial_number']['table'] = 'field_data_field_product_serial_number';
   $handler->display->display_options['fields']['field_product_serial_number']['field'] = 'field_product_serial_number';
@@ -414,7 +414,7 @@ function masterprint_product_views_default_views() {
     t('系统未找到任何产品，请先添加。'),
     t('名称'),
     t('PHP'),
-    t('流水号'),
+    t('产品编号'),
     t('库存量'),
     t('数量'),
     t('最小打包数量'),
