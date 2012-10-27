@@ -219,7 +219,7 @@ function masterprint_user_log_password_change($uid) {
  */
 function masterprint_user_init() {
   global $user;
-  $edit_path = 'user/' . $user->uid . '/edit';
+  $edit_path = 'user/' . $user->uid . '/profile2/edit_account';
   $need_change = masterprint_user_check_user_change_password_status($user->uid);
 
   if ($need_change) {

@@ -120,25 +120,6 @@ function masterprint_mail_send_account_notify_mail($name, $account = NULL) {
   $params = array();
   $params['account'] = $account;
   $params['pet'] = $pet;
-  $pet = pet_load($name);
-  if (!$pet) {
-    watchdog('pet', 'Unable to load PET %name.', array('%name' => $name), WATCHDOG_ERROR);
-    return;
-  }
-  if (!is_array($recipients) || count($recipients) < 1) {
-    watchdog('pet', 'At least one recipient must be provided for PET %name.', array('%name' => $name), WATCHDOG_NOTICE);
-    return;
-  }
-
-  if (empty($params['pet_from'])) {
-    watchdog('pet', 'Missing sender email address in pet_send_one_mail() for PET \'%name\'.', array('%name' => $pet->name), WATCHDOG_ERROR);
-    return;
-  }
-
-  if (empty($params['pet_to'])) {
-    watchdog('pet', 'Missing recipient email address in pet_send_one_mail() for PET \'%name\'.', array('%name' => $pet->name), WATCHDOG_ERROR);
-    return;
-  }
 
   drupal_mail($module, $key, $to, language_default(), $params, $from);
 }
