@@ -6,6 +6,7 @@ define('DEALER_ROLE_ID', 7);
 define('CLIENT_ROLE_ID', 6);
 define('WAREHOUSE_ROLE_ID', 5);
 define('AE_ROLE_ID', 3);
+define('ADMIN_ROLE_ID', 9);
 
 define('ADDRESS_SPLITER', '------------');
 define("PRODUCT_APPLYING", 0);
@@ -527,6 +528,14 @@ function user_is_dealer($user) {
 
 function user_is_client($user) {
   return isset($user->roles[CLIENT_ROLE_ID]);
+}
+
+function user_is_ae($user) {
+  return isset($user->roles[AE_ROLE_ID]);
+}
+
+function user_is_admin($user) {
+  return isset($user->roles[ADMIN_ROLE_ID]); 
 }
 
 function get_client_account_from_user($saler_account) {

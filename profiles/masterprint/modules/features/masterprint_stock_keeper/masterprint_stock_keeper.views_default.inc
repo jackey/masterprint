@@ -103,6 +103,13 @@ function masterprint_stock_keeper_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = '系统未找到任何仓储管理员，请先添加。';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
+  /* Relationship: 用户: 个人资料 */
+  $handler->display->display_options['relationships']['profile']['id'] = 'profile';
+  $handler->display->display_options['relationships']['profile']['table'] = 'users';
+  $handler->display->display_options['relationships']['profile']['field'] = 'profile';
+  $handler->display->display_options['relationships']['profile']['bundle_types'] = array(
+    'stock_keeper' => 'stock_keeper',
+  );
   /* 字段: 用户: Uid */
   $handler->display->display_options['fields']['uid']['id'] = 'uid';
   $handler->display->display_options['fields']['uid']['table'] = 'users';
@@ -117,12 +124,12 @@ function masterprint_stock_keeper_views_default_views() {
   $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
-  /* 字段: 用户: 名称 */
-  $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
-  $handler->display->display_options['fields']['name_1']['table'] = 'users';
-  $handler->display->display_options['fields']['name_1']['field'] = 'name';
-  $handler->display->display_options['fields']['name_1']['label'] = '账户名';
-  $handler->display->display_options['fields']['name_1']['link_to_user'] = FALSE;
+  /* 字段: 个人资料: 仓库名称 */
+  $handler->display->display_options['fields']['field_stock_address']['id'] = 'field_stock_address';
+  $handler->display->display_options['fields']['field_stock_address']['table'] = 'field_data_field_stock_address';
+  $handler->display->display_options['fields']['field_stock_address']['field'] = 'field_stock_address';
+  $handler->display->display_options['fields']['field_stock_address']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_stock_address']['label'] = '仓库地址';
   /* 字段: 用户: E-mail */
   $handler->display->display_options['fields']['mail']['id'] = 'mail';
   $handler->display->display_options['fields']['mail']['table'] = 'users';
@@ -194,9 +201,10 @@ function masterprint_stock_keeper_views_default_views() {
     t('下一页 ›'),
     t('末页 »'),
     t('系统未找到任何仓储管理员，请先添加。'),
+    t('个人资料'),
     t('Uid'),
     t('PHP'),
-    t('账户名'),
+    t('仓库地址'),
     t('账户邮箱'),
     t('创建人'),
     t('创建于'),

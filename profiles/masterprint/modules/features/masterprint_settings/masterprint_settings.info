@@ -53,6 +53,7 @@ features[field][] = profile2-salesman-field_salesman_client_owner
 features[field][] = profile2-salesman-field_salesman_contacter
 features[field][] = profile2-salesman-field_salesman_name
 features[field][] = profile2-salesman-field_tel
+features[field][] = profile2-stock_keeper-field_stock_address
 features[field][] = user-user-field_created_by
 features[profile2_type][] = admin
 features[profile2_type][] = ae

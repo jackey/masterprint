@@ -48,9 +48,8 @@ function masterprint_settings_user_default_permissions() {
   $permissions['access devel information'] = array(
     'name' => 'access devel information',
     'roles' => array(
-      0 => '',
-      1 => 'anonymous user',
-      2 => 'authenticated user',
+      0 => 'anonymous user',
+      1 => 'authenticated user',
     ),
     'module' => 'devel',
   );

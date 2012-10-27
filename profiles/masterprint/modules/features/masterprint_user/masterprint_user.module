@@ -306,6 +306,14 @@ function masterprint_user_menu_alter(&$items) {
 }
 
 /**
+ * Access check.
+ */
+function masterprint_user_edit($account) {
+  $access = (($GLOBALS['user']->uid == $account->uid) || user_access('administer users')) && $account->uid > 0;
+  return $access || user_is_admin();
+}
+
+/**
  * Page callback for displaying profile2
  */
 function masterprint_user_view_own_profile2($user) {

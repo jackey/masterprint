@@ -153,26 +153,31 @@ function masterprint_client_views_default_views() {
   $handler->display->display_options['fields']['field_client_name']['table'] = 'field_data_field_client_name';
   $handler->display->display_options['fields']['field_client_name']['field'] = 'field_client_name';
   $handler->display->display_options['fields']['field_client_name']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_client_name']['empty'] = '暂无';
   /* 字段: 个人资料: 地址 */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_address']['empty'] = '暂无';
   /* 字段: 个人资料: 电话 */
   $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
   $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';
   $handler->display->display_options['fields']['field_tel']['field'] = 'field_tel';
   $handler->display->display_options['fields']['field_tel']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_tel']['empty'] = '暂无';
   /* 字段: 个人资料: 联系人 */
   $handler->display->display_options['fields']['field_client_contacter']['id'] = 'field_client_contacter';
   $handler->display->display_options['fields']['field_client_contacter']['table'] = 'field_data_field_client_contacter';
   $handler->display->display_options['fields']['field_client_contacter']['field'] = 'field_client_contacter';
   $handler->display->display_options['fields']['field_client_contacter']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_client_contacter']['empty'] = '暂无';
   /* 字段: 个人资料: 邮编 */
   $handler->display->display_options['fields']['field_postal_code']['id'] = 'field_postal_code';
   $handler->display->display_options['fields']['field_postal_code']['table'] = 'field_data_field_postal_code';
   $handler->display->display_options['fields']['field_postal_code']['field'] = 'field_postal_code';
   $handler->display->display_options['fields']['field_postal_code']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_postal_code']['empty'] = '暂无';
   /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'users';
@@ -240,6 +245,7 @@ function masterprint_client_views_default_views() {
     t('Uid'),
     t('PHP'),
     t('名称'),
+    t('暂无'),
     t('地址'),
     t('电话'),
     t('联系人'),

@@ -137,11 +137,13 @@ function masterprint_ae_views_default_views() {
   $handler->display->display_options['fields']['field_fullname']['table'] = 'field_data_field_fullname';
   $handler->display->display_options['fields']['field_fullname']['field'] = 'field_fullname';
   $handler->display->display_options['fields']['field_fullname']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_fullname']['empty'] = '暂无';
   /* 字段: 个人资料: 年龄 */
   $handler->display->display_options['fields']['field_age']['id'] = 'field_age';
   $handler->display->display_options['fields']['field_age']['table'] = 'field_data_field_age';
   $handler->display->display_options['fields']['field_age']['field'] = 'field_age';
   $handler->display->display_options['fields']['field_age']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_age']['empty'] = '暂无';
   $handler->display->display_options['fields']['field_age']['settings'] = array(
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
@@ -151,27 +153,39 @@ function masterprint_ae_views_default_views() {
   $handler->display->display_options['fields']['field_gender']['table'] = 'field_data_field_gender';
   $handler->display->display_options['fields']['field_gender']['field'] = 'field_gender';
   $handler->display->display_options['fields']['field_gender']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_gender']['empty'] = '暂无';
   /* 字段: 个人资料: 入职时间 */
   $handler->display->display_options['fields']['field_entry_date']['id'] = 'field_entry_date';
   $handler->display->display_options['fields']['field_entry_date']['table'] = 'field_data_field_entry_date';
   $handler->display->display_options['fields']['field_entry_date']['field'] = 'field_entry_date';
   $handler->display->display_options['fields']['field_entry_date']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_entry_date']['empty'] = '暂无';
+  $handler->display->display_options['fields']['field_entry_date']['settings'] = array(
+    'format_type' => 'long',
+    'fromto' => 'both',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+  );
   /* 字段: 个人资料: 电话 */
   $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
   $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';
   $handler->display->display_options['fields']['field_tel']['field'] = 'field_tel';
   $handler->display->display_options['fields']['field_tel']['relationship'] = 'profile';
   $handler->display->display_options['fields']['field_tel']['label'] = '联系电话';
+  $handler->display->display_options['fields']['field_tel']['empty'] = '暂无';
   /* 字段: 个人资料: 地址 */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_address']['empty'] = '暂无';
   /* 字段: 个人资料: 邮编 */
   $handler->display->display_options['fields']['field_postal_code']['id'] = 'field_postal_code';
   $handler->display->display_options['fields']['field_postal_code']['table'] = 'field_data_field_postal_code';
   $handler->display->display_options['fields']['field_postal_code']['field'] = 'field_postal_code';
   $handler->display->display_options['fields']['field_postal_code']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_postal_code']['empty'] = '暂无';
   /* 字段: 用户: 名称 */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'users';
@@ -183,6 +197,7 @@ function masterprint_ae_views_default_views() {
   $handler->display->display_options['fields']['mail']['table'] = 'users';
   $handler->display->display_options['fields']['mail']['field'] = 'mail';
   $handler->display->display_options['fields']['mail']['label'] = '账户邮箱';
+  $handler->display->display_options['fields']['mail']['empty'] = '暂无';
   /* 字段: 用户: Created date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'users';
@@ -239,6 +254,7 @@ function masterprint_ae_views_default_views() {
     t('Uid'),
     t('PHP'),
     t('姓名'),
+    t('暂无'),
     t('年龄'),
     t('性别'),
     t('入职时间'),

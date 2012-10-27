@@ -23,6 +23,19 @@ function masterprint_mail_menu() {
     'access arguments' => array('manage mail templates'),
     'page callback' => 'masterprint_mail_load_managed_mail_templates',
     'weight' => 300,
+
+
+
+
+
+  $items['mail_templates/%pet/edit'] = array(
+
+
+    'page callback' => 'masterprint_mail_pet_template_edit',
+    'access arguments' => array('manage mail templates'),
+
+
+
   );
   $items['user/%user/mail_templates/list'] = array(
     'title' => '邮件模板列表',
@@ -41,8 +54,8 @@ function masterprint_mail_menu() {
   return $items;
 }
 
-/**
- * Implements hook_permission().
+  $output = '';
+  $output .= views_embed_view('masterprint_email_templates', 'list_block');
  */
 function masterprint_mail_permission() {
   return array(
@@ -91,24 +104,6 @@ function masterprint_mail_form_alter(&$form, &$form_state) {
     }
 
     if (!empty($form['actions']['cancel'])) {
-      $form['actions']['cancel']['#href'] = 'user/' . $user->uid . '/mail_templates';
-    }
-  }
-}
-
-function masterprint_mail_pet_form_submit_handler(&$form, &$form_state) {
-  global $user;
-  $form_state['redirect'] = 'user/' . $user->uid . '/mail_templates';
-}
-
-/**
- * Implements hook_pet_substitutions_alter()
- */
-function masterprint_mail_pet_substitutions_alter(&$substitutions, $params) {
-
-}
-
-
 /**
  * Send mail to user to notify him/her that an new account has created.
  *
@@ -125,7 +120,6 @@ function masterprint_mail_send_account_notify_mail($name, $account = NULL) {
     watchdog('pet', 'Unable to load PET %name.', array('%name' => $name), WATCHDOG_ERROR);
     return;
   }
-
   $module = 'masterprint_mail';
   $key = $pet->name;
   $to = $account->mail;
@@ -134,6 +128,25 @@ function masterprint_mail_send_account_notify_mail($name, $account = NULL) {
   $params = array();
   $params['account'] = $account;
   $params['pet'] = $pet;
+  $pet = pet_load($name);
+  if (!$pet) {
+    watchdog('pet', 'Unable to load PET %name.', array('%name' => $name), WATCHDOG_ERROR);
+    return;
+  }
+  if (!is_array($recipients) || count($recipients) < 1) {
+    watchdog('pet', 'At least one recipient must be provided for PET %name.', array('%name' => $name), WATCHDOG_NOTICE);
+    return;
+  }
+
+  if (empty($params['pet_from'])) {
+    watchdog('pet', 'Missing sender email address in pet_send_one_mail() for PET \'%name\'.', array('%name' => $pet->name), WATCHDOG_ERROR);
+    return;
+  }
+
+  if (empty($params['pet_to'])) {
+    watchdog('pet', 'Missing recipient email address in pet_send_one_mail() for PET \'%name\'.', array('%name' => $pet->name), WATCHDOG_ERROR);
+    return;
+  }
 
   drupal_mail($module, $key, $to, language_default(), $params, $from);
 }
