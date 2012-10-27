@@ -70,8 +70,11 @@ function masterprint_dealer_add_dealer_form($form, &$form_state, $user) {
     '#required' => TRUE,
     '#default_value' => '',
   );
-
-  // Client's password's randomly generated, not specified by creator
+  // Password's is randomly generated, not specified by creator
+  $form['account']['pass'] = array(
+    '#type' => 'value',
+    '#value' => user_password(mt_rand(6, 8)),
+  );
 
   // Append the profile2  fields
   $form['profile_dealer'] = array(
@@ -157,10 +160,9 @@ function masterprint_dealer_add_dealer_form_submit(&$form, &$form_state) {
   $rid = $role->rid;
 
   // Build the user object
-  $pass = masterprint_dealer_generate_client_password();
   $new_user = array(
     'name' => $form_state['values']['name'],
-    'pass' => $pass,
+    'pass' => $form_state['values']['pass'],
     'mail' => $form_state['values']['mail'],
     'init' => $form_state['values']['mail'],
     'status' => 1,
@@ -185,23 +187,7 @@ function masterprint_dealer_add_dealer_form_submit(&$form, &$form_state) {
   profile2_save($profile);
 
   // Send email
-  $mail_from = variable_get('system_mail', 'Masterprint <admin@masterprint.com>');
-  $mail_to = $account->mail;
-  $mail_subject = 'Test subject';
-  $login_url = url('user', array('absolute' => true));
-
-  // Don't indent the message, it will break the email format.
-  $mail_message = "
-尊敬的用户，你好：
-欢迎使用Masterprint系统！你的账号已经创建好:
-
-用户名: $account->name
-密　码：$pass
-
-请访问 $login_url 登陆系统。
-(如果你无法直接点击链接，请将链接地址复制到浏览器地址栏后访问。)";
-
-  masterprint_dealer_send_email($mail_from, $mail_to, $mail_subject, $mail_message);
+  masterprint_mail_send_account_notify_mail('account_created_notify_for_client_dealer', $new_user);
 
   // Notify and redirect
   drupal_set_message(t('客户经销商添加成功！'));
@@ -239,39 +225,3 @@ function masterprint_dealer_load_managed_dealers($user) {
   }
   return $output;
 }
-
-/**
- * Generate a random password
- */
-function masterprint_dealer_generate_client_password() {
-  $len = mt_rand(6, 8);
-  return user_password($len);
-}
-
-/**
- * Send a email to the newly created client
- */
-function masterprint_dealer_send_email($from, $to, $subject, $message) {
-  $token = microtime();
-  $message = array(
-    'id' =>'masterprint_dealer_' . $token,
-    'to' => $to,
-    'subject' => $subject,
-    'body' => array($message),
-    'headers' => array(
-      'From' => $from,
-      'Sender' => $from,
-      'Return-Path' => $from,
-    ),
-  );
-  $system = drupal_mail_system('masterprint_dealer', $token);
-  $message = $system->format($message);
-  if ($system->mail($message)) {
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
-}
-
-

@@ -203,37 +203,3 @@ function masterprint_client_load_managed_clients($user) {
   $output .= views_embed_view('client_listing', 'created_by_user', $user->uid);
   return $output;
 }
-
-/**
- * Generate a random password
- */
-function masterprint_client_generate_client_password() {
-  $len = mt_rand(6, 8);
-  return user_password($len);
-}
-
-/**
- * Send a email to the newly created client
- */
-function masterprint_client_send_email($from, $to, $subject, $message) {
-  $token = microtime();
-  $message = array(
-    'id' =>'masterprint_client_' . $token,
-    'to' => $to,
-    'subject' => $subject,
-    'body' => array($message),
-    'headers' => array(
-      'From' => $from,
-      'Sender' => $from,
-      'Return-Path' => $from,
-    ),
-  );
-  $system = drupal_mail_system('masterprint_client', $token);
-  $message = $system->format($message);
-  if ($system->mail($message)) {
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
-}

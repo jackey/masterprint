@@ -155,7 +155,7 @@ function masterprint_stock_keeper_add_stock_keeper_form_validate(&$form, &$form_
 /**
  * Submission handler
  */
-function masterprint_stock_keeper_add_stock_keeper_form_submit(&$form, &$form_state) {  
+function masterprint_stock_keeper_add_stock_keeper_form_submit(&$form, &$form_state) {
   global $user;
   $uid = $user->uid;
 
@@ -214,31 +214,6 @@ function masterprint_stock_keeper_generate_stock_keeper_password() {
   return user_password($len);
 }
 
-/**
- * Send a email to the newly created stock_keeper
- */
-function masterprint_stock_keeper_send_email($from, $to, $subject, $message) {
-  $token = microtime();
-  $message = array(
-    'id' =>'masterprint_stock_keeper_' . $token,
-    'to' => $to,
-    'subject' => $subject,
-    'body' => array($message),
-    'headers' => array(
-      'From' => $from,
-      'Sender' => $from,
-      'Return-Path' => $from,
-    ),
-  );
-  $system = drupal_mail_system('masterprint_stock_keeper', $token);
-  $message = $system->format($message);
-  if ($system->mail($message)) {
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
-}
 
 /**
  * Form to edit stock-keeper

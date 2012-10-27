@@ -82,7 +82,11 @@ function masterprint_admin_add_admin_form($form, &$form_state, $user) {
     '#default_value' => '',
   );
 
-  // @todo: admin's password is random generated or specified?
+  // Client's password's randomly generated, not specified by creator
+  $form['account']['pass'] = array(
+    '#type' => 'value',
+    '#value' => user_password(mt_rand(6, 8)),
+  );
 
   // Append the profile2 'admin' fields
   $form['profile_admin'] = array(
@@ -196,59 +200,8 @@ function masterprint_admin_add_admin_form_submit(&$form, &$form_state) {
   profile2_save($profile);
 
   // Send email
-  $mail_from = variable_get('system_mail', 'Masterprint <admin@masterprint.com>');
-  $mail_to = $account->mail;
-  $mail_subject = 'Test subject';
-  $login_url = url('user', array('absolute' => true));
-
-  // Don't indent the message, it will break the email format.
-  $mail_message = "
-尊敬的用户，你好：
-欢迎使用Masterprint系统！你的账号已经创建好：
-
-用户名：$account->name
-邮  箱：$account->mail
-密　码：$pass
-
-请访问 $login_url 登陆系统。
-(如果你无法直接点击链接，请将链接地址复制到浏览器地址栏后访问。)";
-
-  masterprint_admin_send_email($mail_from, $mail_to, $mail_subject, $mail_message);
+  masterprint_mail_send_account_notify_mail('account_created_notify_for_admin', $new_user);
 
   drupal_set_message(t('成功添加管理员！'));
   $form_state['redirect'] = 'user/' . $user->uid . '/admin/list';
-}
-
-/**
- * Generate a random password
- */
-function masterprint_admin_generate_admin_password() {
-  $len = mt_rand(6, 8);
-  return user_password($len);
-}
-
-/**
- * Send a email to the newly created client
- */
-function masterprint_admin_send_email($from, $to, $subject, $message) {
-  $token = microtime();
-  $message = array(
-    'id' =>'masterprint_admin_' . $token,
-    'to' => $to,
-    'subject' => $subject,
-    'body' => array($message),
-    'headers' => array(
-      'From' => $from,
-      'Sender' => $from,
-      'Return-Path' => $from,
-    ),
-  );
-  $system = drupal_mail_system('masterprint_admin', $token);
-  $message = $system->format($message);
-  if ($system->mail($message)) {
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
 }
