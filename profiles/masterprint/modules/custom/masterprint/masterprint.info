@@ -1,4 +1,0 @@
-name = Masterprint General
-package = masterprint
-description = Access control for the site.
-core = 7.x

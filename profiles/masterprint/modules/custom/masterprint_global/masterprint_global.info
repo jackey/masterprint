@@ -1,0 +1,4 @@
+name = Masterprint Global
+package = masterprint
+description = A module for the whole site.
+core = 7.x
