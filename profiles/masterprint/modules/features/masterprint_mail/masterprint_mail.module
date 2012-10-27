@@ -10,9 +10,7 @@ include_once 'masterprint_mail.features.inc';
  * Implements hook_init()
  */
 function masterprint_mail_init() {
-  // This is just for testing
-  // require_once drupal_get_path('module', 'pet') . '/includes/pet.admin.inc';
-  // pet_send_mail('account_created_notify_for_client', array('kurtzhong520@gmail.com'), array());
+  //
 }
 
 /**
@@ -111,26 +109,42 @@ function masterprint_mail_pet_substitutions_alter(&$substitutions, $params) {
 }
 
 
-function masterprnt_mail_send_account_notify_mail($name) {
+/**
+ * Send mail to user to notify him/her that an new account has created.
+ *
+ * @param $name
+ *  Pet template name
+ * @param $account
+ *  The account object of a user
+ */
+function masterprint_mail_send_account_notify_mail($name, $account = NULL) {
+  $account = (object) $account;
   $pet = pet_load($name);
+
   if (!$pet) {
     watchdog('pet', 'Unable to load PET %name.', array('%name' => $name), WATCHDOG_ERROR);
     return;
   }
-  if (!is_array($recipients) || count($recipients) < 1) {
-    watchdog('pet', 'At least one recipient must be provided for PET %name.', array('%name' => $name), WATCHDOG_NOTICE);
-    return;
-  }
 
-  if (empty($params['pet_from'])) {
-    watchdog('pet', 'Missing sender email address in pet_send_one_mail() for PET \'%name\'.', array('%name' => $pet->name), WATCHDOG_ERROR);
-    return;
-  }
+  $module = 'masterprint_mail';
+  $key = $pet->name;
+  $to = $account->mail;
+  $from = !empty($pet->from_override) ? $pet->from_override : varible_get('site_mail', 'shanghai@hf-ps.com');
 
-  if (empty($params['pet_to'])) {
-    watchdog('pet', 'Missing recipient email address in pet_send_one_mail() for PET \'%name\'.', array('%name' => $pet->name), WATCHDOG_ERROR);
-    return;
-  }
+  $params = array();
+  $params['account'] = $account;
+  $params['pet'] = $pet;
 
-  drupal_mail('masterprint_mail', $pet->name, $params['pet_to'], language_default(), $params, $params['pet_from']);
+  drupal_mail($module, $key, $to, language_default(), $params, $from);
+}
+
+/**
+ * Implements hook_mail()
+ */
+function masterprint_mail_mail($key, &$message, $params) {
+  $pet = $params['pet'];
+  $account = $params['account'];
+
+  $message['subject'] = $pet->subject;
+  $message['body'][] = token_replace($pet->mail_body, array('user' => $account));
 }

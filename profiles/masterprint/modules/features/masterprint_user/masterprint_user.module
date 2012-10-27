@@ -575,9 +575,8 @@ function masterprint_user_token_info() {
  */
 function masterprint_user_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();
-  dpm($data);
-  if (isset($data['user']) && isset($data['user']->password)) {
-    $replacements['[user:password]'] = $data['user']->password;
+  if (isset($data['user']) && isset($data['user']->pass)) {
+    $replacements['[user:password]'] = $data['user']->pass;
   }
   return $replacements;
 }
