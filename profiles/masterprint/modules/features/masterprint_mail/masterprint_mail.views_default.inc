@@ -88,6 +88,10 @@ function masterprint_mail_views_default_views() {
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '编辑';
   $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['nothing']['alter']['path'] = 'mail_templates/[name]/edit?destination=[php]';
+  /* Sort criterion: Previewable Email Template: 机读名称 */
+  $handler->display->display_options['sorts']['name']['id'] = 'name';
+  $handler->display->display_options['sorts']['name']['table'] = 'pets';
+  $handler->display->display_options['sorts']['name']['field'] = 'name';
 
   /* Display: 区块 */
   $handler = $view->new_display('block', '区块', 'list_block');

@@ -36,7 +36,7 @@ function masterprint_mail_menu() {
     'page callback' => 'masterprint_mail_pet_template_edit',
     'page arguments' => array(1),
     'access arguments' => array('manage mail templates'),
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_CALLBACK,
   );
   return $items;
 }
@@ -67,13 +67,18 @@ function masterprint_mail_load_managed_mail_templates() {
  * Title callback
  */
 function masterprint_mail_pet_template_edit_title($pet) {
-  $title = !empty($pet->title) ? $pet->title : '';
+  $title =  t('编辑');
+  $title .= !empty($pet->title) ? $pet->title : '';
   return $title ;
 }
 /**
  * Page callback
  */
 function masterprint_mail_pet_template_edit($pet) {
+  $title =  t('编辑');
+  $title .= !empty($pet->title) ? $pet->title : '';
+  drupal_set_title($title);
+
   return entity_form('pet', $pet);
 }
 
@@ -82,8 +87,7 @@ function masterprint_mail_pet_template_edit($pet) {
  */
 function masterprint_mail_form_alter(&$form, &$form_state) {
   global $user;
-  if ($form['#form_id'] == 'pet_form') {
-    $form['#submit'][] = 'masterprint_mail_pet_form_submit_handler';
+  if ($form['#form_id'] == 'pet_form' && $user->uid != 1) {
     // Hide the Mimemail section, not needed
     unset($form['mimemail']);
     if(isset($form['#redirect'])) {
