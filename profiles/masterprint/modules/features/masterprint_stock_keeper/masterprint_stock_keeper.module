@@ -12,7 +12,7 @@ include_once 'masterprint_stock_keeper.features.inc';
 function masterprint_stock_keeper_menu() {
   $items = array();
   $items['user/%user/stock_keeper'] = array(
-    'title' => '仓储管理员管理',
+    'title' => '仓储管理',
     'type' => MENU_LOCAL_TASK,
     'access arguments' => array('manage stock_keeper accounts'),
     'page callback' => 'masterprint_stock_keeper_load_managed_stock_keepers',
@@ -20,19 +20,19 @@ function masterprint_stock_keeper_menu() {
     'weight' => 180,
   );
   $items['user/%user/stock_keeper/list'] = array(
-    'title' => '仓储管理员列表',
+    'title' => '仓储列表',
     'access arguments' => array('manage stock_keeper accounts'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['user/%user/stock_keeper/add'] = array(
-    'title' => '添加仓储管理员',
+    'title' => '添加仓储',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('masterprint_stock_keeper_add_stock_keeper_form', 1),
     'access arguments' => array('manage stock_keeper accounts'),
   );
   $items['stock_keeper/%user/edit'] = array(
-    'title' => '编辑仓库管理员',
+    'title' => '编辑仓储',
     'title callback' => 'masterprint_stock_keeper_edit_title',
     'title arguments' => array(1),
     'type' => MENU_CALLBACK,
@@ -59,7 +59,7 @@ function masterprint_stock_keeper_permission() {
  * Title callback
  */
 function masterprint_stock_keeper_edit_title($user) {
-  return t('编辑仓库管理员!user', array('!user' => $user->name));
+  return t('编辑仓库管理员!user', array('!user' => ''));
 }
 
 /**
@@ -68,25 +68,32 @@ function masterprint_stock_keeper_edit_title($user) {
 function masterprint_stock_keeper_add_stock_keeper_form($form, &$form_state, $user) {
   $form = array();
 
-  $form['account'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('账户信息'),
-  );
-
-  $form['account']['name'] = array(
+  $form['name'] = array(
     '#type' => 'textfield',
     '#title' => t('用户名'),
+    '#access' => FALSE,
     '#maxlength' => USERNAME_MAX_LENGTH,
     '#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
     '#required' => TRUE,
     '#attributes' => array('class' => array('username')),
-    '#default_value' => '',
+    '#default_value' => uniqid("stock_keeper"),
   );
-  $form['account']['mail'] = array(
+
+  // Append the profile2 fields
+  $form['profile_stock_keeper'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('仓储信息'),
+  );
+  $profile = profile_create(array('type' => 'stock_keeper'));
+  $form_state['profiles']['stock_keeper'] = $profile;
+  field_attach_form('profile2', $profile, $form['profile_stock_keeper'], $form_state);
+
+
+  $form['profile_stock_keeper']['mail'] = array(
     '#type' => 'textfield',
     '#title' => t('E-mail地址'),
     '#maxlength' => EMAIL_MAX_LENGTH,
-    '#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
+    '#description' => '请输入一个合法的邮件地址，邮件不会对外公开.',
     '#required' => TRUE,
     '#default_value' => '',
   );
@@ -125,7 +132,7 @@ function masterprint_stock_keeper_add_stock_keeper_form_validate(&$form, &$form_
   // Trim whitespace from mail, to prevent confusing 'e-mail not valid'
   // warnings often caused by cutting and pasting.
   $mail = trim($form_state['values']['mail']);
-  form_set_value($form['account']['mail'], $mail, $form_state);
+  form_set_value($form['profile_stock_keeper']['mail'], $mail, $form_state);
 
   // Validate email
   if ($error = user_validate_mail($form_state['values']['mail'])) {
@@ -148,7 +155,7 @@ function masterprint_stock_keeper_add_stock_keeper_form_validate(&$form, &$form_
 /**
  * Submission handler
  */
-function masterprint_stock_keeper_add_stock_keeper_form_submit(&$form, &$form_state) {
+function masterprint_stock_keeper_add_stock_keeper_form_submit(&$form, &$form_state) {  
   global $user;
   $uid = $user->uid;
 
@@ -176,6 +183,14 @@ function masterprint_stock_keeper_add_stock_keeper_form_submit(&$form, &$form_st
 
   $account = user_save(NULL, $new_user);
 
+  // Save profile2 fields
+  profile2_form_submit_build_profile($form, $form_state);
+  // This is needed as some submit callbacks like user_register_submit() rely on
+  // clean form values.
+  profile2_form_submit_cleanup($form, $form_state);
+  $profile = $form_state['profiles']['stock_keeper'];
+  $profile->uid = $account->uid;
+  profile2_save($profile);
 
   // Notify and redirect
   drupal_set_message(t('仓储管理员添加成功！'));
@@ -237,17 +252,31 @@ function masterprint_stock_keeper_edit_stock_keeper_form($form, $form_state, $us
     '#type' => 'value',
     '#value' => $user->mail,
   );
-  $form['mail'] = array(
+
+  // Append the profile2 fields
+  $form['profile_stock_keeper'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('仓储信息'),
+  );
+  $profile = profile2_load_by_user($user, 'stock_keeper');
+  if (!$profile) {
+    $profile = profile_create(array('type' => 'stock_keeper'));
+  }
+  $form_state['profiles']['stock_keeper'] = $profile;
+  field_attach_form('profile2', $profile, $form['profile_stock_keeper'], $form_state);
+
+
+  $form['profile_stock_keeper']['mail'] = array(
     '#type' => 'textfield',
     '#title' => t('E-mail地址'),
     '#maxlength' => EMAIL_MAX_LENGTH,
-    '#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
+    '#description' => '请输入一个合法的邮件地址，邮件不会对外公开.',
     '#required' => TRUE,
     '#default_value' => $user->mail,
   );
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('保存'),
+    '#value' => t('提交'),
   );
   return $form;
 }
@@ -261,7 +290,7 @@ function masterprint_stock_keeper_edit_stock_keeper_form_validate(&$form, &$form
   // Trim whitespace from mail, to prevent confusing 'e-mail not valid'
   // warnings often caused by cutting and pasting.
   $mail = trim($form_state['values']['mail']);
-  form_set_value($form['mail'], $mail, $form_state);
+  form_set_value($form['profile_stock_keeper']['mail'], $mail, $form_state);
 
   // Validate email
   if ($error = user_validate_mail($form_state['values']['mail'])) {
@@ -290,20 +319,18 @@ function masterprint_stock_keeper_edit_stock_keeper_form_submit(&$form, &$form_s
   $values = $form_state['values'];
   $stock_keeper = user_load($values['stock_keeper_uid']);
 
-  if ((!empty($values['mail'])) && ($values['stock_keeper_old_mail'] == $values['mail'])) {
-    drupal_set_message(t('您未对仓库管理员<strong>%user</strong>的邮件地址做修改。', array(
-        '%user'=> $stock_keeper->name)));
-  }
-  else {
-    $stock_keeper_updated = user_save($stock_keeper, array('mail' => $values['mail']));
-    if (!empty($stock_keeper_updated)) {
-      drupal_set_message(t('仓库管理员<strong>%user</strong>的邮件地址被更新为：%new_email 。', array(
-          '%user'=> $stock_keeper->name, '%new_email'=> $values['mail'])));
-    }
-    else {
-      drupal_set_message(t('更新仓库管理员<strong>%user</strong>的邮件地址操作失败！', array(
-          '%user'=> $stock_keeper->name), 'error'));
-    }
-  }
+
+  $stock_keeper_updated = user_save($stock_keeper, array('mail' => $values['mail']));
+
+  // Save profile2 fields
+  profile2_form_submit_build_profile($form, $form_state);
+  // This is needed as some submit callbacks like user_register_submit() rely on
+  // clean form values.
+  profile2_form_submit_cleanup($form, $form_state);
+  $profile = $form_state['profiles']['stock_keeper'];
+  $profile->uid = $stock_keeper->uid;
+  profile2_save($profile);
+
+  drupal_set_message("仓储资料更改成功");
 }
 

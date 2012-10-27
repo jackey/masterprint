@@ -3,7 +3,7 @@
 /**
  * Add body classes if certain regions have content.
  */
-function bartik_ext_ext_preprocess_html(&$variables) {
+function bartik_ext_preprocess_html(&$variables) {
   if (!empty($variables['page']['featured'])) {
     $variables['classes_array'][] = 'featured';
   }
@@ -29,17 +29,18 @@ function bartik_ext_ext_preprocess_html(&$variables) {
 /**
  * Override or insert variables into the page template for HTML output.
  */
-function bartik_ext_ext_process_html(&$variables) {
+function bartik_ext_process_html(&$variables) {
   // Hook into color.module.
   if (module_exists('color')) {
     _color_html_alter($variables);
   }
+
 }
 
 /**
  * Override or insert variables into the page template.
  */
-function bartik_ext_ext_process_page(&$variables) {
+function bartik_ext_process_page(&$variables) {
   // Hook into color.module.
   if (module_exists('color')) {
     _color_page_alter($variables);
@@ -71,6 +72,8 @@ function bartik_ext_ext_process_page(&$variables) {
     // Make sure the shortcut link is the first item in title_suffix.
     $variables['title_suffix']['add_or_remove_shortcut']['#weight'] = -100;
   }
+
+
 }
 
 /**
@@ -153,4 +156,13 @@ function bartik_ext_field__taxonomy_term_reference($variables) {
   $output = '<div class="' . $variables['classes'] . (!in_array('clearfix', $variables['classes_array']) ? ' clearfix' : '') . '"' . $variables['attributes'] .'>' . $output . '</div>';
 
   return $output;
+}
+
+function bartik_ext_process_breadcrumb(&$variables) {
+  $bread_crumb = drupal_get_breadcrumb();
+  if (!drupal_is_front_page() && arg(0) != 'user') {
+    $bread_crumb[] = l(drupal_get_title(), base_path() . request_uri());
+  }
+  drupal_set_breadcrumb($bread_crumb);
+  $variables['breadcrumb'] = $bread_crumb;
 }

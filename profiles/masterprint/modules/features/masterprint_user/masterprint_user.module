@@ -295,7 +295,7 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
  * Implements hook_menu_alter()
  */
 function masterprint_user_menu_alter(&$items) {
-  $items['user/%user/edit']['access callback'] = FALSE;
+  $items['user/%user/edit']['access callback'] = 'masterprint_user_edit';
 
   $items['user/%user/view']['type'] = MENU_CALLBACK;
 
@@ -303,6 +303,14 @@ function masterprint_user_menu_alter(&$items) {
   $items['user/%user']['access callback'] = TRUE;
   $items['user/%user']['page callback'] = 'drupal_get_form';
   $items['user/%user']['page arguments'] = array('masterprint_user_edit_own_profile2', 1);
+}
+
+/**
+ * Access check.
+ */
+function masterprint_user_edit($account) {
+  $access = (($GLOBALS['user']->uid == $account->uid) || user_access('administer users')) && $account->uid > 0;
+  return $access || user_is_admin();
 }
 
 /**
@@ -575,7 +583,6 @@ function masterprint_user_token_info() {
  */
 function masterprint_user_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();
-  dpm($data);
   if (isset($data['user']) && isset($data['user']->password)) {
     $replacements['[user:password]'] = $data['user']->password;
   }
