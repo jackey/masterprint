@@ -6,7 +6,6 @@ php = 5.2.4
 dependencies[] = admin
 dependencies[] = ctools
 dependencies[] = date
-dependencies[] = devel
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = image

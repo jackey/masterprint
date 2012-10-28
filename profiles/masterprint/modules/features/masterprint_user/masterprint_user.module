@@ -278,12 +278,15 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
     }
   }
 
+  // For client dealer and client salesman, hide the client field
   if ($form_id == 'masterprint_user_edit_own_profile2') {
-    if (masterprint_user_is_user_client($user->uid)) {
+    if (masterprint_user_is_client_dealer($user->uid)) {
       if (!empty($form['profile_dealer']) && !empty($form['profile_dealer']['field_dealer_client_owner'])) {
         $form['profile_dealer']['field_dealer_client_owner']['#attributes']['style'][] = 'display:none;';
       }
+    }
 
+    if (masterprint_user_is_client_salesman($user->uid)) {
       if (!empty($form['profile_salesman']) && !empty($form['profile_salesman']['field_salesman_client_owner'])) {
         $form['profile_salesman']['field_salesman_client_owner']['#attributes']['style'][] = 'display:none;';
       }
@@ -300,15 +303,41 @@ function masterprint_user_menu_alter(&$items) {
   $items['user/%user/view']['type'] = MENU_CALLBACK;
 
   $items['user/%user']['title'] = '个人资料';
+  $items['user/%user']['title callback'] = 'masterprint_user_title';
+  $items['user/%user']['title arguments'] = array(1);
   $items['user/%user']['access callback'] = TRUE;
   $items['user/%user']['page callback'] = 'drupal_get_form';
   $items['user/%user']['page arguments'] = array('masterprint_user_edit_own_profile2', 1);
 }
 
+
+/**
+ * Title callback
+ */
+function masterprint_user_title($user) {
+  $title = '';
+
+  // Use role name as prefix
+  $rid = masterprint_user_get_masterprint_role($user->uid);
+  if (!empty($rid)) {
+    $role = user_role_load($rid);
+    if (!empty($role)) {
+      $title .= $role->name . ' - ';
+    }
+  }
+
+  // Try to use current user profile's name as page title
+  $profile_name = masterprint_user_get_profile2_fullname($user->uid);
+  $title .= !empty($profile_name) ? $profile_name : $user->name;
+
+  // If not found, fallback to account name
+  return $title;
+}
 /**
  * Access check.
  */
 function masterprint_user_edit($account) {
+  return FALSE;
   $access = (($GLOBALS['user']->uid == $account->uid) || user_access('administer users')) && $account->uid > 0;
   return $access || user_is_admin();
 }
@@ -472,6 +501,37 @@ function masterprint_user_is_user_client($uid) {
   }
   return FALSE;
 }
+
+/**
+ * Check if a user is a client dealer
+ */
+function masterprint_user_is_client_dealer($uid) {
+  $user = user_load($uid);
+  $user_roles = (!empty($user->roles)) ? $user->roles : array();
+  $client_role = user_role_load_by_name('客户的经销商');
+  if (!empty($client_role->rid)) {
+    if (array_key_exists($client_role->rid, $user_roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Check if a user is a client
+ */
+function masterprint_user_is_client_salesman($uid) {
+  $user = user_load($uid);
+  $user_roles = (!empty($user->roles)) ? $user->roles : array();
+  $client_role = user_role_load_by_name('客户销售人员');
+  if (!empty($client_role->rid)) {
+    if (array_key_exists($client_role->rid, $user_roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 
 /**
  * Get the profile2 type the user is binding to
