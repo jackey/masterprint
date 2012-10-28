@@ -56,12 +56,10 @@ function masterprint_ae_add_ae_form($form, &$form_state, $user) {
     '#required' => TRUE,
     '#default_value' => '',
   );
-
+  // Password's is randomly generated, not specified by creator
   $form['account']['pass'] = array(
-    '#type' => 'password_confirm',
-    '#size' => 25,
-    '#description' => t('Provide a password for the new account in both fields.'),
-    '#required' => TRUE,
+    '#type' => 'value',
+    '#value' => user_password(mt_rand(6, 8)),
   );
 
   // Append the profile2 AE fields
@@ -164,8 +162,6 @@ function masterprint_ae_add_ae_form_submit(&$form, &$form_state) {
 
   $account = user_save(NULL, $new_user);
 
-  // TODO: Send mail?
-
   // Save profile2 fields
   profile2_form_submit_build_profile($form, $form_state);
   // This is needed as some submit callbacks like user_register_submit() rely on
@@ -174,6 +170,9 @@ function masterprint_ae_add_ae_form_submit(&$form, &$form_state) {
   $profile = $form_state['profiles']['ae'];
   $profile->uid = $account->uid;
   profile2_save($profile);
+
+  // Send email
+  masterprint_mail_send_account_notify_mail('account_created_notify_for_ae', $new_user);
 
   // Notify and redirect
   drupal_set_message(t('AE添加成功!'));
