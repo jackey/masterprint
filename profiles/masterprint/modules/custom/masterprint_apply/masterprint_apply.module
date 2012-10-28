@@ -194,7 +194,7 @@ function get_product_stock_number($product) {
     return 0;
   }
   else {
-    $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ? AND status = ?", array($product->nid, PRODUCT_SENT))->fetchAssoc();
+    $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ? AND status = ?", array($product->nid, PRODUCT_PASSED))->fetchAssoc();
     $cost_total = $result['cost_total'];
     return ($total_count - $cost_total > 0) ? ($total_count - $cost_total) : 0;
   }
@@ -346,13 +346,16 @@ function user_product_apply_list($user) {
   }
 
   if ($search_uids == array()) {
-    $search_uids[] = -1;
+    $query = db_select("product_apply", 'pa')->fields('pa')->execute();
+  }
+  else {
+    $query = db_select("product_apply", 'pa')->fields('pa')->condition('uid', $search_uids, 'in')->execute();
   }
   $header = array('产品名称', '申请时间', '申请数量', '产品缩略图', '申请人',  '申请状态');
   if (user_access('approve apply')) {
     $header[] = '操作';
   }
-  $query = db_select("product_apply", 'pa')->fields('pa')->condition('uid', $search_uids, 'in')->execute();
+
   $apply_product = array();
   $table_rows = array();
   while ($data = $query->fetchAssoc()) {
