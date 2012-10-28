@@ -212,6 +212,7 @@ function pet_lookup_uid($mail) {
  *        bcc's in the PET.
  */
 function pet_send_mail($name, $recipients, $options) {
+  require_once(drupal_get_path('module', 'pet').'/includes/pet.admin.inc');
   $pet = pet_load($name);
   if (!$pet) {
     watchdog('pet', 'Unable to load PET %name.', array('%name' => $name), WATCHDOG_ERROR);
