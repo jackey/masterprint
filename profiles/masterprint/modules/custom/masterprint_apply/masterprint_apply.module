@@ -31,17 +31,21 @@ function masterprint_apply_menu() {
   $items['user/%user/applyproduct'] = array(
     'title' => '产品申请',
     'type' => MENU_LOCAL_TASK,
+    'page callback' => 'user_product_apply_list',
+    'page arguments' => array('1'),
+    'access arguments' => array('view apply'),
+    'weight' => 120,
+  );
+  $items['user/%user/applyproduct/list'] = array(
+    'title' => '产品申请列表',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['user/%user/applyproduct/new'] = array(
+    'title' => '产品申请',
+    'type' => MENU_LOCAL_TASK,
     'access arguments' => array('apply product'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('masterprint_apply_product', '1'),
-    'weight' => 120,
-  );
-  $items['user/%/applyproductlist'] = array(
-    'title' => '产品申请列表',
-    'type' => MENU_LOCAL_TASK,
-    'access arguments' => array('view apply'),
-    'page callback' => 'user_product_apply_list',
-    'page arguments' => array('1'),
     'weight' => 120,
   );
   $items['approve/%/%'] = array(
