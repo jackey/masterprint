@@ -300,6 +300,9 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
 function masterprint_user_menu_alter(&$items) {
   $items['user/%user/edit']['access callback'] = 'masterprint_user_edit';
 
+  // Disable devel tab
+  $items['user/%user/devel']['access callback'] = FALSE;
+
   $items['user/%user/view']['type'] = MENU_CALLBACK;
 
   $items['user/%user']['title'] = '个人资料';
