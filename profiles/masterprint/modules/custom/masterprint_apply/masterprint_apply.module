@@ -227,7 +227,9 @@ function page_delivery_product_sure_submit($form, &$form_state) {
   $client_account = get_client_account_from_user($apply_account);
   //发邮件给客户
   //drupal_mail('masterprint_apply', 'notify_client_when_delivery', $client_account->mail, language_default(), array());
-  pet_send_mail(notify_client_when_delivery, array('mail' => $client_account->mail, 'uid' => $client_account->uid, array('nid' => $apply_product['product_id'])));
+  pet_send_mail(notify_client_when_delivery, 
+    array('mail' => $client_account->mail, 'uid' => $client_account->uid), 
+    array('nid' => $apply_product['product_id'])));
 
   //发货后，检查库存，如果库存少于20个则发送邮件给对应的客户和AE
   $product_stock = get_product_stock_number($product);
@@ -238,7 +240,7 @@ function page_delivery_product_sure_submit($form, &$form_state) {
     //   $client_account->mail,
     //   language_default(),
     //   array());
-    pet_send_mail(notify_warning_when_product_less, array('mail' => $client_account->mail, 'uid' => $client_account->uid, 
+    pet_send_mail(notify_warning_when_product_less, array('mail' => $client_account->mail, 'uid' => $client_account->uid),
       array('nid' => $apply_product['product_id']));
   }
 
