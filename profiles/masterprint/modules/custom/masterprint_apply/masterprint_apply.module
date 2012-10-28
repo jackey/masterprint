@@ -96,6 +96,8 @@ function masterprint_apply_node_insert($node) {
       language_default(),
       array());
   }
+  $user = user_load($node->field_product_applied_by[LANGUAGE_NONE][0]['target_id']);
+  drupal_mail('masterprint_apply', 'notify_warehouse_when_product_insert', $user->mail, language_default(), array());
 }
 
 function page_delivery_product_sure() {
@@ -547,12 +549,13 @@ function masterprint_apply_product_submit($form, &$form_state) {
     drupal_set_message("产品申请成功，请等待您所属客户审核");
 
       //然后发送邮件到客户，请求审核通过
-    drupal_mail(
-      'masterprint_apply',
-      'submit_product_apply',
-      $client_account->mail,
-      language_default(),
-      array());
+    // drupal_mail(
+    //   'masterprint_apply',
+    //   'submit_product_apply',
+    //   $client_account->mail,
+    //   language_default(),
+    //   array());
+    
   }
 }
 
