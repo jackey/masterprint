@@ -303,11 +303,36 @@ function masterprint_user_menu_alter(&$items) {
   $items['user/%user/view']['type'] = MENU_CALLBACK;
 
   $items['user/%user']['title'] = '个人资料';
+  $items['user/%user']['title callback'] = 'masterprint_user_title';
+  $items['user/%user']['title arguments'] = array(1);
   $items['user/%user']['access callback'] = TRUE;
   $items['user/%user']['page callback'] = 'drupal_get_form';
   $items['user/%user']['page arguments'] = array('masterprint_user_edit_own_profile2', 1);
 }
 
+
+/**
+ * Title callback
+ */
+function masterprint_user_title($user) {
+  $title = '';
+
+  // Use role name as prefix
+  $rid = masterprint_user_get_masterprint_role($user->uid);
+  if (!empty($rid)) {
+    $role = user_role_load($rid);
+    if (!empty($role)) {
+      $title .= $role->name . ' - ';
+    }
+  }
+
+  // Try to use current user profile's name as page title
+  $profile_name = masterprint_user_get_profile2_fullname($user->uid);
+  $title .= !empty($profile_name) ? $profile_name : $user->name;
+
+  // If not found, fallback to account name
+  return $title;
+}
 /**
  * Access check.
  */
