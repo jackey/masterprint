@@ -234,6 +234,7 @@ function masterprint_user_init() {
  * Implements hook_form_alter()
  */
 function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
+  dpm($form);
   global $user;
 
   if ($form_id == 'user_profile_form') {
@@ -278,12 +279,15 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
     }
   }
 
+  // For client dealer and client salesman, hide the client field
   if ($form_id == 'masterprint_user_edit_own_profile2') {
-    if (masterprint_user_is_user_client($user->uid)) {
+    if (masterprint_user_is_client_dealer($user->uid)) {
       if (!empty($form['profile_dealer']) && !empty($form['profile_dealer']['field_dealer_client_owner'])) {
         $form['profile_dealer']['field_dealer_client_owner']['#attributes']['style'][] = 'display:none;';
       }
+    }
 
+    if (masterprint_user_is_client_salesman($user->uid)) {
       if (!empty($form['profile_salesman']) && !empty($form['profile_salesman']['field_salesman_client_owner'])) {
         $form['profile_salesman']['field_salesman_client_owner']['#attributes']['style'][] = 'display:none;';
       }
@@ -472,6 +476,37 @@ function masterprint_user_is_user_client($uid) {
   }
   return FALSE;
 }
+
+/**
+ * Check if a user is a client dealer
+ */
+function masterprint_user_is_client_dealer($uid) {
+  $user = user_load($uid);
+  $user_roles = (!empty($user->roles)) ? $user->roles : array();
+  $client_role = user_role_load_by_name('客户的经销商');
+  if (!empty($client_role->rid)) {
+    if (array_key_exists($client_role->rid, $user_roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Check if a user is a client
+ */
+function masterprint_user_is_client_salesman($uid) {
+  $user = user_load($uid);
+  $user_roles = (!empty($user->roles)) ? $user->roles : array();
+  $client_role = user_role_load_by_name('客户销售人员');
+  if (!empty($client_role->rid)) {
+    if (array_key_exists($client_role->rid, $user_roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 
 /**
  * Get the profile2 type the user is binding to
