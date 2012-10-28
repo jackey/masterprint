@@ -12,7 +12,11 @@ define('ADDRESS_SPLITER', '------------');
 define("PRODUCT_APPLYING", 0);
 define("PRODUCT_PASSED", 1);
 define("PRODUCT_SENT", 2);
+define("PRODUCT_REFUSED", 3);
 
+/**
+ * Implements hook_menu().
+ */
 function masterprint_apply_menu() {
   $items = array();
   $items['user/%user/applyproduct'] = array(
@@ -31,12 +35,12 @@ function masterprint_apply_menu() {
     'page arguments' => array('1'),
     'weight' => 120,
   );
-  $items['approve/%'] = array(
+  $items['approve/%/%'] = array(
     'title' => '产品申请通过',
     'type' => MENU_CALLBACK,
     'access arguments' => array('approve apply'),
     'page callback' => 'client_approve_apply',
-    'page arguments' => array(1)
+    'page arguments' => array(1, 2)
   );
   $items['user/%/applydetail/%'] = array(
     'title' => '申请详情',
@@ -92,7 +96,7 @@ function masterprint_apply_node_insert($node) {
       language_default(),
       array());
   }
-  }
+}
 
 function page_delivery_product_sure() {
   $apply_id = arg(1);
@@ -184,12 +188,12 @@ function page_delivery_product_sure_submit($form, &$form_state) {
   $apply_id = $form_state['values']['apply_id'];
   //更新申请状态/更新发货数量
   db_update("product_apply")
-      ->fields(array('status' => 2))
-      ->fields(array('sent_count' => $form_state['values']['product_count']))
+      ->fields(array(
+        'sent_count' => $form_state['values']['product_count'],
+        'status' => PRODUCT_SENT,
+        'approve_time' => time()))
       ->condition('id', $apply_id, '=')
       ->execute();
-
-  //TODO:发送邮件给客户/申请人
   $apply_product = db_select('product_apply', 'ap')
     ->fields('ap')
     ->condition('id', $apply_id, '=')
@@ -259,23 +263,39 @@ function masterprint_apply_process_productapply(&$vars) {
   $vars['product_view'] = node_view($vars['product']);
 }
 
-function client_approve_apply($id) {
-  //审核状态修改
-  db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
-  $apply_product = db_select('product_apply', 'ap')
+function client_approve_apply($id, $action = 'pass') {
+  if ($action == 'pass') {
+    //审核状态修改
+    db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
+    $apply_product = db_select('product_apply', 'ap')
+      ->fields('ap')
+      ->condition('id', $id, '=')
+      ->execute()
+      ->fetchAssoc();
+    // 需要通知仓库管理员
+    $warehousr_manager = list_warehouse_manager();
+    foreach ($warehousr_manager as $uid => $user) {
+      drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array('apply_product' => $apply_product));
+    }
+    //修改库存
+    //TODO:
+    drupal_goto($_SERVER['HTTP_REFERER']);
+    return '';
+  }
+  else if ($action == 'refused'){
+    //审核状态修改
+    db_update("product_apply")->fields(array('status' => PRODUCT_REFUSED))->condition('id', $id, '=')->execute();
+    drupal_goto($_SERVER['HTTP_REFERER']);
+    return '';
+  }
+}
+
+function load_apply_pruduct($id) {
+  return db_select('product_apply', 'ap')
     ->fields('ap')
     ->condition('id', $id, '=')
     ->execute()
     ->fetchAssoc();
-  // 需要通知仓库管理员
-  $warehousr_manager = list_warehouse_manager();
-  foreach ($warehousr_manager as $uid => $user) {
-    drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array('apply_product' => $apply_product));
-  }
-  //修改库存
-  //TODO:
-  drupal_goto($_SERVER['HTTP_REFERER']);
-  return '';
 }
 
 function user_product_apply_list($user) {
@@ -298,31 +318,52 @@ function user_product_apply_list($user) {
   if ($search_uids == array()) {
     $search_uids[] = -1;
   }
-  $header = array('产品名称', '申请时间', '申请数量', '申请人',  '申请状态', '操作');
+  $header = array('产品名称', '申请时间', '申请数量', '产品缩略图', '申请人',  '申请状态');
+  if (user_access('approve apply')) {
+    $header[] = '操作';
+  }
   $query = db_select("product_apply", 'pa')->fields('pa')->condition('uid', $search_uids, 'in')->execute();
   $apply_product = array();
   $table_rows = array();
   while ($data = $query->fetchAssoc()) {
     $op = '';
-    if ($data['status'] == 0) {
-      $op .= l('通过', 'approve/'.$data['id']);
+    if ($data['status'] == PRODUCT_APPLYING) {
+      $op .= l('通过', 'approve/'.$data['id'].'/pass');
+      $op .= l('拒绝', 'approve/'.$data['id'].'/refused');
     }
-    else {
-      $op = '<span>审核已通过</span>';
+    else if ($data['status'] == PRODUCT_PASSED){
+      $op = '<span>已通过</span>';
+    }
+    else if ($data['status'] == PRODUCT_REFUSED) {
+      $op = '<span>已拒绝</span>';
+    }
+    else if ($data['status'] == PRODUCT_SENT) {
+      $op = '<span>已发出</span>';
     }
     $op .= '|'.l('详情', 'user/'.arg(1).'/applydetail/'. $data['id']);
     if (!user_access('approve apply')) {
       $op = '无';
     }
     $node = node_load($data['product_id']);
+    $thumbnail_url = count($node->field_product_thumbnail) > 0 ? file_create_url($node->field_product_thumbnail[LANGUAGE_NONE][0]['uri']) : "";
+    if (!$thumbnail_url) {
+      $product_thumbnail_render = '暂无';
+    }
+    else {
+      $product_thumbnail_render = '<a class="showProductThumbnail" href="'.$thumbnail_url.'" rel="lightbox">缩略图</a>';
+    }
     $apply_user = user_load($data['uid']);
     $table_row = array(
       $node->title,
       date('Y m d h:i:s', $data['apply_time']),
       $data['count'],
+      $product_thumbnail_render,
       $apply_user->name,
-      $data['status'] == 0 ? '待审核': '审核通过',
-      $op);
+      $data['status'] == 0 ? '待审核': '审核通过');
+
+    if (user_access('approve apply')) {
+      $table_row[] = $op;
+    }
     $table_rows[] = $table_row;
   }
   return theme('table', array('header' => $header, 'rows' => $table_rows));
@@ -393,26 +434,28 @@ function masterprint_apply_product() {
   $form = array();
   $rows = array();
   foreach ($product_nodes as $product) {
-    $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ?", array($product->nid))->fetchAssoc();
-    $cost_total = $result['cost_total'];
+    // $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_PASSED ,$product->nid))->fetchAssoc();
+    // $cost_total = $result['cost_total'];
+    $product_apply_statictis = product_apply_statictis($product->nid);
     $rows[] = array(
       $product->title,
-      $product->field_product_count[LANGUAGE_NONE][0]['value'] - $cost_total,
-      $product->field_product_min_pack_num[LANGUAGE_NONE][0]['value']);
+      $product->field_product_count[LANGUAGE_NONE][0]['value'] - $product_apply_statictis['cost'],
+      $product->field_product_min_pack_num[LANGUAGE_NONE][0]['value'],
+      $product_apply_statictis['applying']);
   }
 
-  $header = array('产品名称', '产品库存', '产品最小打包数量');
+  $header = array('产品名称', '产品库存', '产品最小打包数量', '正在审核产品量');
   $product_list_table = theme('table', array('header' => $header, 'rows' => $rows));
   global $user;
+  $form['product_list'] = array(
+    '#markup' => $product_list_table,
+    '#title' => '您的产品列表',
+  );
   $form['product'] = array(
     '#type' => 'select',
     '#title' => t('选择需要的产品'),
     '#options' => $options,
     '#required' => TRUE,
-  );
-  $form['product_list'] = array(
-    '#markup' => $product_list_table,
-    '#title' => '您的产品列表',
   );
   $form['product_count'] = array(
     '#type' => 'textfield',
@@ -448,8 +491,10 @@ function masterprint_apply_product_validate($form, &$form_state) {
   $product_id = $form_state['values']['product'];
   $node = node_load($product_id);
   $total_count = $node->field_product_count[LANGUAGE_NONE][0]['value'];
-  $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ?", array($product_id))->fetchAssoc();
+  $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_PASSED ,$product_id))->fetchAssoc();
   $cost_total = $result['cost_total'];
+  $result = db_query("SELECT SUM(count) as applying_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_APPLYING, $product_id))->fetchAssoc();
+  $applying_total = $result['applying_total'];
   $pack_count = $node->field_product_min_pack_num[LANGUAGE_NONE][0]['value'];
   if (!is_numeric($count)) {
     form_set_error('product_count', '产品数量必须是数字');
@@ -464,6 +509,22 @@ function masterprint_apply_product_validate($form, &$form_state) {
     form_set_error('product_count', '申请数量不能大于库存数量');
     return FALSE;
   }
+  if (intval($count) > ($total_count - $cost_total - $applying_total)) {
+    form_set_error('product_count', '当前库存不足,请减少申请数量');
+    return FALSE;
+  }
+}
+
+//产品的损耗统计
+function product_apply_statictis($product_id = 0) {
+  $node = node_load($product_id);
+  $total_count = $node->field_product_count[LANGUAGE_NONE][0]['value'];
+  $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_PASSED ,$product_id))->fetchAssoc();
+  $cost_total = $result['cost_total'] ? $result['cost_total']: 0;
+  $result = db_query("SELECT SUM(count) as applying_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_APPLYING, $product_id))->fetchAssoc();
+  $applying_total = $result['applying_total'] ? $result['applying_total']: 0;
+
+  return array('total' => $total_count, 'cost' => $cost_total, 'applying' => $applying_total);
 }
 
 function masterprint_apply_product_submit($form, &$form_state) {
@@ -483,7 +544,6 @@ function masterprint_apply_product_submit($form, &$form_state) {
     $status = drupal_write_record('product_apply', $data);
     $apply_account = user_load($uid);
     $client_account = get_client_account_from_user($apply_account);
-    dpm($client_account);
     drupal_set_message("产品申请成功，请等待您所属客户审核");
 
       //然后发送邮件到客户，请求审核通过

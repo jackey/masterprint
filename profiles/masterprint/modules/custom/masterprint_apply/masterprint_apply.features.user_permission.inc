@@ -14,8 +14,9 @@ function masterprint_apply_user_default_permissions() {
   $permissions['apply product'] = array(
     'name' => 'apply product',
     'roles' => array(
-      0 => '客户的经销商',
-      1 => '客户销售人员',
+      0 => 'administrator',
+      1 => '客户的经销商',
+      2 => '客户销售人员',
     ),
     'module' => 'masterprint_apply',
   );
@@ -24,7 +25,7 @@ function masterprint_apply_user_default_permissions() {
   $permissions['approve apply'] = array(
     'name' => 'approve apply',
     'roles' => array(
-      0 => 'AE业务经理',
+      0 => 'administrator',
       1 => '客户',
     ),
     'module' => 'masterprint_apply',
@@ -35,7 +36,9 @@ function masterprint_apply_user_default_permissions() {
     'name' => 'list all products',
     'roles' => array(
       0 => 'AE业务经理',
-      1 => '管理员',
+      1 => 'administrator',
+      2 => '仓储管理员',
+      3 => '管理员',
     ),
     'module' => 'masterprint_apply',
   );
@@ -44,8 +47,11 @@ function masterprint_apply_user_default_permissions() {
   $permissions['view apply'] = array(
     'name' => 'view apply',
     'roles' => array(
-      0 => '客户',
-      1 => '管理员',
+      0 => 'AE业务经理',
+      1 => 'administrator',
+      2 => '客户',
+      3 => '客户的经销商',
+      4 => '客户销售人员',
     ),
     'module' => 'masterprint_apply',
   );

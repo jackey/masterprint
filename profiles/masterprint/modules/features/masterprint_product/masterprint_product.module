@@ -103,7 +103,7 @@ function masterprint_product_product_node_form_validate($form, &$form_state) {
       ->fieldCondition('field_product_serial_number', 'value', $serial_number);
     $result = $query->execute();
 
-    if (!empty($result)) {
+    if (!empty($result) && empty($values['nid'])) {
       form_set_error('field_product_serial_number', t('系统已经存在与该产品序列号一样的产品。'));
     }
   }
