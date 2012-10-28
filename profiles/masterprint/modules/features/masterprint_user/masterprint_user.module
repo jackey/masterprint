@@ -312,6 +312,7 @@ function masterprint_user_menu_alter(&$items) {
  * Access check.
  */
 function masterprint_user_edit($account) {
+  return FALSE;
   $access = (($GLOBALS['user']->uid == $account->uid) || user_access('administer users')) && $account->uid > 0;
   return $access || user_is_admin();
 }
