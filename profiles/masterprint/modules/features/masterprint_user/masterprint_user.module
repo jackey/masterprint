@@ -319,7 +319,7 @@ function masterprint_user_menu_alter(&$items) {
  */
 function masterprint_user_title($user) {
   // Don't care administrator
-  if (user_is_admin($user)) {
+  if ($user->uid == 1) {
     return 'Administrator';
   }
 
