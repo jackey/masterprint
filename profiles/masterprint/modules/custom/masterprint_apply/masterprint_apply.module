@@ -248,8 +248,29 @@ function page_delivery_product_sure_submit($form, &$form_state) {
     }
   }
 
+  //发邮件给AE
+  $ae_accounts = list_ae_account();
+  foreach ($ae_accounts as $ae) {
+    pet_send_mail(notify_apply_account_when_delivery, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
+      'nid' => $apply_product['product_id']
+    ));
+  }
+
+  require_once(drupal_get_path('module', 'user').'/user.pages.inc');
   user_logout();
   drupal_goto('');
+}
+
+function masterprint_apply_substitutions($pet, $params) {
+  $substitutions = array();
+  $apply_id = isset($params['apply_id']) ? $params['apply_id']: '';
+  if (!empty($apply_id)) {
+    $apply = load_apply_pruduct($apply_id);
+
+    $substitutions = array('apply_id' => $apply_id);
+  }
+
+  return $substitutions;
 }
 
 function page_show_apply_detail($uid, $id) {
@@ -296,7 +317,7 @@ function client_approve_apply($id, $action = 'pass') {
     foreach ($warehousr_manager as $uid => $user) {
       // drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array('apply_product' => $apply_product));
       pet_send_mail(notify_warehouse_manager_when_approve, array('mail' => $user->mail, 'uid' => $user->uid),
-        array('nid' => $apply_product['product_id']));
+        array('nid' => $apply_product['product_id'], 'apply_id' => $id));
     }
     //修改库存
     //TODO:
