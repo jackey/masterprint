@@ -17,11 +17,17 @@ function masterprint_apply_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
+      'approve_time' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
       'product_id' => array(
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
       ),
+      //总数
       'count' => array(
         'type' => 'int',
         'not null' => TRUE,

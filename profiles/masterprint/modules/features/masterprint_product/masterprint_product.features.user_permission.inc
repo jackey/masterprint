@@ -16,7 +16,8 @@ function masterprint_product_user_default_permissions() {
     'roles' => array(
       0 => 'AE业务经理',
       1 => 'administrator',
-      2 => '管理员',
+      2 => '客户',
+      3 => '管理员',
     ),
     'module' => 'node',
   );
@@ -38,7 +39,8 @@ function masterprint_product_user_default_permissions() {
     'roles' => array(
       0 => 'AE业务经理',
       1 => 'administrator',
-      2 => '管理员',
+      2 => '客户',
+      3 => '管理员',
     ),
     'module' => 'node',
   );
@@ -60,7 +62,8 @@ function masterprint_product_user_default_permissions() {
     'roles' => array(
       0 => 'AE业务经理',
       1 => 'administrator',
-      2 => '管理员',
+      2 => '客户',
+      3 => '管理员',
     ),
     'module' => 'node',
   );
@@ -71,7 +74,8 @@ function masterprint_product_user_default_permissions() {
     'roles' => array(
       0 => 'AE业务经理',
       1 => 'administrator',
-      2 => '管理员',
+      2 => '客户',
+      3 => '管理员',
     ),
     'module' => 'masterprint_product',
   );

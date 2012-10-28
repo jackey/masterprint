@@ -161,7 +161,7 @@ function bartik_ext_field__taxonomy_term_reference($variables) {
 function bartik_ext_process_breadcrumb(&$variables) {
   $bread_crumb = drupal_get_breadcrumb();
   if (!drupal_is_front_page() && arg(0) != 'user') {
-    $bread_crumb[] = l(drupal_get_title(), base_path() . request_uri());
+    $bread_crumb[] = l(drupal_get_title(), arg());
   }
   drupal_set_breadcrumb($bread_crumb);
   $variables['breadcrumb'] = $bread_crumb;

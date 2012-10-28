@@ -11,6 +11,7 @@ stylesheets[all][] = css/colors.css
 stylesheets[print][] = css/print.css
 
 scripts[] = scripts/masterprint.js
+scripts[] = scripts/modal/js/jquery.simplemodal.js
 
 regions[header] = Header
 regions[help] = Help
