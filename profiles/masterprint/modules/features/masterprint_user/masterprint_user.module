@@ -295,7 +295,7 @@ function masterprint_user_form_alter(&$form, &$form_state, $form_id) {
  * Implements hook_menu_alter()
  */
 function masterprint_user_menu_alter(&$items) {
-  $items['user/%user/edit']['access callback'] = FALSE;
+  $items['user/%user/edit']['access callback'] = 'masterprint_user_edit';
 
   $items['user/%user/view']['type'] = MENU_CALLBACK;
 
