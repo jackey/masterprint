@@ -244,7 +244,7 @@ function page_delivery_product_sure_submit($form, &$form_state) {
     //   $client_account->mail,
     //   language_default(),
     //   array());
-    pet_send_mail(notify_warning_when_product_less, array('mail' => $client_account->mail, 'uid' => $client_account->uid),
+    pet_send_mail('notify_warning_when_product_les', array('mail' => $client_account->mail, 'uid' => $client_account->uid),
       array('nid' => $apply_product['product_id']));
   }
 
