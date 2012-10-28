@@ -14,6 +14,15 @@ define("PRODUCT_PASSED", 1);
 define("PRODUCT_SENT", 2);
 define("PRODUCT_REFUSED", 3);
 
+
+// Email template
+define('submit_product_apply', 'notify_on_product_request'); //'经销商/销售员申请产品提醒
+define('notify_warehouse_manager_when_approve', 'notify_on_product_accepted');//产品被客户通过邮件
+define('notify_client_when_delivery', 'notify_client_on_delivery');//仓库管理员发出产品后致客户提醒邮件
+define('notify_apply_account_when_delivery', 'notify_requester_on_delivery');//仓库管理员发出产品后致产品申请人邮件
+define('notify_warehouse_when_product_insert', 'notify_stock_keeper_on_product_added');//产品被添加后致仓库管理员邮件
+define('notify_warning_when_product_less', 'notify_on_nearly_out_of_stock');//库存告警邮件
+
 /**
  * Implements hook_menu().
  */
@@ -90,14 +99,16 @@ function masterprint_apply_node_insert($node) {
   //成功添加产品后，需要告之仓库管理员入库
   $managers = list_warehouse_manager();
   foreach ($managers as $manager) {
-    drupal_mail('masterprint_apply',
-      'notify_warehouse_when_product_insert',
-      $manager->mail,
-      language_default(),
-      array());
+    // drupal_mail('masterprint_apply',
+    //   'notify_warehouse_when_product_insert',
+    //   $manager->mail,
+    //   language_default(),
+    //   array());
+    pet_send_mail(notify_warehouse_when_product_insert, array('mail' => $manager->mail, 'uid' => $manager->uid), array('nid' => $node->nid));
   }
   $user = user_load($node->field_product_applied_by[LANGUAGE_NONE][0]['target_id']);
-  drupal_mail('masterprint_apply', 'notify_warehouse_when_product_insert', $user->mail, language_default(), array());
+  //drupal_mail('masterprint_apply', 'notify_warehouse_when_product_insert', $user->mail, language_default(), array());
+  pet_send_mail(notify_warehouse_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid, array('nid' => $user->nid)));
 }
 
 function page_delivery_product_sure() {
@@ -206,32 +217,44 @@ function page_delivery_product_sure_submit($form, &$form_state) {
   $uid = $apply_product['uid'];
   $product = node_load($apply_product['product_id']);
   $apply_account = user_load($uid);
-  drupal_mail('masterprint_apply', 'notify_apply_account_when_delivery', $apply_account->mail, language_default(), array());
+  //drupal_mail('masterprint_apply', 'notify_apply_account_when_delivery', $apply_account->mail, language_default(), array());
+  pet_send_mail(notify_apply_account_when_delivery, 
+    array('mail' => $apply_account->mail, 'uid' => $apply_account->uid), 
+    array('nid' => $apply_product['product_id'])
+  );
 
   //客户ID
   $client_account = get_client_account_from_user($apply_account);
   //发邮件给客户
-  drupal_mail('masterprint_apply', 'notify_client_when_delivery', $client_account->mail, language_default(), array());
+  //drupal_mail('masterprint_apply', 'notify_client_when_delivery', $client_account->mail, language_default(), array());
+  pet_send_mail(notify_client_when_delivery, 
+    array('mail' => $client_account->mail, 'uid' => $client_account->uid), 
+    array('nid' => $apply_product['product_id'])));
 
   //发货后，检查库存，如果库存少于20个则发送邮件给对应的客户和AE
   $product_stock = get_product_stock_number($product);
   $total_count = $product->field_product_count[LANGUAGE_NONE][0]['value'];
   if (round($product_stock / $total_count, 1) > 0.8) {
-    drupal_mail('masterprint_apply',
-      'notify_warning_when_product_less',
-      $client_account->mail,
-      language_default(),
-      array());
+    // drupal_mail('masterprint_apply',
+    //   'notify_warning_when_product_less',
+    //   $client_account->mail,
+    //   language_default(),
+    //   array());
+    pet_send_mail(notify_warning_when_product_less, array('mail' => $client_account->mail, 'uid' => $client_account->uid),
+      array('nid' => $apply_product['product_id']));
   }
 
   //发邮件给AE
   $ae_accounts = list_ae_account();
   foreach ($ae_accounts as $ae) {
-    drupal_mail('masterprint_apply',
-      'notify_warning_when_product_less',
-      $ae->mail,
-      language_default(),
-      array());
+    // drupal_mail('masterprint_apply',
+    //   'notify_warning_when_product_less',
+    //   $ae->mail,
+    //   language_default(),
+    //   array());
+    pet_send_mail(notify_warning_when_product_less, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
+      'nid' => $apply_product['product_id']
+    ));
   }
 }
 
@@ -277,7 +300,9 @@ function client_approve_apply($id, $action = 'pass') {
     // 需要通知仓库管理员
     $warehousr_manager = list_warehouse_manager();
     foreach ($warehousr_manager as $uid => $user) {
-      drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array('apply_product' => $apply_product));
+      // drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array('apply_product' => $apply_product));
+      pet_send_mail(notify_warehouse_manager_when_approve, array('mail' => $user->mail, 'uid' => $user->uid), 
+        array('nid' => $apply_product['product_id']));
     }
     //修改库存
     //TODO:
@@ -548,14 +573,15 @@ function masterprint_apply_product_submit($form, &$form_state) {
     $client_account = get_client_account_from_user($apply_account);
     drupal_set_message("产品申请成功，请等待您所属客户审核");
 
-      //然后发送邮件到客户，请求审核通过
     // drupal_mail(
     //   'masterprint_apply',
     //   'submit_product_apply',
     //   $client_account->mail,
     //   language_default(),
     //   array());
-    
+
+    //然后发送邮件到客户，请求审核通过
+    pet_send_mail(submit_product_apply, array('mail' => $client_account->mail, 'uid' => $client_account->uid), array('nid' => $product_id));
   }
 }
 
