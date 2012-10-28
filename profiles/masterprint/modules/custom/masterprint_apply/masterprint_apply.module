@@ -14,13 +14,12 @@ define("PRODUCT_PASSED", 1);
 define("PRODUCT_SENT", 2);
 define("PRODUCT_REFUSED", 3);
 
-
 // Email template
 define('submit_product_apply', 'notify_on_product_request'); //'经销商/销售员申请产品提醒
-define('notify_warehouse_manager_when_approve', 'notify_stock_keeper_on_product_added');//产品被客户通过邮件
+define('notify_warehouse_manager_when_approve', 'notify_on_product_accepted');//产品被客户通过邮件
 define('notify_client_when_delivery', 'notify_client_on_delivery');//仓库管理员发出产品后致客户提醒邮件
 define('notify_apply_account_when_delivery', 'notify_requester_on_delivery');//仓库管理员发出产品后致产品申请人邮件
-define('notify_warehouse_when_product_insert', 'notify_stock_keeper_on_product_added');//产品被添加后致仓库管理员邮件
+define('notify_warehouse_when_product_insert', 'notify_warehouse_when_product_insert');//产品被添加后致仓库管理员邮件
 define('notify_warning_when_product_less', 'notify_on_nearly_out_of_stock');//库存告警邮件
 
 /**
@@ -657,6 +656,7 @@ function get_client_account_from_user($saler_account) {
  * Impelements hook_mail()
  */
 function masterprint_apply_mail($key, &$message, $params) {
+  return;
   // 经销商/销售员申请产品时候，发送邮件.
   if ($key == 'submit_product_apply') {
     $message['subject'] = 'Hello world';
