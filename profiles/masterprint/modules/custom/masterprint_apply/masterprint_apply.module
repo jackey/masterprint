@@ -220,7 +220,6 @@ function page_delivery_product_sure_submit($form, &$form_state) {
   $uid = $apply_product['uid'];
   $product = node_load($apply_product['product_id']);
   $apply_account = user_load($uid);
-  //drupal_mail('masterprint_apply', 'notify_apply_account_when_delivery', $apply_account->mail, language_default(), array());
   pet_send_mail(notify_apply_account_when_delivery,
     array('mail' => $apply_account->mail, 'uid' => $apply_account->uid),
     array('nid' => $apply_product['product_id'])
@@ -229,8 +228,7 @@ function page_delivery_product_sure_submit($form, &$form_state) {
   //客户ID
   $client_account = get_client_account_from_user($apply_account);
   //发邮件给客户
-  //drupal_mail('masterprint_apply', 'notify_client_when_delivery', $client_account->mail, language_default(), array());
-  pet_send_mail('notify_client_when_delivery',
+  pet_send_mail(notify_apply_account_when_delivery,
     array('mail' => $client_account->mail, 'uid' => $client_account->uid),
     array('nid' => $apply_product['product_id']));
 
@@ -238,27 +236,20 @@ function page_delivery_product_sure_submit($form, &$form_state) {
   $product_stock = get_product_stock_number($product);
   $total_count = $product->field_product_count[LANGUAGE_NONE][0]['value'];
   if (round($product_stock / $total_count, 1) > 0.8) {
-    // drupal_mail('masterprint_apply',
-    //   'notify_warning_when_product_less',
-    //   $client_account->mail,
-    //   language_default(),
-    //   array());
-    pet_send_mail('notify_warning_when_product_les', array('mail' => $client_account->mail, 'uid' => $client_account->uid),
+    pet_send_mail(notify_warning_when_product_less, array('mail' => $client_account->mail, 'uid' => $client_account->uid),
       array('nid' => $apply_product['product_id']));
+
+    //发邮件给AE
+    $ae_accounts = list_ae_account();
+    foreach ($ae_accounts as $ae) {
+      pet_send_mail(notify_warning_when_product_less, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
+        'nid' => $apply_product['product_id']
+      ));
+    }
   }
 
-  //发邮件给AE
-  $ae_accounts = list_ae_account();
-  foreach ($ae_accounts as $ae) {
-    // drupal_mail('masterprint_apply',
-    //   'notify_warning_when_product_less',
-    //   $ae->mail,
-    //   language_default(),
-    //   array());
-    pet_send_mail(notify_warning_when_product_less, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
-      'nid' => $apply_product['product_id']
-    ));
-  }
+  user_logout();
+  drupal_goto('/');
 }
 
 function page_show_apply_detail($uid, $id) {
