@@ -258,19 +258,17 @@ function page_delivery_product_sure_submit($form, &$form_state) {
 
   require_once(drupal_get_path('module', 'user').'/user.pages.inc');
   user_logout();
-  drupal_goto('');
+  drupal_goto('<front>');
 }
 
-function masterprint_apply_substitutions($pet, $params) {
-  $substitutions = array();
-  $apply_id = isset($params['apply_id']) ? $params['apply_id']: '';
+function masterprint_apply_pet_substitutions_alter(&$substitutions, &$params) {
+  $apply_id = isset($params['pet_cc']) ? $params['pet_cc']: '';
   if (!empty($apply_id)) {
     $apply = load_apply_pruduct($apply_id);
 
-    $substitutions = array('apply_id' => $apply_id);
+    $substitutions['apply'] = (object)$apply;
+    unset($params['pet_cc']);
   }
-
-  return $substitutions;
 }
 
 function page_show_apply_detail($uid, $id) {
@@ -317,7 +315,7 @@ function client_approve_apply($id, $action = 'pass') {
     foreach ($warehousr_manager as $uid => $user) {
       // drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array('apply_product' => $apply_product));
       pet_send_mail(notify_warehouse_manager_when_approve, array('mail' => $user->mail, 'uid' => $user->uid),
-        array('nid' => $apply_product['product_id'], 'apply_id' => $id));
+        array('nid' => $apply_product['product_id'], 'cc' => $id));
     }
     //修改库存
     //TODO:
@@ -338,6 +336,37 @@ function load_apply_pruduct($id) {
     ->condition('id', $id, '=')
     ->execute()
     ->fetchAssoc();
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function masterprint_apply_token_info() {
+  $type = array(
+    'name' => t('Product apply'),
+    'description' => t('用户产品申请'),
+    'needs-data' => 'apply',
+  );
+  $apply['id'] = array(
+    'name' => t("Apply ID"), 
+    'description' => t("申请的产品ID."),
+  );
+
+  return array(
+    'types' => array('apply' => $type),
+    'tokens' => array('apply' => $apply),
+  );
+}
+
+function masterprint_apply_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  if ($type == 'apply') {
+    $apply = $data['apply'];
+    foreach ($tokens as $name => $origin) {
+      $replacements[$origin] = $apply->{$name};
+    }
+
+    return $replacements;
+  }
 }
 
 function user_product_apply_list($user) {
