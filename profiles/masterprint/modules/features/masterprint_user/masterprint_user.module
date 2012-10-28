@@ -315,6 +315,11 @@ function masterprint_user_menu_alter(&$items) {
  * Title callback
  */
 function masterprint_user_title($user) {
+  // Don't care administrator
+  if (user_is_admin($user)) {
+    return 'Administrator';
+  }
+
   $title = '';
 
   // Use role name as prefix
@@ -541,19 +546,21 @@ function masterprint_user_get_user_profile_type($uid) {
 
   $mp_role_rid = masterprint_user_get_masterprint_role($uid);
   $mp_role = user_role_load($mp_role_rid);
-  $mp_role_name = $mp_role->name;
+  if (!empty($mp_role)) {
+    $mp_role_name = $mp_role->name;
 
-  $type_mapping = array(
-    '管理员' => 'admin',
-    'AE业务经理' => 'ae',
-    '客户' => 'client',
-    '客户的经销商' => 'dealer',
-    '客户销售人员' => 'salesman',
-    '仓储管理员' => 'stock_keeper',
-  );
+    $type_mapping = array(
+      '管理员' => 'admin',
+      'AE业务经理' => 'ae',
+      '客户' => 'client',
+      '客户的经销商' => 'dealer',
+      '客户销售人员' => 'salesman',
+      '仓储管理员' => 'stock_keeper',
+    );
 
-  if (array_key_exists($mp_role_name, $type_mapping)) {
-    return $type_mapping[$mp_role_name];
+    if (array_key_exists($mp_role_name, $type_mapping)) {
+      return $type_mapping[$mp_role_name];
+    }
   }
 
   return FALSE;
