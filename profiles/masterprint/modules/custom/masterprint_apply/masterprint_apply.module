@@ -383,6 +383,16 @@ function user_product_apply_list($user) {
     else {
       $product_thumbnail_render = '<a class="showProductThumbnail" href="'.$thumbnail_url.'" rel="lightbox">缩略图</a>';
     }
+    $status = '待审核';
+    if ($data['status'] == PRODUCT_PASSED){
+      $status = '<span>已通过</span>';
+    }
+    else if ($data['status'] == PRODUCT_REFUSED) {
+      $status = '<span>已拒绝</span>';
+    }
+    else if ($data['status'] == PRODUCT_SENT) {
+      $status = '<span>已发出</span>';
+    }
     $apply_user = user_load($data['uid']);
     $table_row = array(
       $node->title,
@@ -390,7 +400,7 @@ function user_product_apply_list($user) {
       $data['count'],
       $product_thumbnail_render,
       $apply_user->name,
-      $data['status'] == 0 ? '待审核': '审核通过');
+      $status);
 
     if (user_access('approve apply')) {
       $table_row[] = $op;

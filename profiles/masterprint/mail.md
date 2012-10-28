@@ -6,9 +6,9 @@
 
 * client_test_1@sina.cn / abcdefg
 
-* client_saler_1@163.cn / abcdefg
+* client_saler_1@163.com / abcdefg
 
-* client_dealer_1@163.cn / abcdefg
+* client_dealer_1@163.com / abcdefg
 
 
 ## test account
