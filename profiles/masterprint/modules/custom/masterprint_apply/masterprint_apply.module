@@ -30,22 +30,21 @@ function masterprint_apply_menu() {
   $items['user/%user/applyproduct'] = array(
     'title' => '产品申请',
     'type' => MENU_LOCAL_TASK,
-    'page callback' => 'user_product_apply_list',
-    'page arguments' => array('1'),
-    'access arguments' => array('view apply'),
-    'weight' => 120,
-  );
-  $items['user/%user/applyproduct/list'] = array(
-    'title' => '产品申请列表',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-  );
-  $items['user/%user/applyproduct/new'] = array(
-    'title' => '产品申请',
-    'type' => MENU_LOCAL_TASK,
     'access arguments' => array('apply product'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('masterprint_apply_product', '1'),
     'weight' => 120,
+  );
+  $items['user/%user/applyproduct/new'] = array(
+    'title' => '产品申请',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['user/%user/applyproduct/list'] = array(
+    'title' => '申请列表',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'user_product_apply_list',
+    'page arguments' => array('1'),
+    'access arguments' => array('view apply'),
   );
   $items['approve/%/%'] = array(
     'title' => '产品申请通过',
@@ -348,7 +347,7 @@ function masterprint_apply_token_info() {
     'needs-data' => 'apply',
   );
   $apply['id'] = array(
-    'name' => t("Apply ID"), 
+    'name' => t("Apply ID"),
     'description' => t("申请的产品ID."),
   );
 
