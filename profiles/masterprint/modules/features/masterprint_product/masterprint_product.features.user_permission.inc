@@ -75,7 +75,9 @@ function masterprint_product_user_default_permissions() {
       0 => 'AE业务经理',
       1 => 'administrator',
       2 => '客户',
-      3 => '管理员',
+      3 => '客户的经销商',
+      4 => '客户销售人员',
+      5 => '管理员',
     ),
     'module' => 'masterprint_product',
   );
