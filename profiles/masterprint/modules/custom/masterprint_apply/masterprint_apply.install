@@ -55,6 +55,25 @@ function masterprint_apply_schema() {
         'default' => '',
         'not null' => TRUE
       ),
+      // Delivery information
+      'delivery_company' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'default' => '',
+        'not null' => TRUE
+      ),
+      'delivery_serial_no' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'default' => '',
+        'not null' => TRUE
+      ),
+      'delivery_contact_tel' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'default' => '',
+        'not null' => TRUE
+      ),
     ),
     'primary key' => array('id'),
   );
