@@ -313,7 +313,6 @@ function client_approve_apply($id, $action = 'pass') {
     // 需要通知仓库管理员
     $warehousr_manager = list_warehouse_manager();
     foreach ($warehousr_manager as $uid => $user) {
-      // drupal_mail('masterprint_apply', 'notify_warehouse_manager_when_approve', $user->mail, language_default(), array('apply_product' => $apply_product));
       pet_send_mail(notify_warehouse_manager_when_approve, array('mail' => $user->mail, 'uid' => $user->uid),
         array('nid' => $apply_product['product_id'], 'cc' => $id));
     }
