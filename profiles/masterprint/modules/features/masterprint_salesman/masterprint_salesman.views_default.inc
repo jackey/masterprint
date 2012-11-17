@@ -257,6 +257,8 @@ function masterprint_salesman_views_default_views() {
   $handler->display->display_options['fields']['field_salesman_addresses']['table'] = 'field_data_field_salesman_addresses';
   $handler->display->display_options['fields']['field_salesman_addresses']['field'] = 'field_salesman_addresses';
   $handler->display->display_options['fields']['field_salesman_addresses']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_salesman_addresses']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_salesman_addresses']['multi_type'] = 'ul';
   /* 字段: 个人资料: 电话 */
   $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
   $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';
@@ -354,6 +356,8 @@ function masterprint_salesman_views_default_views() {
   $handler->display->display_options['fields']['field_salesman_addresses']['table'] = 'field_data_field_salesman_addresses';
   $handler->display->display_options['fields']['field_salesman_addresses']['field'] = 'field_salesman_addresses';
   $handler->display->display_options['fields']['field_salesman_addresses']['relationship'] = 'profile';
+  $handler->display->display_options['fields']['field_salesman_addresses']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_salesman_addresses']['multi_type'] = 'ul';
   /* 字段: 个人资料: 电话 */
   $handler->display->display_options['fields']['field_tel']['id'] = 'field_tel';
   $handler->display->display_options['fields']['field_tel']['table'] = 'field_data_field_tel';

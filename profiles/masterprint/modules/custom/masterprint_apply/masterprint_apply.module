@@ -30,22 +30,21 @@ function masterprint_apply_menu() {
   $items['user/%user/applyproduct'] = array(
     'title' => '产品申请',
     'type' => MENU_LOCAL_TASK,
-    'page callback' => 'user_product_apply_list',
-    'page arguments' => array('1'),
-    'access arguments' => array('view apply'),
-    'weight' => 120,
-  );
-  $items['user/%user/applyproduct/list'] = array(
-    'title' => '产品申请列表',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-  );
-  $items['user/%user/applyproduct/new'] = array(
-    'title' => '产品申请',
-    'type' => MENU_LOCAL_TASK,
     'access arguments' => array('apply product'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('masterprint_apply_product', '1'),
     'weight' => 120,
+  );
+  $items['user/%user/applyproduct/new'] = array(
+    'title' => '产品申请',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['user/%user/applyproduct/list'] = array(
+    'title' => '申请列表',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'user_product_apply_list',
+    'page arguments' => array('1'),
+    'access arguments' => array('view apply'),
   );
   $items['approve/%/%'] = array(
     'title' => '产品申请通过',
@@ -114,6 +113,9 @@ function masterprint_apply_node_insert($node) {
   pet_send_mail(notify_warehouse_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid, array('nid' => $user->nid)));
 }
 
+/**
+ * The form used for delivering the product as requested.
+ */
 function page_delivery_product_sure() {
   $apply_id = arg(1);
   $access_key = arg(3);
@@ -144,6 +146,7 @@ function page_delivery_product_sure() {
   $form['product_request_count'] = array(
     '#markup' => '</br><span class="product_request_count">' . t('产品申请数量: %stock', array('%stock' => $apply_product['count'])). '</span></br>',
   );
+
   $form['product_count'] = array(
     '#title' => t('发货数量'),
     '#type' => 'textfield',
@@ -151,6 +154,49 @@ function page_delivery_product_sure() {
     '#size' => 12,
     '#description' => t('只能填写数字'),
   );
+
+
+  // Delivery information
+  $form['delivery_info'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('物流信息'),
+  );
+
+  $form['delivery_info']['delivery_company'] = array(
+    '#type' => 'select',
+    '#title' => t('物流公司'),
+    '#options' => array(
+      'yuantong' => t('圆通'),
+      'shentong' => t('申通'),
+      'yunda' => t('韵达'),
+      'tiantian' => t('天天快递'),
+      'shunfeng' => t('顺风'),
+      'other' => t('其他物流'),
+    ),
+  );
+
+  // A conditional field let the user to specify other company
+  $form['delivery_info']['delivery_company_other'] = array(
+    '#type' => 'textfield',
+    '#title' => t('其他物流公司:'),
+    '#description' => t('如果你所选择的快递公司不在上面列表中，请在此输入。'),
+    '#states' => array(
+      'visible' => array(
+        'select[name="delivery_company"]' => array('value' => 'other'),
+      ),
+    ),
+  );
+
+  $form['delivery_info']['delivery_serial_no'] = array(
+    '#type' => 'textfield',
+    '#title' =>  t('运单号码'),
+  );
+
+  $form['delivery_info']['delivery_contact_tel'] = array(
+    '#type' => 'textfield',
+    '#title' =>  t('联系电话'),
+  );
+
   $form['product_stock'] = array(
     '#markup' => '<span class="product-stock-element">' . t('产品库存: %stock', array('%stock' => get_product_stock_number($product))). '</span></br>',
   );
@@ -168,6 +214,9 @@ function page_delivery_product_sure() {
   return $form;
 }
 
+/**
+ * Validation handler for form #page_delivery_product_sure
+ */
 function page_delivery_product_sure_validate($form, &$form_state) {
   if (!is_numeric($form_state['values']['product_count'])) {
     form_set_error('product_count', t('发货数量 只能填写数字'));
@@ -200,14 +249,38 @@ function get_product_stock_number($product) {
   }
 }
 
+/**
+ * Submission handler for form #page_delivery_product_sure
+ */
 function page_delivery_product_sure_submit($form, &$form_state) {
+  $values = $form_state['values'];
+
+  $delivert_companies = array(
+    'yuantong' => '圆通',
+    'shentong' => '申通',
+    'yunda' => '韵达',
+    'tiantian' => '天天快递',
+    'shunfeng' => '顺丰',
+  );
+
+  // Gather the right delivery company
+  if (!empty($values['delivery_company']) && $values['delivery_company'] == 'other') {
+    $delivery_company = $values['delivery_company_other'];
+  }
+  else {
+    $delivery_company = $delivert_companies[$values['delivery_company']];
+  }
+
   $apply_id = $form_state['values']['apply_id'];
   //更新申请状态/更新发货数量
   db_update("product_apply")
       ->fields(array(
         'sent_count' => $form_state['values']['product_count'],
         'status' => PRODUCT_SENT,
-        'approve_time' => time()))
+        'approve_time' => time(),
+        'delivery_company' => $delivery_company,
+        'delivery_serial_no' => $values['delivery_serial_no'],
+        'delivery_contact_tel' => $values['delivery_contact_tel'],))
       ->condition('id', $apply_id, '=')
       ->execute();
   $apply_product = db_select('product_apply', 'ap')
@@ -347,7 +420,7 @@ function masterprint_apply_token_info() {
     'needs-data' => 'apply',
   );
   $apply['id'] = array(
-    'name' => t("Apply ID"), 
+    'name' => t("Apply ID"),
     'description' => t("申请的产品ID."),
   );
 
