@@ -124,7 +124,7 @@ function masterprint_stock_keeper_views_default_views() {
   $handler->display->display_options['fields']['php']['php_value'] = 'return current_path();';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
-  /* 字段: 个人资料: 仓库名称 */
+  /* 字段: Broken/missing handler */
   $handler->display->display_options['fields']['field_stock_address']['id'] = 'field_stock_address';
   $handler->display->display_options['fields']['field_stock_address']['table'] = 'field_data_field_stock_address';
   $handler->display->display_options['fields']['field_stock_address']['field'] = 'field_stock_address';

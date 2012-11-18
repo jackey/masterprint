@@ -17,12 +17,12 @@ function masterprint_user_strongarm() {
   $strongarm->value = array(
     6 => '6',
     8 => '8',
+    7 => '7',
     2 => 0,
     4 => 0,
     9 => 0,
     3 => 0,
     5 => 0,
-    7 => 0,
   );
   $export['masterprint_user_password_change_roles'] = $strongarm;
 
