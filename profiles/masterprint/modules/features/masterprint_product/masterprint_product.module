@@ -29,7 +29,8 @@ function masterprint_product_menu() {
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'node_add',
     'page arguments' => array('product'),
-    'access arguments' => array('manage masterprint products'),
+    'access arguments' => array('create', 'product'),
+    'access callback' => 'node_access',
     'file path' => drupal_get_path('module', 'node'),
     'file' => 'node.pages.inc',
   );
@@ -109,6 +110,9 @@ function masterprint_product_product_node_form_validate($form, &$form_state) {
   }
 }
 
+/**
+ * Implements hook_query_alter();
+ */
 function masterprint_product_views_query_alter(&$view, &$query) {
   if ($view->name = 'product_listing' && $view->current_display == 'main_list') {
     foreach ($query->where as $key => $conditions) {
@@ -130,7 +134,7 @@ function masterprint_product_views_pre_render(&$views) {
   if ($views->human_name == 'product_listing') {
     foreach ($views->result as $key => &$row) {
       $product = node_load($row->nid);
-      $row->nid = get_product_stock_number($product);
+      $row->nid = get_product_stock_number_value_on_product_list($product);
     }
   }
 }

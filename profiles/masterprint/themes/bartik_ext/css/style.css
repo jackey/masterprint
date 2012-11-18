@@ -1660,3 +1660,19 @@ div.admin-panel .description {
   right:-18px;
   cursor:pointer;
 }
+
+.simple-class {
+
+}
+
+tr.refused-class {
+  background-color: #E4E4E4;
+}
+
+tr.passed-class {
+  background-color: #E4E4E4;
+}
+
+tr.sent-class {
+  background-color: #E4E4E4;
+}

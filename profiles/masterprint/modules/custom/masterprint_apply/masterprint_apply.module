@@ -21,30 +21,31 @@ define('notify_client_when_delivery', 'notify_client_on_delivery');//仓库管�
 define('notify_apply_account_when_delivery', 'notify_requester_on_delivery');//仓库管理员发出产品后致产品申请人邮件
 define('notify_warehouse_when_product_insert', 'notify_warehouse_when_product_insert');//产品被添加后致仓库管理员邮件
 define('notify_warning_when_product_less', 'notify_on_nearly_out_of_stock');//库存告警邮件
+define('notify_user_when_refused_apply', 'notify_user_when_refused_apply'); //申请的产品审核拒绝
 
 /**
  * Implements hook_menu().
  */
 function masterprint_apply_menu() {
   $items = array();
-  $items['user/%user/applyproduct'] = array(
+  $items['user/%user/applyproduct/list'] = array(
     'title' => '产品申请',
     'type' => MENU_LOCAL_TASK,
     'access arguments' => array('apply product'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('masterprint_apply_product', '1'),
-    'weight' => 120,
   );
   $items['user/%user/applyproduct/new'] = array(
     'title' => '产品申请',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['user/%user/applyproduct/list'] = array(
+  $items['user/%user/applyproduct'] = array(
     'title' => '申请列表',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'user_product_apply_list',
     'page arguments' => array('1'),
     'access arguments' => array('view apply'),
+    'weight' => 125,
   );
   $items['approve/%/%'] = array(
     'title' => '产品申请通过',
@@ -52,6 +53,13 @@ function masterprint_apply_menu() {
     'access arguments' => array('approve apply'),
     'page callback' => 'client_approve_apply',
     'page arguments' => array(1, 2)
+  );
+  $items['frused-approve/%'] = array(
+    'title' => '产品申请拒绝',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('approve apply'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('refused_product_apply_form', 1)
   );
   $items['user/%/applydetail/%'] = array(
     'title' => '申请详情',
@@ -68,6 +76,48 @@ function masterprint_apply_menu() {
     'page arguments' => array('page_delivery_product_sure'),
   );
   return $items;
+}
+
+/** 
+ * Refused product apply form.
+ */
+function refused_product_apply_form($un_used, $un_used, $product_id) {
+  return array(
+    'refused_reason' => array(
+      '#type' => 'textfield',
+      '#title' => t('拒绝理由'),
+      '#default_value' => t('库存不足？'),
+    ),
+    'product_id' => array(
+      '#type' => 'hidden',
+      '#value' => $product_id
+    ),
+    'button' => array(
+      '#type' => 'submit',
+      '#value' => t('拒绝'),
+    ),
+  );
+}
+
+function refused_product_apply_form_submit($form, $form_state) {
+    //审核状态拒绝
+    db_update("product_apply")
+      ->fields(array('status' => PRODUCT_REFUSED, 'refused_reseaon' => $form_state['values']['refused_reason']))
+      ->condition('id', $form_state['values']['product_id'], '=')
+      ->execute();
+    $product_apply = load_apply_pruduct($form_state['values']['product_id']);
+    $uid = $product_apply['uid'];
+    $apply_user = user_load($uid);
+    //产品被拒绝后需要给邮件提醒到申请人
+    pet_send_mail(notify_user_when_refused_apply, 
+      array('mail' => $apply_user->mail, 'uid' => $apply_user->uid), 
+      array('nid' => $product_apply['product_id']
+    ));
+
+
+    $form_state['redirect'] = '<front>';
+    drupal_redirect_form($form_state);
+
 }
 
 /**
@@ -98,19 +148,16 @@ function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
  * hook_node_insert()
  */
 function masterprint_apply_node_insert($node) {
-  //成功添加产品后，需要告之仓库管理员入库
-  $managers = list_warehouse_manager();
-  foreach ($managers as $manager) {
-    // drupal_mail('masterprint_apply',
-    //   'notify_warehouse_when_product_insert',
-    //   $manager->mail,
-    //   language_default(),
-    //   array());
-    pet_send_mail(notify_warehouse_when_product_insert, array('mail' => $manager->mail, 'uid' => $manager->uid), array('nid' => $node->nid));
+  if ($node->type == 'product') {
+    //成功添加产品后，需要告之仓库管理员入库
+    $managers = list_warehouse_manager();
+    foreach ($managers as $manager) {
+      pet_send_mail(notify_warehouse_when_product_insert, array('mail' => $manager->mail, 'uid' => $manager->uid), array('nid' => $node->nid));
+    }
+    //产品添加后要通知客户
+    $user = user_load($node->field_product_applied_by[LANGUAGE_NONE][0]['target_id']);
+    pet_send_mail(notify_warehouse_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid), array('nid' => $node->uid));
   }
-  $user = user_load($node->field_product_applied_by[LANGUAGE_NONE][0]['target_id']);
-  //drupal_mail('masterprint_apply', 'notify_warehouse_when_product_insert', $user->mail, language_default(), array());
-  pet_send_mail(notify_warehouse_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid, array('nid' => $user->nid)));
 }
 
 /**
@@ -149,8 +196,9 @@ function page_delivery_product_sure() {
 
   $form['product_count'] = array(
     '#title' => t('发货数量'),
-    '#type' => 'textfield',
+    '#type' => 'hidden',
     '#maxlength' => 12,
+    '#default_value' => $apply_product['count'],
     '#size' => 12,
     '#description' => t('只能填写数字'),
   );
@@ -162,20 +210,26 @@ function page_delivery_product_sure() {
     '#title' => t('物流信息'),
   );
 
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'delivery_company')
+    ->execute();
+  if (!empty($entities['node'])) {
+    $companies =  node_load_multiple(array_keys($entities['node']));
+  }
+  $options = array();
+  foreach ($companies as $company) {
+    $options[$company->nid] = $company->title;
+  }
+  $options['other'] = t('其他物流');
+
   $form['delivery_info']['delivery_company'] = array(
     '#type' => 'select',
     '#title' => t('物流公司'),
-    '#options' => array(
-      'yuantong' => t('圆通'),
-      'shentong' => t('申通'),
-      'yunda' => t('韵达'),
-      'tiantian' => t('天天快递'),
-      'shunfeng' => t('顺风'),
-      'other' => t('其他物流'),
-    ),
+    '#options' => $options,
   );
 
-  // A conditional field let the user to specify other company
+  // // A conditional field let the user to specify other company
   $form['delivery_info']['delivery_company_other'] = array(
     '#type' => 'textfield',
     '#title' => t('其他物流公司:'),
@@ -190,11 +244,6 @@ function page_delivery_product_sure() {
   $form['delivery_info']['delivery_serial_no'] = array(
     '#type' => 'textfield',
     '#title' =>  t('运单号码'),
-  );
-
-  $form['delivery_info']['delivery_contact_tel'] = array(
-    '#type' => 'textfield',
-    '#title' =>  t('联系电话'),
   );
 
   $form['product_stock'] = array(
@@ -250,25 +299,51 @@ function get_product_stock_number($product) {
 }
 
 /**
+ * 返回在产品列表上的库存
+ */
+function get_product_stock_number_value_on_product_list($product) {
+  $total_count = $product->field_product_count[LANGUAGE_NONE][0]['value'];
+  if (!$total_count) {
+    return 0;
+  }
+  else {
+    $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ? AND status in (?, ?)", array($product->nid, PRODUCT_APPLYING, PRODUCT_PASSED))->fetchAssoc();
+    $cost_total = $result['cost_total'];
+    return ($total_count - $cost_total > 0) ? ($total_count - $cost_total) : 0;
+  }
+}
+
+/**
  * Submission handler for form #page_delivery_product_sure
  */
 function page_delivery_product_sure_submit($form, &$form_state) {
   $values = $form_state['values'];
 
-  $delivert_companies = array(
-    'yuantong' => '圆通',
-    'shentong' => '申通',
-    'yunda' => '韵达',
-    'tiantian' => '天天快递',
-    'shunfeng' => '顺丰',
-  );
+  // $delivert_companies = array(
+  //   'yuantong' => '圆通',
+  //   'shentong' => '申通',
+  //   'yunda' => '韵达',
+  //   'tiantian' => '天天快递',
+  //   'shunfeng' => '顺丰',
+  // );
 
   // Gather the right delivery company
   if (!empty($values['delivery_company']) && $values['delivery_company'] == 'other') {
-    $delivery_company = $values['delivery_company_other'];
+    $new_delivery_company = $values['delivery_company_other'];
+    //自动保存新添加的物流公司
+    global $language;
+    $node = (Object)null;
+    $node->type = 'delivery_company';
+    node_object_prepare($node);
+    $node->title = $new_delivery_company;
+    $node->language = $language->language;
+    $node->uid = 1;
+    $node->status = 1;
+    node_save($node);
+    $delivery_company = $node->nid;
   }
   else {
-    $delivery_company = $delivert_companies[$values['delivery_company']];
+    $delivery_company = $values['delivery_company'];
   }
 
   $apply_id = $form_state['values']['apply_id'];
@@ -279,8 +354,8 @@ function page_delivery_product_sure_submit($form, &$form_state) {
         'status' => PRODUCT_SENT,
         'approve_time' => time(),
         'delivery_company' => $delivery_company,
-        'delivery_serial_no' => $values['delivery_serial_no'],
-        'delivery_contact_tel' => $values['delivery_contact_tel'],))
+        'delivery_serial_no' => $values['delivery_serial_no'],))
+        // 'delivery_contact_tel' => $values['delivery_contact_tel'],))
       ->condition('id', $apply_id, '=')
       ->execute();
   $apply_product = db_select('product_apply', 'ap')
@@ -372,11 +447,12 @@ function masterprint_apply_theme() {
 
 function masterprint_apply_process_productapply(&$vars) {
   $vars['product_view'] = node_view($vars['product']);
+  $vars['delivery_company_view'] = node_view(node_load($vars['apply']['delivery_company']));
 }
 
 function client_approve_apply($id, $action = 'pass') {
   if ($action == 'pass') {
-    //审核状态修改
+    //审核状态通过
     db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
     $apply_product = db_select('product_apply', 'ap')
       ->fields('ap')
@@ -389,13 +465,32 @@ function client_approve_apply($id, $action = 'pass') {
       pet_send_mail(notify_warehouse_manager_when_approve, array('mail' => $user->mail, 'uid' => $user->uid),
         array('nid' => $apply_product['product_id'], 'cc' => $id));
     }
-    //修改库存
-    //TODO:
+
+    $product = node_load($apply_product['product_id']);
+    //发货后，检查库存，如果库存少于20个则发送邮件给对应的客户和AE
+    $product_stock = get_product_stock_number($product);
+    $total_count = $product->field_product_count[LANGUAGE_NONE][0]['value'];
+    if ($product_stock / $total_count < 0.2) {
+        //客户ID
+      $apply_account = user_load($apply_product['uid']);
+      $client_account = get_client_account_from_user($apply_account);
+      pet_send_mail(notify_warning_when_product_less, array('mail' => $client_account->mail, 'uid' => $client_account->uid),
+        array('nid' => $apply_product['product_id']));
+
+      //发邮件给AE
+      $ae_accounts = list_ae_account();
+      foreach ($ae_accounts as $ae) {
+        pet_send_mail(notify_warning_when_product_less, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
+          'nid' => $apply_product['product_id']
+        ));
+      }
+    }
+    
     drupal_goto($_SERVER['HTTP_REFERER']);
     return '';
   }
   else if ($action == 'refused'){
-    //审核状态修改
+    //审核状态拒绝
     db_update("product_apply")->fields(array('status' => PRODUCT_REFUSED))->condition('id', $id, '=')->execute();
     drupal_goto($_SERVER['HTTP_REFERER']);
     return '';
@@ -475,7 +570,7 @@ function user_product_apply_list($user) {
     $op = '';
     if ($data['status'] == PRODUCT_APPLYING) {
       $op .= l('通过', 'approve/'.$data['id'].'/pass');
-      $op .= l('拒绝', 'approve/'.$data['id'].'/refused');
+      $op .= l('拒绝', 'frused-approve/'.$data['id']);
     }
     else if ($data['status'] == PRODUCT_PASSED){
       $op = '<span>已通过</span>';
@@ -486,7 +581,7 @@ function user_product_apply_list($user) {
     else if ($data['status'] == PRODUCT_SENT) {
       $op = '<span>已发出</span>';
     }
-    $op .= '|'.l('详情', 'user/'.arg(1).'/applydetail/'. $data['id']);
+    $op .= '|'.l('产品详情', 'user/'.arg(1).'/applydetail/'. $data['id']);
     if (!user_access('approve apply')) {
       $op = '无';
     }
@@ -520,7 +615,19 @@ function user_product_apply_list($user) {
     if (user_access('approve apply')) {
       $table_row[] = $op;
     }
-    $table_rows[] = $table_row;
+    if ($data['status'] == PRODUCT_APPLYING) {
+      $class = 'simple-class';
+    }
+    else if ($data['status'] == PRODUCT_REFUSED) {
+      $class = 'refused-class';
+    }
+    else if ($data['status'] == PRODUCT_PASSED) {
+      $class = 'passed-class';
+    }
+    else {
+      $class  = 'sent-class';
+    }
+    $table_rows[] = array('data' => $table_row, 'class' => array($class));
   }
   return theme('table', array('header' => $header, 'rows' => $table_rows));
 }

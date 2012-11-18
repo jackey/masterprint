@@ -49,6 +49,11 @@ function masterprint_apply_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
+      'refused_reseaon' => array(
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'default' => '',
+      ),
       'address' => array(
         'type' => 'varchar',
         'length' => '255',
