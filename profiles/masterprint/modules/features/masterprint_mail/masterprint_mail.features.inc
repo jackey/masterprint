@@ -148,5 +148,17 @@ function masterprint_mail_default_pet() {
     "bcc_default" : "",
     "recipient_callback" : ""
   }');
+  $items['notify_warehouse_when_product_insert'] = entity_import('pet', '{
+    "name" : "notify_warehouse_when_product_insert",
+    "title" : "\\u5f53\\u4ea7\\u54c1\\u88ab\\u6dfb\\u52a0\\u540e\\u901a\\u77e5\\u4ed3\\u5e93\\u7ba1\\u7406\\u5458",
+    "subject" : "\\u65b0\\u7684\\u4ea7\\u54c1\\u9700\\u8981\\u5165\\u5e93",
+    "mail_body" : "\\u5c0a\\u656c\\u7684\\u4ed3\\u5e93\\u7ba1\\u7406\\u5458:\\r\\n\\r\\n\\u60a8\\u6709\\u65b0\\u7684\\u4ea7\\u54c1: [node:title] \\u9700\\u8981\\u5165\\u5e93\\r\\n\\r\\n\\u8be6\\u60c5: [site:url]\\/node\\/[node:nid]",
+    "mail_body_plain" : null,
+    "send_plain" : "0",
+    "from_override" : "",
+    "cc_default" : "",
+    "bcc_default" : "",
+    "recipient_callback" : ""
+  }');
   return $items;
 }

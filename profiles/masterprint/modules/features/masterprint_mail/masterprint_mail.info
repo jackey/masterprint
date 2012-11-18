@@ -20,6 +20,7 @@ features[pet][] = notify_on_product_accepted
 features[pet][] = notify_on_product_request
 features[pet][] = notify_requester_on_delivery
 features[pet][] = notify_stock_keeper_on_product_added
+features[pet][] = notify_warehouse_when_product_insert
 features[user_permission][] = administer previewable email templates
 features[user_permission][] = manage mail templates
 features[user_permission][] = use previewable email templates
