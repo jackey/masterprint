@@ -26,6 +26,14 @@ function masterprint_product_views_api() {
  */
 function masterprint_product_node_info() {
   $items = array(
+    'delivery_company' => array(
+      'name' => t('物流公司'),
+      'base' => 'node_content',
+      'description' => '',
+      'has_title' => '1',
+      'title_label' => t('物流公司名称'),
+      'help' => '',
+    ),
     'product' => array(
       'name' => t('印刷产品'),
       'base' => 'node_content',

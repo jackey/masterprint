@@ -82,6 +82,8 @@ projects[migrate][version] = 2.4
 projects[grammar_parser_lib][subdir] = contrib
 projects[grammar_parser_lib][version] = 1.0
 
+projects[views_export_xlsv][subdir] = contrib
+projects[views_export_xlsv][version] = 1.0
 
 ; Themes
 ; ------------

@@ -59,6 +59,7 @@ dependencies[] = views_php
 dependencies[] = menu_block
 dependencies[] = profile2
 dependencies[] = migrate
+dependencies[] = views_export_xls
 
 ; Custom modules & features
 dependencies[] = masterprint

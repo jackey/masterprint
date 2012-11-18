@@ -173,7 +173,7 @@ function page_delivery_product_sure() {
     ->fetchAssoc();
   if (!$apply_product) {
      return array(
-       'error' => array('#markup' => '申请没有找到'),
+       'error' => array('#markup' => t('申请没有找到')),
      );
   }
   $product = node_load($apply_product['product_id']);
@@ -188,7 +188,7 @@ function page_delivery_product_sure() {
     $address_str[] = '<span class="address">'.$add.'</span>';
   }
   $form['address'] = array(
-    '#markup' => '送货地址:'. implode("</br>", $address_str),
+    '#markup' => t('送货地址')."':". implode("</br>", $address_str),
   );
   $form['product_request_count'] = array(
     '#markup' => '</br><span class="product_request_count">' . t('产品申请数量: %stock', array('%stock' => $apply_product['count'])). '</span></br>',
@@ -258,7 +258,7 @@ function page_delivery_product_sure() {
   );
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => '确认发货',
+    '#value' => t('确认发货'),
   );
   return $form;
 }
@@ -281,7 +281,7 @@ function page_delivery_product_sure_validate($form, &$form_state) {
   $product = node_load($apply_product['product_id']);
   $stock_number = get_product_stock_number($product);
   if ($stock_number < $form_state['values']['product_count']) {
-    form_set_error('product_count', '抱歉：库存不足!');
+    form_set_error('product_count', t('抱歉：库存不足!'));
   }
 }
 
@@ -428,9 +428,9 @@ function page_show_apply_detail($uid, $id) {
 
   $product = node_load($apply_product['product_id']);
   $breadcrumbs = array();
-  $breadcrumbs[] = l('网站', '<front>');
-  $breadcrumbs[] = l('用户', 'user');
-  $breadcrumbs[] = l('申请列表', 'user/'.$uid.'/applyproductlist');
+  $breadcrumbs[] = l(t('网站'), '<front>');
+  $breadcrumbs[] = l(t('用户'), 'user');
+  $breadcrumbs[] = l(t('申请列表'), 'user/'.$uid.'/applyproductlist');
   drupal_set_breadcrumb($breadcrumbs);
 
   return theme('productapply', array('product' => $product, 'apply' => $apply_product));
@@ -559,9 +559,9 @@ function user_product_apply_list($user) {
   else {
     $query = db_select("product_apply", 'pa')->fields('pa')->condition('uid', $search_uids, 'in')->execute();
   }
-  $header = array('产品名称', '申请时间', '申请数量', '产品缩略图', '申请人',  '申请状态');
+  $header = array(t('产品名称'), t('申请时间'), t('申请数量'), t('产品缩略图'), t('申请人'),  t('申请状态'));
   if (user_access('approve apply')) {
-    $header[] = '操作';
+    $header[] = t('操作');
   }
 
   $apply_product = array();
@@ -569,39 +569,39 @@ function user_product_apply_list($user) {
   while ($data = $query->fetchAssoc()) {
     $op = '';
     if ($data['status'] == PRODUCT_APPLYING) {
-      $op .= l('通过', 'approve/'.$data['id'].'/pass');
-      $op .= l('拒绝', 'frused-approve/'.$data['id']);
+      $op .= l(t('通过'), 'approve/'.$data['id'].'/pass');
+      $op .= l(t('拒绝'), 'frused-approve/'.$data['id']);
     }
     else if ($data['status'] == PRODUCT_PASSED){
-      $op = '<span>已通过</span>';
+      $op = '<span>'.t('已通过').'</span>';
     }
     else if ($data['status'] == PRODUCT_REFUSED) {
-      $op = '<span>已拒绝</span>';
+      $op = '<span>'.t('已拒绝').'</span>';
     }
     else if ($data['status'] == PRODUCT_SENT) {
-      $op = '<span>已发出</span>';
+      $op = '<span>'.t('已发出').'</span>';
     }
-    $op .= '|'.l('产品详情', 'user/'.arg(1).'/applydetail/'. $data['id']);
+    $op .= '|'.l(t('产品详情'), 'user/'.arg(1).'/applydetail/'. $data['id']);
     if (!user_access('approve apply')) {
-      $op = '无';
+      $op = t('无');
     }
     $node = node_load($data['product_id']);
     $thumbnail_url = count($node->field_product_thumbnail) > 0 ? file_create_url($node->field_product_thumbnail[LANGUAGE_NONE][0]['uri']) : "";
     if (!$thumbnail_url) {
-      $product_thumbnail_render = '暂无';
+      $product_thumbnail_render = t('暂无');
     }
     else {
       $product_thumbnail_render = '<a class="showProductThumbnail" href="'.$thumbnail_url.'" rel="lightbox">缩略图</a>';
     }
-    $status = '待审核';
+    $status = t('待审核');
     if ($data['status'] == PRODUCT_PASSED){
-      $status = '<span>已通过</span>';
+      $status = '<span>'.t('已通过').'</span>';
     }
     else if ($data['status'] == PRODUCT_REFUSED) {
-      $status = '<span>已拒绝</span>';
+      $status = '<span>'.t('已拒绝').'</span>';
     }
     else if ($data['status'] == PRODUCT_SENT) {
-      $status = '<span>已发出</span>';
+      $status = '<span>'.t('已发出').'</span>';
     }
     $apply_user = user_load($data['uid']);
     $table_row = array(
@@ -707,12 +707,12 @@ function masterprint_apply_product() {
       $product_apply_statictis['applying']);
   }
 
-  $header = array('产品名称', '产品库存', '产品最小打包数量', '正在审核产品量');
+  $header = array(t('产品名称'), t('产品库存'), t('产品最小打包数量'), t('正在审核产品量'));
   $product_list_table = theme('table', array('header' => $header, 'rows' => $rows));
   global $user;
   $form['product_list'] = array(
     '#markup' => $product_list_table,
-    '#title' => '您的产品列表',
+    '#title' => t('您的产品列表'),
   );
   $form['product'] = array(
     '#type' => 'select',
@@ -722,7 +722,7 @@ function masterprint_apply_product() {
   );
   $form['product_count'] = array(
     '#type' => 'textfield',
-    '#title' => '申请产品数量',
+    '#title' => t('申请产品数量'),
     '#default_value' => '0',
     '#maxlength' => 12,
     '#size' => 12,
@@ -734,7 +734,7 @@ function masterprint_apply_product() {
   );
   $form['deliver_address'] = array(
     '#type' => 'select',
-    '#title' => '送货地址',
+    '#title' => t('送货地址'),
     '#required' => TRUE,
     '#options' => $address_options,
     '#multiple' => FALSE,
@@ -742,7 +742,7 @@ function masterprint_apply_product() {
 
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => '申请产品',
+    '#value' => t('申请产品'),
   );
 
 
@@ -760,20 +760,20 @@ function masterprint_apply_product_validate($form, &$form_state) {
   $applying_total = $result['applying_total'];
   $pack_count = $node->field_product_min_pack_num[LANGUAGE_NONE][0]['value'];
   if (!is_numeric($count)) {
-    form_set_error('product_count', '产品数量必须是数字');
+    form_set_error('product_count', t('产品数量必须是数字'));
     return FALSE;
   }
   if (intval($count) <= 0) {
-    form_set_error('product_count', '产品申请数量不小于0个');
+    form_set_error('product_count', t('产品申请数量不小于0个'));
     return FALSE;
   }
   if (intval($count) > $total_count - $cost_total) {
-    drupal_set_message('当前库存量为'. ($total_count - $cost_total), 'error');
-    form_set_error('product_count', '申请数量不能大于库存数量');
+    drupal_set_message(t('当前库存量为'). ($total_count - $cost_total), 'error');
+    form_set_error('product_count', t('申请数量不能大于库存数量'));
     return FALSE;
   }
   if (intval($count) > ($total_count - $cost_total - $applying_total)) {
-    form_set_error('product_count', '当前库存不足,请减少申请数量');
+    form_set_error('product_count', t('当前库存不足,请减少申请数量'));
     return FALSE;
   }
 }
@@ -807,7 +807,7 @@ function masterprint_apply_product_submit($form, &$form_state) {
     $status = drupal_write_record('product_apply', $data);
     $apply_account = user_load($uid);
     $client_account = get_client_account_from_user($apply_account);
-    drupal_set_message("产品申请成功，请等待您所属客户审核");
+    drupal_set_message(t("产品申请成功，请等待您所属客户审核"));
 
     // drupal_mail(
     //   'masterprint_apply',
