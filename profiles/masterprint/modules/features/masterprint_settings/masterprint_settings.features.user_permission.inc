@@ -30,10 +30,9 @@ function masterprint_settings_user_default_permissions() {
     'roles' => array(
       0 => 'AE业务经理',
       1 => 'administrator',
-      2 => 'anonymous user',
-      3 => 'authenticated user',
-      4 => '仓储管理员',
-      5 => '管理员',
+      2 => 'authenticated user',
+      3 => '仓储管理员',
+      4 => '管理员',
     ),
     'module' => 'node',
   );
@@ -349,6 +348,13 @@ function masterprint_settings_user_default_permissions() {
     'module' => 'profile2',
   );
 
+  // Exported permission: execute php code.
+  $permissions['execute php code'] = array(
+    'name' => 'execute php code',
+    'roles' => array(),
+    'module' => 'devel',
+  );
+
   // Exported permission: manage features.
   $permissions['manage features'] = array(
     'name' => 'manage features',
@@ -389,6 +395,13 @@ function masterprint_settings_user_default_permissions() {
     'name' => 'select different theme',
     'roles' => array(),
     'module' => 'admin',
+  );
+
+  // Exported permission: switch users.
+  $permissions['switch users'] = array(
+    'name' => 'switch users',
+    'roles' => array(),
+    'module' => 'devel',
   );
 
   // Exported permission: translate interface.
