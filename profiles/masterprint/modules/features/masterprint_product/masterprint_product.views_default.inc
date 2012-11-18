@@ -247,12 +247,12 @@ function masterprint_product_views_default_views() {
     'title' => 'title',
     'php' => 'php',
     'field_product_serial_number' => 'field_product_serial_number',
-    'field_product_stock' => 'field_product_stock',
+    'nid' => 'nid',
     'field_product_count' => 'field_product_count',
     'field_product_min_pack_num' => 'field_product_min_pack_num',
-    'nid' => 'nid',
-    'delete_node' => 'delete_node',
     'edit_node' => 'delete_node',
+    'delete_node' => 'delete_node',
+    'view_node' => 'delete_node',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
@@ -275,7 +275,7 @@ function masterprint_product_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_product_stock' => array(
+    'nid' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -296,9 +296,7 @@ function masterprint_product_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'nid' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
+    'edit_node' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -308,7 +306,7 @@ function masterprint_product_views_default_views() {
       'separator' => ' | ',
       'empty_column' => 0,
     ),
-    'edit_node' => array(
+    'view_node' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -355,6 +353,7 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['fields']['field_product_count']['id'] = 'field_product_count';
   $handler->display->display_options['fields']['field_product_count']['table'] = 'field_data_field_product_count';
   $handler->display->display_options['fields']['field_product_count']['field'] = 'field_product_count';
+  $handler->display->display_options['fields']['field_product_count']['label'] = '产品数量';
   $handler->display->display_options['fields']['field_product_count']['settings'] = array(
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
@@ -377,6 +376,11 @@ function masterprint_product_views_default_views() {
   $handler->display->display_options['fields']['delete_node']['table'] = 'views_entity_node';
   $handler->display->display_options['fields']['delete_node']['field'] = 'delete_node';
   $handler->display->display_options['fields']['delete_node']['label'] = '操作';
+  /* 字段: 内容: 链接 */
+  $handler->display->display_options['fields']['view_node']['id'] = 'view_node';
+  $handler->display->display_options['fields']['view_node']['table'] = 'views_entity_node';
+  $handler->display->display_options['fields']['view_node']['field'] = 'view_node';
+  $handler->display->display_options['fields']['view_node']['label'] = '查看';
   /* Sort criterion: 内容: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -420,9 +424,10 @@ function masterprint_product_views_default_views() {
     t('PHP'),
     t('产品编号'),
     t('库存量'),
-    t('数量'),
+    t('产品数量'),
     t('最小打包数量'),
     t('操作'),
+    t('查看'),
     t('区块'),
   );
   $export['product_listing'] = $view;

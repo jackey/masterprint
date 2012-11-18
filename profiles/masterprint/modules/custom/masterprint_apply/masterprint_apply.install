@@ -52,6 +52,7 @@ function masterprint_apply_schema() {
       'refused_reseaon' => array(
         'type' => 'varchar',
         'not null' => TRUE,
+        'length' => 255,
         'default' => '',
       ),
       'address' => array(
