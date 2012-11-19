@@ -119,7 +119,11 @@ function masterprint_product_views_query_alter(&$view, &$query) {
       if (strpos($conditions['conditions'][0]['field'], 'field_data_field_product_applied_by') !== FALSE) {
         $client_id = $conditions['conditions'][0]['value'][':field_data_field_product_applied_by_field_product_applied_by_target_id'];
         global $user;
-        if (!user_is_client($user)) {
+        if (user_is_saler($user)) {
+          $saler_client = get_client_account_from_user($user);
+          $query->where[$key]['conditions'][0]['value'][':field_data_field_product_applied_by_field_product_applied_by_target_id'] = $saler_client->uid;
+        }
+        else if (!user_is_client($user)) {
           unset($query->where[$key]);
         }
       }
