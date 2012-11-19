@@ -36,11 +36,11 @@ function masterprint_apply_menu() {
     'page arguments' => array('masterprint_apply_product', '1'),
   );
   $items['user/%user/applyproduct/new'] = array(
-    'title' => '产品申请',
+    'title' => '申请列表',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['user/%user/applyproduct'] = array(
-    'title' => '申请列表',
+    'title' => '申请管理',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'user_product_apply_list',
     'page arguments' => array('1'),
@@ -111,13 +111,11 @@ function refused_product_apply_form_submit($form, $form_state) {
     //产品被拒绝后需要给邮件提醒到申请人
     pet_send_mail(notify_user_when_refused_apply, 
       array('mail' => $apply_user->mail, 'uid' => $apply_user->uid), 
-      array('nid' => $product_apply['product_id']
-    ));
-
+      array('nid' => $product_apply['product_id'], 'refused_reseaon' => $form_state['values']['refused_reason'])
+    );
 
     $form_state['redirect'] = '<front>';
     drupal_redirect_form($form_state);
-
 }
 
 /**
