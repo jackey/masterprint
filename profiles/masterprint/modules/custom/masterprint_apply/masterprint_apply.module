@@ -45,7 +45,7 @@ function masterprint_apply_menu() {
     'page callback' => 'user_product_apply_list',
     'page arguments' => array('1'),
     'access arguments' => array('view apply'),
-    'weight' => 125,
+    'weight' => 200,
   );
   $items['approve/%/%'] = array(
     'title' => '产品申请通过',
