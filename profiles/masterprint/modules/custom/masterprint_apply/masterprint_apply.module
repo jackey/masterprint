@@ -451,7 +451,13 @@ function masterprint_apply_theme() {
 
 function masterprint_apply_process_productapply(&$vars) {
   $vars['product_view'] = node_view($vars['product']);
-  $vars['delivery_company_view'] = node_view(node_load($vars['apply']['delivery_company']));
+  $company = node_load($vars['apply']['delivery_company']);
+  if ($company) {
+    $vars['delivery_company_view'] = node_view(node_load($vars['apply']['delivery_company']));
+  }
+  else {
+    $vars['delivery_company_view'] = array('#markup' => ''); 
+  }
 }
 
 function client_approve_apply($id, $action = 'pass') {
