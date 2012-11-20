@@ -425,13 +425,19 @@ function page_show_apply_detail($uid, $id) {
     ->fetchAssoc();
 
   $product = node_load($apply_product['product_id']);
-  $breadcrumbs = array();
-  $breadcrumbs[] = l(t('网站'), '<front>');
-  $breadcrumbs[] = l(t('用户'), 'user');
-  $breadcrumbs[] = l(t('申请列表'), 'user/'.$uid.'/applyproductlist');
-  drupal_set_breadcrumb($breadcrumbs);
+  if($product) {
+    $breadcrumbs = array();
+    $breadcrumbs[] = l(t('网站'), '<front>');
+    $breadcrumbs[] = l(t('用户'), 'user');
+    $breadcrumbs[] = l(t('申请列表'), 'user/'.$uid.'/applyproductlist');
+    drupal_set_breadcrumb($breadcrumbs);
 
-  return theme('productapply', array('product' => $product, 'apply' => $apply_product));
+    return theme('productapply', array('product' => $product, 'apply' => $apply_product));
+  }
+  else {
+    return array('#markup' => t('网站出现未知错误，请联系管理员'));
+  }
+
 }
 
 function masterprint_apply_theme() {
