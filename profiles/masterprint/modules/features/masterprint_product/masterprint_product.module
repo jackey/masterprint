@@ -17,7 +17,7 @@ function masterprint_product_menu() {
     'page callback' => 'masterprint_product_load_managed_products',
     'page arguments' => array(1),
     'access arguments' => array('manage masterprint products'),
-    'weight' => 200,
+    'weight' => 125,
   );
   $items['user/%user/product/list'] = array(
     'title' => '产品列表',
