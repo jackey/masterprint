@@ -750,7 +750,6 @@ function masterprint_apply_product() {
     // $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_PASSED ,$product->nid))->fetchAssoc();
     // $cost_total = $result['cost_total'];
     $product_apply_statictis = product_apply_statictis($product->nid);
-    dpm($product_apply_statictis);
     $rows[] = array(
       $product->title,
       $product->field_product_count[LANGUAGE_NONE][0]['value'] - $product_apply_statictis['cost'] - $product_apply_statictis['applying'],
