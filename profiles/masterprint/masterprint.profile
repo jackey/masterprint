@@ -75,6 +75,7 @@ function masterprint_install_custom_configure_finished($success, $results, $oper
  * @todo: Are the roles aready in the system when it's invoked?
  */
 function masterprint_profile_create_dummy_users() {
+
   $users =  array(
     '管理员' => array(
       array(
@@ -83,23 +84,23 @@ function masterprint_profile_create_dummy_users() {
         'mail' => 'admin_1@test.com',
       ),
     ),
-    'AE业务经理' => array(
-      array(
-        'name' => 'ae_one',
-        'pass' => 'ae_one',
-        'mail' => 'ae_one@test.com',
-      ),
-      array(
-        'name' => 'ae_two',
-        'pass' => 'ae_two',
-          'mail' => 'ae_two@test.com',
-      ),
-      array(
-        'name' => 'ae_three',
-        'pass' => 'ae_three',
-        'mail' => 'ae_three@test.com',
-      ),
-    ),
+    // 'AE业务经理' => array(
+    //   array(
+    //     'name' => 'ae_one',
+    //     'pass' => 'ae_one',
+    //     'mail' => 'ae_one@test.com',
+    //   ),
+    //   array(
+    //     'name' => 'ae_two',
+    //     'pass' => 'ae_two',
+    //       'mail' => 'ae_two@test.com',
+    //   ),
+    //   array(
+    //     'name' => 'ae_three',
+    //     'pass' => 'ae_three',
+    //     'mail' => 'ae_three@test.com',
+    //   ),
+    // ),
   );
 
   foreach ($users as $r_name => $users) {
