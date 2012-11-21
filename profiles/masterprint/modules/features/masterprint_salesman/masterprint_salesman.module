@@ -229,3 +229,21 @@ function masterprint_salesman_load_managed_salesman($user) {
   }
   return $output;
 }
+
+/**
+ * Implements hook_form_alter()
+ */
+function masterprint_salesman_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'masterprint_user_edit_own_profile2') {
+    $profile_type = $form['profile_type']['#value'];
+    global $user;
+    $can_not_access = user_is_dealer($user) || user_is_saler($user) || user_is_client($user);
+    //经销商
+    if ($profile_type == 'dealer' && $can_not_access) {
+      $form['profile_dealer']['field_dealer_client_owner']['#access'] = FALSE;
+    }
+    if ($profile_type == 'salesman' && $can_not_access) {
+      $form['profile_salesman']['field_salesman_client_owner']['#access'] = FALSE;
+    }
+  }
+}
