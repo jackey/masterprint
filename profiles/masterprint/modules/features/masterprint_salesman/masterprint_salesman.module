@@ -235,7 +235,7 @@ function masterprint_salesman_load_managed_salesman($user) {
  */
 function masterprint_salesman_form_alter(&$form, $form_state, $form_id) {
   if ($form_id == 'masterprint_user_edit_own_profile2') {
-    $profile_type = $form['profile_type']['#value'];
+    $profile_type = @$form['profile_type']['#value'];
     global $user;
     $can_not_access = user_is_dealer($user) || user_is_saler($user) || user_is_client($user);
     //经销商
