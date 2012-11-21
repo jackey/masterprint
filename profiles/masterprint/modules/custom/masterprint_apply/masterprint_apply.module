@@ -75,7 +75,24 @@ function masterprint_apply_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('page_delivery_product_sure'),
   );
+  $items['print/%'] = array(
+    'title' => '打印',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'page callback' => 'theme_product_apply_print',
+    'page arguments' => array('1'),
+  );
   return $items;
+}
+
+//输出打印页面内容
+function theme_product_apply_print($apply_id) {
+  $product_apply = load_apply_pruduct($apply_id);
+  $product = node_view(node_load($product_apply['product_id']));
+  $user = user_view(user_load($product_apply['uid']));
+  hide($user['summary']);
+
+  return theme('productapply_print', array('product' => $product, 'apply' => $product_apply, 'user' => $user));
 }
 
 /** 
@@ -201,7 +218,6 @@ function page_delivery_product_sure() {
     '#description' => t('只能填写数字'),
   );
 
-
   // Delivery information
   $form['delivery_info'] = array(
     '#type' => 'fieldset',
@@ -239,6 +255,17 @@ function page_delivery_product_sure() {
     ),
   );
 
+    $form['delivery_info']['delivery_company_phone'] = array(
+    '#type' => 'textfield',
+    '#title' => t('电话号码'),
+    '#description' => t('如果你所选择的快递公司不在上面列表中，请在此输入。'),
+    '#states' => array(
+      'visible' => array(
+        'select[name="delivery_company"]' => array('value' => 'other'),
+      ),
+    ),
+  );
+
   $form['delivery_info']['delivery_serial_no'] = array(
     '#type' => 'textfield',
     '#title' =>  t('运单号码'),
@@ -257,6 +284,10 @@ function page_delivery_product_sure() {
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('确认发货'),
+  );
+
+  $form['print'] = array(
+    '#markup' => l(t('打印'), 'print/'.$apply_id, array('target' => 'blank')),
   );
   return $form;
 }
@@ -328,6 +359,7 @@ function page_delivery_product_sure_submit($form, &$form_state) {
   // Gather the right delivery company
   if (!empty($values['delivery_company']) && $values['delivery_company'] == 'other') {
     $new_delivery_company = $values['delivery_company_other'];
+    $new_delivery_phone = $values['delivery_company_phone'];
     //自动保存新添加的物流公司
     global $language;
     $node = (Object)null;
@@ -335,6 +367,7 @@ function page_delivery_product_sure_submit($form, &$form_state) {
     node_object_prepare($node);
     $node->title = $new_delivery_company;
     $node->language = $language->language;
+    $node->field_phone_number[LANGUAGE_NONE][0]['value'] = $new_delivery_phone;
     $node->uid = 1;
     $node->status = 1;
     node_save($node);
@@ -440,11 +473,18 @@ function page_show_apply_detail($uid, $id) {
 
 }
 
+/**
+ * Implements hook_theme().
+ */
 function masterprint_apply_theme() {
   $hooks = array();
   $hooks['productapply'] = array(
     'variables' => array('product' => new stdclass, 'apply' => array()),
     'template' => 'productapply',
+  );
+  $hooks['productapply_print'] = array(
+    'variables' => array('product' => NULL, 'apply' => NULL, 'user' => NULL),
+    'template' => 'productapply_print',
   );
   return $hooks;
 }
@@ -710,9 +750,10 @@ function masterprint_apply_product() {
     // $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_PASSED ,$product->nid))->fetchAssoc();
     // $cost_total = $result['cost_total'];
     $product_apply_statictis = product_apply_statictis($product->nid);
+    dpm($product_apply_statictis);
     $rows[] = array(
       $product->title,
-      $product->field_product_count[LANGUAGE_NONE][0]['value'] - $product_apply_statictis['cost'],
+      $product->field_product_count[LANGUAGE_NONE][0]['value'] - $product_apply_statictis['cost'] - $product_apply_statictis['applying'],
       $product->field_product_min_pack_num[LANGUAGE_NONE][0]['value'],
       $product_apply_statictis['applying']);
   }
