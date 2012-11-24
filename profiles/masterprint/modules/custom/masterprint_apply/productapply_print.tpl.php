@@ -2,10 +2,11 @@
 
 <?php print drupal_render($product); ?>
 
-<h2>申请人:</h2>
+<h2>物流公司:</h2>
+<?php print drupal_render($delivery_company) ?>
 
-<?php print drupal_render($user);?>
-
+<h2>运单号码:</h2>
+<?php  print drupal_render($delivery_no)?>
 <script type="text/javascript">
 	window.print();
 </script>

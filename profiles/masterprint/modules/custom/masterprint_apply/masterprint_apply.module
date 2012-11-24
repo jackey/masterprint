@@ -89,11 +89,17 @@ function masterprint_apply_menu() {
 //输出打印页面内容
 function theme_product_apply_print($apply_id) {
   $product_apply = load_apply_pruduct($apply_id);
+  $delivery_company = node_load($product_apply['delivery_company']);
   $product = node_view(node_load($product_apply['product_id']));
   $user = user_view(user_load($product_apply['uid']));
   hide($user['summary']);
 
-  return theme('productapply_print', array('product' => $product, 'apply' => $product_apply, 'user' => $user));
+  return theme('productapply_print', array(
+    'product' => $product, 
+    'apply' => $product_apply, 
+    'user' => $user, 
+    'delivery_no' => $product_apply['delivery_serial_no'],
+    'delivery_company' => node_view($delivery_company)));
 }
 
 /** 
