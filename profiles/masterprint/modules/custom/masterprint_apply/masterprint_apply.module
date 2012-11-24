@@ -274,9 +274,9 @@ function page_delivery_product_sure() {
   $form['product_stock'] = array(
     '#markup' => '<span class="product-stock-element">' . t('产品库存: %stock', array('%stock' => get_product_stock_number($product))). '</span></br>',
   );
-  $form['product_stock'] = array(
-    '#markup' => '<span class="product-stock-element">' . t('产品库存: %stock', array('%stock' => get_product_stock_number($product))). '</span></br>',
-  );
+  // $form['product_stock'] = array(
+  //   '#markup' => '<span class="product-stock-element">' . t('产品库存: %stock', array('%stock' => get_product_stock_number($product))). '</span></br>',
+  // );
   $form['apply_id'] = array(
     '#type' => 'hidden',
     '#default_value' => $apply_id
@@ -314,14 +314,14 @@ function page_delivery_product_sure_validate($form, &$form_state) {
   }
 }
 
-//返回产品的库存
+// 返回产品的库存
 function get_product_stock_number($product) {
   $total_count = $product->field_product_count[LANGUAGE_NONE][0]['value'];
   if (!$total_count) {
     return 0;
   }
   else {
-    $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ? AND status = ?", array($product->nid, PRODUCT_PASSED))->fetchAssoc();
+    $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE product_id = ? AND status = ?", array($product->nid, PRODUCT_SENT))->fetchAssoc();
     $cost_total = $result['cost_total'];
     return ($total_count - $cost_total > 0) ? ($total_count - $cost_total) : 0;
   }
