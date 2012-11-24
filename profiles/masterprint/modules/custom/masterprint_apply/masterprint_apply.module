@@ -763,7 +763,7 @@ function masterprint_apply_product() {
 
     $rows[] = array(
       $product->title,
-      get_product_stock_number_value_on_product_list(load_apply_pruduct($product->nid)),
+      get_product_stock_number_value_on_product_list(node_load($product->nid)),
       $product->field_product_min_pack_num[LANGUAGE_NONE][0]['value'],
       $product_apply_statictis['applying']);
   }
@@ -815,7 +815,7 @@ function masterprint_apply_product_validate($form, &$form_state) {
   $product_id = $form_state['values']['product'];
   $node = node_load($product_id);
   $total_count = $node->field_product_count[LANGUAGE_NONE][0]['value'];
-  $cost_total = get_product_stock_number_value_on_product_list(load_apply_pruduct($product_id));
+  $cost_total = get_product_stock_number_value_on_product_list($node);
   $result = db_query("SELECT SUM(count) as applying_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_APPLYING, $product_id))->fetchAssoc();
   $applying_total = $result['applying_total'];
   $pack_count = $node->field_product_min_pack_num[LANGUAGE_NONE][0]['value'];
