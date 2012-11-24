@@ -81,7 +81,7 @@ function masterprint_apply_menu() {
     'type' => MENU_CALLBACK,
     'access callback' => TRUE,
     'page callback' => 'theme_product_apply_print',
-    'page arguments' => array('1'),
+    'page arguments' => array(1),
   );
   return $items;
 }
@@ -129,7 +129,7 @@ function refused_product_apply_form_submit($form, $form_state) {
     //产品被拒绝后需要给邮件提醒到申请人
     pet_send_mail(notify_user_when_refused_apply, 
       array('mail' => $apply_user->mail, 'uid' => $apply_user->uid), 
-      array('nid' => $product_apply['product_id'], 'refused_reseaon' => $form_state['values']['refused_reason'])
+      array('nid' => $product_apply['product_id'], 'refused_reason' => $form_state['values']['refused_reason'])
     );
 
     $form_state['redirect'] = '<front>';
@@ -551,7 +551,7 @@ function client_approve_apply($id, $action = 'pass') {
 function load_apply_pruduct($id) {
   return db_select('product_apply', 'ap')
     ->fields('ap')
-    ->condition('id', $id, '=')
+    ->condition('id', $id)
     ->execute()
     ->fetchAssoc();
 }
@@ -568,6 +568,10 @@ function masterprint_apply_token_info() {
   $apply['id'] = array(
     'name' => t("Apply ID"),
     'description' => t("申请的产品ID."),
+  );
+  $apply['refused_reason'] = array(
+    'name' => t(' Refused Reason'),
+    'description' => t('审核拒绝原因'),
   );
 
   return array(
