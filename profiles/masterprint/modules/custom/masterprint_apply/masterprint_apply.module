@@ -125,9 +125,10 @@ function refused_product_apply_form_submit($form, $form_state) {
     $product_apply = load_apply_pruduct($form_state['values']['product_id']);
     $uid = $product_apply['uid'];
     $apply_user = user_load($uid);
+    dpm($apply_user);
     //产品被拒绝后需要给邮件提醒到申请人
     pet_send_mail(notify_user_when_refused_apply, 
-      array('mail' => 'client_saler_1@163.com', 'uid' => $apply_user->uid), 
+      array('mail' => $apply_user->mail, 'uid' => $apply_user->uid), 
       array('nid' => $product_apply['product_id'], 'refused_reseaon' => $form_state['values']['refused_reason'])
     );
 
