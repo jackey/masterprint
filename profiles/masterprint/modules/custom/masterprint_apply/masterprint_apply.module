@@ -764,7 +764,7 @@ function masterprint_apply_product() {
     $product_apply_statictis = product_apply_statictis($product->nid);
     $rows[] = array(
       $product->title,
-      $product->field_product_count[LANGUAGE_NONE][0]['value'] - $product_apply_statictis['cost'] - $product_apply_statictis['applying'],
+      get_product_stock_number_value_on_product_list($product->nid),
       $product->field_product_min_pack_num[LANGUAGE_NONE][0]['value'],
       $product_apply_statictis['applying']);
   }
