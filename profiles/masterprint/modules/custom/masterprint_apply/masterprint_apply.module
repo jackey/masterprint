@@ -22,6 +22,7 @@ define('notify_apply_account_when_delivery', 'notify_requester_on_delivery');//�
 define('notify_warehouse_when_product_insert', 'notify_warehouse_when_product_insert');//产品被添加后致仓库管理员邮件
 define('notify_warning_when_product_less', 'notify_on_nearly_out_of_stock');//库存告警邮件
 define('notify_user_when_refused_apply', 'notify_user_when_refused_apply'); //申请的产品审核拒绝
+define('nofiy_client_when_product_insert', 'notify_stock_keeper_on_product_added');//产品被添加后致客户邮件
 
 /**
  * Implements hook_menu().
@@ -171,7 +172,7 @@ function masterprint_apply_node_insert($node) {
     }
     //产品添加后要通知客户
     $user = user_load($node->field_product_applied_by[LANGUAGE_NONE][0]['target_id']);
-    pet_send_mail(notify_warehouse_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid), array('nid' => $node->uid));
+    pet_send_mail(notify_client_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid), array('nid' => $node->uid));
   }
 }
 
