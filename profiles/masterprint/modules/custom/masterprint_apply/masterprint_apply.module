@@ -815,7 +815,7 @@ function masterprint_apply_product_validate($form, &$form_state) {
   $product_id = $form_state['values']['product'];
   $node = node_load($product_id);
   $total_count = $node->field_product_count[LANGUAGE_NONE][0]['value'];
-  $cost_total = get_product_stock_number_value_on_product_list($node);
+  $stock_number = get_product_stock_number_value_on_product_list($node);
   $result = db_query("SELECT SUM(count) as applying_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_APPLYING, $product_id))->fetchAssoc();
   $applying_total = $result['applying_total'];
   $pack_count = $node->field_product_min_pack_num[LANGUAGE_NONE][0]['value'];
@@ -828,7 +828,7 @@ function masterprint_apply_product_validate($form, &$form_state) {
     return FALSE;
   }
 
-  if (intval($count) > ($total_count - $cost_total)) {
+  if (intval($count) > $stock_number) {
     form_set_error('product_count', t('当前库存不足,请减少申请数量'));
     return FALSE;
   }
