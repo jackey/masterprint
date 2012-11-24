@@ -832,6 +832,7 @@ function masterprint_apply_product_validate($form, &$form_state) {
     form_set_error('product_count', t('当前库存不足,请减少申请数量'));
     return FALSE;
   }
+  dpm($cost_total);
 }
 
 //产品的损耗统计
