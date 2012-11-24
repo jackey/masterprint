@@ -621,7 +621,7 @@ function user_product_apply_list($user) {
     $op = '';
     if ($data['status'] == PRODUCT_APPLYING) {
       $op .= l(t('通过'), 'approve/'.$data['id'].'/pass');
-      $op .= l(t('拒绝'), 'frused-approve/'.$data['id']);
+      $op .= '|'. l(t('拒绝'), 'frused-approve/'.$data['id']);
     }
     else if ($data['status'] == PRODUCT_PASSED){
       $op = '<span>'.t('已通过').'</span>';
