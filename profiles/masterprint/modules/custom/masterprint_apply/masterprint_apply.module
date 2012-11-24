@@ -759,12 +759,11 @@ function masterprint_apply_product() {
   $form = array();
   $rows = array();
   foreach ($product_nodes as $product) {
-    // $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_PASSED ,$product->nid))->fetchAssoc();
-    // $cost_total = $result['cost_total'];
     $product_apply_statictis = product_apply_statictis($product->nid);
+
     $rows[] = array(
       $product->title,
-      get_product_stock_number_value_on_product_list($product->nid),
+      get_product_stock_number_value_on_product_list(load_apply_pruduct($product->nid)),
       $product->field_product_min_pack_num[LANGUAGE_NONE][0]['value'],
       $product_apply_statictis['applying']);
   }
@@ -816,8 +815,7 @@ function masterprint_apply_product_validate($form, &$form_state) {
   $product_id = $form_state['values']['product'];
   $node = node_load($product_id);
   $total_count = $node->field_product_count[LANGUAGE_NONE][0]['value'];
-  $result = db_query("SELECT SUM(count) as cost_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_PASSED ,$product_id))->fetchAssoc();
-  $cost_total = $result['cost_total'];
+  $cost_total = get_product_stock_number_value_on_product_list(load_apply_pruduct($product_id));
   $result = db_query("SELECT SUM(count) as applying_total FROM {product_apply} WHERE status = ? AND product_id = ?", array(PRODUCT_APPLYING, $product_id))->fetchAssoc();
   $applying_total = $result['applying_total'];
   $pack_count = $node->field_product_min_pack_num[LANGUAGE_NONE][0]['value'];
@@ -829,12 +827,8 @@ function masterprint_apply_product_validate($form, &$form_state) {
     form_set_error('product_count', t('产品申请数量不小于0个'));
     return FALSE;
   }
-  if (intval($count) > $total_count - $cost_total) {
-    drupal_set_message(t('当前库存量为'). ($total_count - $cost_total), 'error');
-    form_set_error('product_count', t('申请数量不能大于库存数量'));
-    return FALSE;
-  }
-  if (intval($count) > ($total_count - $cost_total - $applying_total)) {
+
+  if (intval($count) > ($total_count - $cost_total)) {
     form_set_error('product_count', t('当前库存不足,请减少申请数量'));
     return FALSE;
   }
