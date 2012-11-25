@@ -308,7 +308,7 @@ function page_delivery_product_sure() {
     '#type' => 'hidden',
     '#default_value' => $apply_id
   );
-  if ($apply_product->status != PRODUCT_SENT) {
+  if ($apply_product['status'] != PRODUCT_SENT) {
     $form['submit'] = array(
       '#type' => 'submit',
       '#value' => t('确认发货'),
