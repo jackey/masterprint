@@ -8,5 +8,5 @@
 <h2>运单号码:</h2>
 <?php  print $delivery_no?>
 <script type="text/javascript">
-	window.print();
+	//window.print();
 </script>

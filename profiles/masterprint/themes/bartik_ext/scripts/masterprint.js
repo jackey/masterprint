@@ -24,6 +24,147 @@
 	    	}
 	    	return false;
 	    });
+
+	    // 产品发货地方要检查用户选择的物流公司
+	    var form = $('#page-delivery-product-sure');
+	    var company_id = $('#edit-delivery-company', form).val();
+	    var delivery_no = $('#edit-delivery-serial-no', form).val();
+	    var company_name = $('#edit-delivery-company-other', form).val();
+	    var company_phone = $('#edit-delivery-company-phone', form).val();
+	    var history_print_link = $('#print_link', form).attr('href');
+	    //print/[product_id]?company_id=[]&delivery_no=[]&company_phone=[]&company_name=[]
+	    $('#print_link', form).attr('href', function (i,h) {
+    		var param = {
+    			company_id: company_id,
+    			delivery_no: delivery_no,
+    			company_phone: company_phone,
+    			company_name: company_name
+    		};
+    		var query = $.param(param);
+	    	return history_print_link + (history_print_link.indexOf('?') == -1 ? "?" + query: '&' + query);
+	    });
+
+	    //
+	    $('#edit-delivery-company', form).change(function () {
+		    var company_id = $('#edit-delivery-company', form).val();
+		    var delivery_no = $('#edit-delivery-serial-no', form).val();
+		    var company_name = $('#edit-delivery-company-other', form).val();
+		    var company_phone = $('#edit-delivery-company-phone', form).val();
+    		var param = {
+    			company_id: company_id,
+    			delivery_no: delivery_no,
+    			company_phone: company_phone,
+    			company_name: company_name
+    		};
+    		var query = $.param(param);
+		    $('#print_link', form).attr('href', function (i,h) {
+	    		var param = {
+	    			company_id: company_id,
+	    			delivery_no: delivery_no,
+	    			company_phone: company_phone,
+	    			company_name: company_name
+	    		};
+	    		var query = $.param(param);
+		    	return history_print_link + (history_print_link.indexOf('?') == -1 ? "?" + query: '&' + query);
+		    });
+	    });
+
+	    $('#edit-delivery-serial-no', form).change(function () {
+		    var company_id = $('#edit-delivery-company', form).val();
+		    var delivery_no = $('#edit-delivery-serial-no', form).val();
+		    var company_name = $('#edit-delivery-company-other', form).val();
+		    var company_phone = $('#edit-delivery-company-phone', form).val();
+    		var param = {
+    			company_id: company_id,
+    			delivery_no: delivery_no,
+    			company_phone: company_phone,
+    			company_name: company_name
+    		};
+    		var query = $.param(param);
+		    $('#print_link', form).attr('href', function (i,h) {
+	    		var param = {
+	    			company_id: company_id,
+	    			delivery_no: delivery_no,
+	    			company_phone: company_phone,
+	    			company_name: company_name
+	    		};
+	    		var query = $.param(param);
+		    	return history_print_link + (history_print_link.indexOf('?') == -1 ? "?" + query: '&' + query);
+		    });
+	    });
+
+	    $('#edit-delivery-company-other', form).change(function () {
+		    var company_id = $('#edit-delivery-company', form).val();
+		    var delivery_no = $('#edit-delivery-serial-no', form).val();
+		    var company_name = $('#edit-delivery-company-other', form).val();
+		    var company_phone = $('#edit-delivery-company-phone', form).val();
+    		var param = {
+    			company_id: company_id,
+    			delivery_no: delivery_no,
+    			company_phone: company_phone,
+    			company_name: company_name
+    		};
+    		var query = $.param(param);
+		    $('#print_link', form).attr('href', function (i,h) {
+	    		var param = {
+	    			company_id: company_id,
+	    			delivery_no: delivery_no,
+	    			company_phone: company_phone,
+	    			company_name: company_name
+	    		};
+	    		var query = $.param(param);
+		    	return history_print_link + (history_print_link.indexOf('?') == -1 ? "?" + query: '&' + query);
+		    });
+	    });
+
+	    $('#edit-delivery-company-phone', form).change(function () {
+		    var company_id = $('#edit-delivery-company', form).val();
+		    var delivery_no = $('#edit-delivery-serial-no', form).val();
+		    var company_name = $('#edit-delivery-company-other', form).val();
+		    var company_phone = $('#edit-delivery-company-phone', form).val();
+    		var param = {
+    			company_id: company_id,
+    			delivery_no: delivery_no,
+    			company_phone: company_phone,
+    			company_name: company_name
+    		};
+    		var query = $.param(param);
+		    $('#print_link', form).attr('href', function (i,h) {
+	    		var param = {
+	    			company_id: company_id,
+	    			delivery_no: delivery_no,
+	    			company_phone: company_phone,
+	    			company_name: company_name
+	    		};
+	    		var query = $.param(param);
+		    	return history_print_link + (history_print_link.indexOf('?') == -1 ? "?" + query: '&' + query);
+		    });
+	    });
+
+
+	    $('#edit-delivery-company', form).change(function () {
+		    var company_id = $('#edit-delivery-company', form).val();
+		    var delivery_no = $('#edit-delivery-serial-no', form).val();
+		    var company_name = $('#edit-delivery-company-other', form).val();
+		    var company_phone = $('#edit-delivery-company-phone', form).val();
+    		var param = {
+    			company_id: company_id,
+    			delivery_no: delivery_no,
+    			company_phone: company_phone,
+    			company_name: company_name
+    		};
+    		var query = $.param(param);
+		    $('#print_link', form).attr('href', function (i,h) {
+	    		var param = {
+	    			company_id: company_id,
+	    			delivery_no: delivery_no,
+	    			company_phone: company_phone,
+	    			company_name: company_name
+	    		};
+	    		var query = $.param(param);
+		    	return history_print_link + (history_print_link.indexOf('?') == -1 ? "?" + query: '&' + query);
+		    });
+	    });
 	  }
 	};
 })(jQuery);

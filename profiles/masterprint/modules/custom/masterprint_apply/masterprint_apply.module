@@ -76,6 +76,7 @@ function masterprint_apply_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('page_delivery_product_sure'),
   );
+  // print/[product_id]?company_id=[]&delivery_no=[]&company_phone=[]&company_name=[]
   $items['print/%'] = array(
     'title' => '打印',
     'type' => MENU_CALLBACK,
@@ -88,18 +89,38 @@ function masterprint_apply_menu() {
 
 //输出打印页面内容
 function theme_product_apply_print($apply_id) {
+  $company_id = $_GET['company_id'];
+  if ($company_id == 'other') {
+    $company_phone = $_GET['company_phone'];
+    $company_name = $_GET['company_name'];
+  }
+  $delivery_info = $_GET['delivery_no'];
   $product_apply = load_apply_pruduct($apply_id);
-  $delivery_company = node_load($product_apply['delivery_company']);
+  $delivery_company = node_load($company_id);
   $product = node_view(node_load($product_apply['product_id']));
   $user = user_view(user_load($product_apply['uid']));
+  if ($delivery_company) {
+    $view_delivery_company = node_view($delivery_company);
+  }
+  else {
+    $view_delivery_company = array(
+      '#markup' => '<div id="node-4" class="node node-delivery-company clearfix">
+        <h2>
+          '.$company_name.'
+        </h2>
+  <div class="content clearfix">
+    <div class="field field-name-field-phone-number field-type-text field-label-inline clearfix"><div class="field-label">电话号码:&nbsp;</div><div class="field-items"><div class="field-item even">'.$company_phone.'</div></div></div>  </div>
+</div>'
+    );
+  }
   hide($user['summary']);
 
   return theme('productapply_print', array(
     'product' => $product, 
     'apply' => $product_apply, 
-    'user' => $user, 
-    'delivery_no' => $product_apply['delivery_serial_no'],
-    'delivery_company' => node_view($delivery_company)));
+    'user' => $user,
+    'delivery_no' => $delivery_info,
+    'delivery_company' => $view_delivery_company));
 }
 
 /** 
@@ -292,7 +313,7 @@ function page_delivery_product_sure() {
   );
 
   $form['print'] = array(
-    '#markup' => l(t('打印'), 'print/'.$apply_id, array('target' => 'blank')),
+    '#markup' => l(t('打印'), 'print/'.$apply_id, array('attributes' =>array('target' => 'blank', 'id' => 'print_link'))),
   );
   return $form;
 }
