@@ -526,15 +526,9 @@ function client_approve_apply($id, $action = 'pass') {
 
     $product = node_load($apply_product['product_id']);
     //发货后，检查库存，如果库存少于20个则发送邮件给对应的客户和AE
-    $product_stock = get_product_stock_number($product);
+    $product_stock = get_product_stock_number_value_on_product_list($product);
     $total_count = $product->field_product_count[LANGUAGE_NONE][0]['value'];
-    dpm($product_stock);
-    dpm($total_count);
-    dpm($product_stock / $total_count);
-    if ($product_stock / $total_count < 0.2) {
-      dpm('hello');
-    }
-    if ($product_stock / $total_count < 0.2) {
+    if ($product_stock / $total_count <= 0.2) {
         //客户ID
       $apply_account = user_load($apply_product['uid']);
       $client_account = get_client_account_from_user($apply_account);
@@ -838,7 +832,6 @@ function masterprint_apply_product_validate($form, &$form_state) {
     form_set_error('product_count', t('当前库存不足,请减少申请数量'));
     return FALSE;
   }
-  dpm($cost_total);
 }
 
 //产品的损耗统计
