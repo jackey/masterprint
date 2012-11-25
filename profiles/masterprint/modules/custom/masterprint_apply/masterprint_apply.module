@@ -281,9 +281,7 @@ function page_delivery_product_sure() {
   $form['product_stock'] = array(
     '#markup' => '<span class="product-stock-element">' . t('产品库存: %stock', array('%stock' => get_product_stock_number($product))). '</span></br>',
   );
-  // $form['product_stock'] = array(
-  //   '#markup' => '<span class="product-stock-element">' . t('产品库存: %stock', array('%stock' => get_product_stock_number($product))). '</span></br>',
-  // );
+
   $form['apply_id'] = array(
     '#type' => 'hidden',
     '#default_value' => $apply_id
@@ -444,7 +442,9 @@ function page_delivery_product_sure_submit($form, &$form_state) {
   }
 
   require_once(drupal_get_path('module', 'user').'/user.pages.inc');
-  user_logout();
+  if (user_is_logged_in()) {
+    user_logout();
+  }
   drupal_goto('<front>');
 }
 
