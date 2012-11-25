@@ -297,6 +297,7 @@ function page_delivery_product_sure() {
   $form['delivery_info']['delivery_serial_no'] = array(
     '#type' => 'textfield',
     '#title' =>  t('运单号码'),
+    '#required' => TRUE,
   );
 
   $form['product_stock'] = array(
@@ -307,10 +308,13 @@ function page_delivery_product_sure() {
     '#type' => 'hidden',
     '#default_value' => $apply_id
   );
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('确认发货'),
-  );
+  if ($apply_product->status != PRODUCT_SENT) {
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('确认发货'),
+    );
+  }
+
 
   $form['print'] = array(
     '#markup' => l(t('打印'), 'print/'.$apply_id, array('attributes' =>array('target' => 'blank', 'id' => 'print_link'))),
