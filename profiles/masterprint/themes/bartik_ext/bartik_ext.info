@@ -1,14 +1,11 @@
 
 name = bartik_ext
 description = A flexible, recolorable theme with many regions.
-package = Core
-version = VERSION
+version = "7.x-1.0"
 core = 7.x
+base theme = bartik
 
-stylesheets[all][] = css/layout.css
-stylesheets[all][] = css/style.css
-stylesheets[all][] = css/colors.css
-stylesheets[print][] = css/print.css
+stylesheets[all][] = css/masterprint.css
 
 scripts[] = scripts/masterprint.js
 scripts[] = scripts/modal/js/jquery.simplemodal.js
@@ -35,10 +32,3 @@ regions[footer_fourthcolumn] = Footer fourth column
 regions[footer] = Footer
 
 settings[shortcut_module_link] = 0
-
-
-; Information added by drupal.org packaging script on 2012-08-01
-version = "7.15"
-project = "drupal"
-datestamp = "1343839327"
-
