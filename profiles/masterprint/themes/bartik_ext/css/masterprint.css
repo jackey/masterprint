@@ -1,2 +1,20 @@
 
 /* ---------- General Layout ---------- */
+body{
+	background:#fff url(../images/bg.png);
+}
+#header{
+	background:none;
+}
+#site-name a{
+	color:#333;
+}
+#page, #main-wrapper{
+	background:none;
+}
+#page-wrapper, #footer-wrapper{
+	background:none;
+}
+.front #footer-wrapper{
+	background:none;
+}
