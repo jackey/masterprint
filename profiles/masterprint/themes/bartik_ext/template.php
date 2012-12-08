@@ -8,3 +8,13 @@ function bartik_ext_process_breadcrumb(&$variables) {
   drupal_set_breadcrumb($bread_crumb);
   $variables['breadcrumb'] = $bread_crumb;
 }
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function bartik_ext_preprocess_page(&$vars) {
+	// Exin
+	if (arg() == array('user') && user_is_anonymous()) {
+		$vars['tabs']['#primary'][1] = array();
+	}
+}
