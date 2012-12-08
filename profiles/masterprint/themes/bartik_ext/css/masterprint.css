@@ -6,6 +6,9 @@ body{
 #header{
 	background:none;
 }
+.user #name-and-slogan{
+	padding-top:0;
+}
 #site-name a{
 	color:#333;
 }
@@ -20,10 +23,15 @@ body{
 }
 #site-name span{
 	display:block;
+	width:264px;
+	height:50px;
+	background:url(../images/logo.png) no-repeat;
+	text-indent:-999em;
+}
+.user #site-name span{
 	width:283px;
 	height:71px;
-	background:url(../images/logo-user.png);
-	text-indent:-999em;
+	background:url(../images/logo-user.png) no-repeat;
 }
 .user #content {
 	display: block;
@@ -83,4 +91,22 @@ body{
 	background:#000;
 	color:#fff;
 	padding:8px 21px;
+}
+
+/* Header */
+#name-and-slogan{
+	padding-top:71px;
+}
+#secondary-menu-links{
+	margin-top:77px;
+}
+#secondary-menu-links li a{
+	padding:6px 15px;
+	font-weight:bold;
+}
+#secondary-menu-links li.first a{
+	background:#7c7c7c;
+}
+#secondary-menu-links li.last a{
+	color:#7c7c7c;
 }
