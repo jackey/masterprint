@@ -12,10 +12,9 @@ function bartik_ext_process_breadcrumb(&$variables) {
 /**
  * Implements hook_preprocess_page().
  */
-/*function bartik_ext_preprocess_page(&$vars) {
+function bartik_ext_preprocess_page(&$vars) {
 	// Exin
 	if (arg() == array('user') && user_is_anonymous()) {
-		$vars['tabs']['#primary'][0] = array();
-		$vars['tabs']['#primary'][1] = array();
+		$vars['theme_hook_suggestions'][] = 'page__login';
 	}
-}*/
+}
