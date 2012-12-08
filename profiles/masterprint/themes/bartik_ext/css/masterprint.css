@@ -60,3 +60,6 @@ body{
 	margin-top:45px;
 	text-align:right;
 }
+.user input.form-text{
+	width:342px;
+}
