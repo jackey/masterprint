@@ -165,6 +165,16 @@
 		    	return history_print_link + (history_print_link.indexOf('?') == -1 ? "?" + query: '&' + query);
 		    });
 	    });
+		$('#edit-name').autofill({
+			value: '请输入用户名',
+			defaultTextColor: '#000',
+			activeTextColor: '#333'
+		});
+		$('#edit-pass').autofill({
+			value: '请输入密码',
+			defaultTextColor: '#000',
+			activeTextColor: '#333'
+		});
 	  }
 	};
 })(jQuery);

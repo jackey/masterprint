@@ -28,7 +28,8 @@ body{
 .user #content {
 	display: block;
     width: 490px;
-	margin:100px auto 0;
+	margin:0 auto 0;
+	padding-top:100px;
 }
 .user h1#page-title{
 	margin:15px 0 0;
@@ -50,16 +51,36 @@ body{
 	padding:40px 0 0;
 	overflow:hidden;
 }
+.user #user-login label,
 .user #user-login .description{
 	display:none;
 }
 .user .form-item{
-	margin-top:0;
+	margin-top:0;site-url
 }
 .user .site-url{
-	margin-top:45px;
+	margin:45px 0;
 	text-align:right;
+	background:url(../images/bg-site-url.png) no-repeat 315px 50%;
+	color:#808080;
 }
 .user input.form-text{
-	width:342px;
+	width:310px;
+	border:none;
+	padding:12px 12px 12px 60px;
+}
+.user #user-login #edit-name{
+	background:#c3effe url(../images/bg-username.png) no-repeat 0 0;
+}
+.user #user-login #edit-pass_autofill,.user #user-login #edit-pass{
+	background:#cbcbcb url(../images/bg-password.png) no-repeat 0 0;
+}
+.user #edit-actions {
+	text-align:right;
+}
+.user #edit-actions input{
+	border-radius:0;
+	background:#000;
+	color:#fff;
+	padding:8px 21px;
 }
