@@ -1,56 +1,53 @@
-
 /* ---------- General Layout ---------- */
-body{
+body {
 	background:#fff url(../images/bg.png);
 }
 a {
-  color: #808080;
+	color: #808080;
 }
-a:hover,
-a:focus {
-  color: #333;
+a:hover, a:focus {
+	color: #333;
 }
 a:active {
-  color: #ccc;
+	color: #ccc;
 }
-
-#header{
+#header {
 	background:none;
 }
-.user #name-and-slogan{
+.user #name-and-slogan {
 	padding-top:0;
 }
-#site-name a{
+#site-name a {
 	color:#333;
 }
-#page, #main-wrapper{
+#page, #main-wrapper {
 	background:none;
 }
-#page-wrapper, #footer-wrapper{
+#page-wrapper, #footer-wrapper {
 	background:none;
 }
-.front #footer-wrapper{
+.front #footer-wrapper {
 	background:none;
 }
-#site-name span{
+#site-name span {
 	display:block;
 	width:264px;
 	height:50px;
 	background:url(../images/logo.png) no-repeat;
 	text-indent:-999em;
 }
-.user #site-name span{
+.user #site-name span {
 	width:283px;
 	height:71px;
 	background:url(../images/logo-user.png) no-repeat;
 }
 .user #content {
 	display: block;
-    width: 490px;
+	width: 490px;
 	margin:0 auto 0;
 	padding-top:100px;
 }
-.user h1#page-title{
+.user h1#page-title {
 	margin:15px 0 0;
 	padding-left:52px;
 	height:58px;
@@ -60,40 +57,39 @@ a:active {
 	font-size:14px;
 	font-weight:bold;
 }
-.user #block-system-main .content{
+.user #block-system-main .content {
 	margin:0;
 	background:#fff;
 }
-.user #user-login{
+.user #user-login {
 	width:390px;
 	margin:0 auto;
 	padding:40px 0 10px;
 	overflow:hidden;
 }
-.user #user-login label,
-.user #user-login .description{
+.user #user-login label, .user #user-login .description {
 	display:none;
 }
-.user .form-item{
+.user .form-item {
 	margin-top:0;
 	padding:12px 12px 12px 60px;
 }
-.user .site-url{
+.user .site-url {
 	margin:45px 0;
 	text-align:right;
 	background:url(../images/bg-site-url.png) no-repeat 315px 50%;
 	color:#808080;
 }
-.user input.form-text{
+.user input.form-text {
 	width:310px;
 	border:none;
 	margin:0;
 	background:none;
 }
-.user .form-item-name{
+.user .form-item-name {
 	background:#c3effe url(../images/bg-username.png) no-repeat 0 0;
 }
-.user .form-item-pass{
+.user .form-item-pass {
 	background:#cbcbcb url(../images/bg-password.png) no-repeat 0 0;
 }
 .user #edit-actions {
@@ -101,7 +97,7 @@ a:active {
 	margin-top:0;
 	padding-top:0;
 }
-.user #edit-actions input{
+.user #edit-actions input {
 	border-radius:0;
 	background:#000;
 	color:#fff;
@@ -111,48 +107,95 @@ a:active {
 	float:left;
 	padding:8px 0 8px 65px;
 }
-
 /* Header */
-#name-and-slogan{
+#name-and-slogan {
 	padding-top:71px;
 }
-#secondary-menu-links{
+#secondary-menu-links {
 	margin-top:77px;
 }
-#secondary-menu-links li a{
+#secondary-menu-links li a {
 	padding:6px 15px;
 	font-weight:bold;
 }
-#secondary-menu-links li.first a{
+#secondary-menu-links li.first a {
 	background:#7c7c7c;
 }
-#secondary-menu-links li.last a{
+#secondary-menu-links li.last a {
 	color:#7c7c7c;
 }
-
-#breadcrumb,
-.tabs ul.tabs,
-#welcome-message .inner,
-#content .region,
-#page-title{
+#breadcrumb, .tabs ul.tabs, #welcome-message .inner, #content .region, #page-title {
 	width:960px;
 	margin: 0 auto;
 }
-#main{
+#main {
 	width:auto;
 }
-#welcome-message{
+#content .section {
+	padding:0;
+}
+#welcome-message {
 	background:#000;
 	color:#fff;
 	padding:23px 0;
 	overflow:hidden;
 	font-weight:bold;
 }
-#welcome-message .left{
+#welcome-message .left {
 	float:left;
 	padding-left:9px;
 }
-#welcome-message .right{
+#welcome-message .right {
 	float:right;
 	color:#f6608a;
+}
+.tabs ul.primary li a {
+	border:none;
+	background:none;
+	text-shadow:0 0 0 navy;
+	border-radius:0;
+	-khtml-border-radius:0;
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
+}
+.tabs ul.primary li.active a {
+	background:#000;
+	color:#fff;
+	border:none;
+}
+ul.secondary li{
+	border:none;
+}
+.tabs ul.secondary li{
+	padding:0 10px 0 0;
+	margin:40px 0 20px;
+}
+.tabs ul.secondary li a{
+	color:#7e7e7e;
+	font-weight:bold;
+}
+.tabs ul.secondary li a.active {
+	background:#969696 url(../images/tab-arrow.png) no-repeat 90% 50%;
+	color:#000;
+	padding:6px 24px 6px 16px;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	-khtml-border-radius: 0;
+	border-radius: 0;
+}
+#primary-tab {
+	padding:25px 0;
+}
+#secondary-tab{
+	
+}
+#block-system-main{
+	clear:both;
+}
+tr td, tr th{
+	border-width:0;
+}
+table tr th {
+  background: #bfbfbf;
+  color:#000;
 }
