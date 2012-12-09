@@ -49,7 +49,8 @@ a:active {
 }
 .user h1#page-title {
 	margin:15px 0 0;
-	padding-left:52px;
+	text-indent:52px;
+	width:490px;
 	height:58px;
 	line-height:58px;
 	background:#000;
