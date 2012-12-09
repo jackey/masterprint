@@ -13,8 +13,9 @@ function bartik_ext_process_breadcrumb(&$variables) {
  * Implements hook_preprocess_page().
  */
 function bartik_ext_preprocess_page(&$vars) {
+  $path = $_GET['q'];
 	// Exin
-	if (arg() == array('user') && user_is_anonymous()) {
+	if ((arg() == array('user') && user_is_anonymous()) || $path == 'user/password') {
 		$vars['theme_hook_suggestions'][] = 'page__login';
 	}
 }
