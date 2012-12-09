@@ -29,6 +29,20 @@ function bartik_ext_theme() {
     'path' => drupal_get_path('theme', 'bartik_ext'). '/templates',
     'template' => 'user_login_form',
   );
+  $themes['menu_local_tasks'] = array(
+    'variables' => array(),
+    'template' => 'menu_local_tasks',
+    'path' => drupal_get_path('theme', 'bartik_ext'). '/templates',
+    'preprocess functions' => array(
+      'bartik_ext_menu_local_tasks_process'
+    ),
+  );
 
   return $themes;
+}
+
+// custom THEMENAME_menu_local_tasks().
+function bartik_ext_menu_local_tasks_process(&$variables) {
+  $variables['primary'] = menu_primary_local_tasks();
+  $variables['secondary'] = menu_secondary_local_tasks();
 }
