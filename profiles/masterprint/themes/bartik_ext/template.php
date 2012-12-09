@@ -18,3 +18,17 @@ function bartik_ext_preprocess_page(&$vars) {
 		$vars['theme_hook_suggestions'][] = 'page__login';
 	}
 }
+
+/**
+ * Implements hook_theme().
+ */
+function bartik_ext_theme() {
+  $themes = array();
+  $themes['user_login'] = array(
+    'render element' => 'form',
+    'path' => drupal_get_path('theme', 'bartik_ext'). '/templates',
+    'template' => 'user_login_form',
+  );
+
+  return $themes;
+}
