@@ -75,7 +75,8 @@ a:active {
 	display:none;
 }
 .user .form-item{
-	margin-top:0;site-url
+	margin-top:0;
+	padding:12px 12px 12px 60px;
 }
 .user .site-url{
 	margin:45px 0;
@@ -86,12 +87,13 @@ a:active {
 .user input.form-text{
 	width:310px;
 	border:none;
-	padding:12px 12px 12px 60px;
+	margin:0;
+	background:none;
 }
-.user #user-login #edit-name{
+.user .form-item-name{
 	background:#c3effe url(../images/bg-username.png) no-repeat 0 0;
 }
-.user #user-login #edit-pass_autofill,.user #user-login #edit-pass{
+.user .form-item-pass{
 	background:#cbcbcb url(../images/bg-password.png) no-repeat 0 0;
 }
 .user #edit-actions {
@@ -126,4 +128,31 @@ a:active {
 }
 #secondary-menu-links li.last a{
 	color:#7c7c7c;
+}
+
+#breadcrumb,
+.tabs ul.tabs,
+#welcome-message .inner,
+#content .region,
+#page-title{
+	width:960px;
+	margin: 0 auto;
+}
+#main{
+	width:auto;
+}
+#welcome-message{
+	background:#000;
+	color:#fff;
+	padding:23px 0;
+	overflow:hidden;
+	font-weight:bold;
+}
+#welcome-message .left{
+	float:left;
+	padding-left:9px;
+}
+#welcome-message .right{
+	float:right;
+	color:#f6608a;
 }
