@@ -27,7 +27,7 @@ function masterprint_global_preprocess_page(&$vars) {
       break;
 
     case 'user':
-      drupal_set_title(t('登陆入口'));
+      drupal_set_title(t('User Login'));
       break;
   }
 }
