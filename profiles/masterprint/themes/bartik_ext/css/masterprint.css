@@ -3,6 +3,17 @@
 body{
 	background:#fff url(../images/bg.png);
 }
+a {
+  color: #808080;
+}
+a:hover,
+a:focus {
+  color: #333;
+}
+a:active {
+  color: #ccc;
+}
+
 #header{
 	background:none;
 }
@@ -56,7 +67,7 @@ body{
 .user #user-login{
 	width:390px;
 	margin:0 auto;
-	padding:40px 0 0;
+	padding:40px 0 10px;
 	overflow:hidden;
 }
 .user #user-login label,
@@ -84,13 +95,19 @@ body{
 	background:#cbcbcb url(../images/bg-password.png) no-repeat 0 0;
 }
 .user #edit-actions {
-	text-align:right;
+	float:right;
+	margin-top:0;
+	padding-top:0;
 }
 .user #edit-actions input{
 	border-radius:0;
 	background:#000;
 	color:#fff;
 	padding:8px 21px;
+}
+.actions .forget-password {
+	float:left;
+	padding:8px 0 8px 65px;
 }
 
 /* Header */

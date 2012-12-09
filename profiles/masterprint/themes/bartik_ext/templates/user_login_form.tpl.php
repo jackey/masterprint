@@ -7,11 +7,10 @@
 </div>
 
 <div class="actions">
-	<?php print drupal_render($form['actions'])?>
-
-	<div class="links">
-		<?php print l(t('Forget password'), 'user/password')?>
+	<div class="links forget-password">
+		<?php print l(t('忘记密码'), 'user/password')?>
 	</div>
+	<?php print drupal_render($form['actions'])?>
 </div>
 
 <?php print drupal_render_children($form)?>
