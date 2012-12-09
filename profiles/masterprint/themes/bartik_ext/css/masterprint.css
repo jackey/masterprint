@@ -41,6 +41,9 @@ a:active {
 	height:71px;
 	background:url(../images/logo-user.png) no-repeat;
 }
+.page-user-password .user #site-name span{
+	background:url(../images/logo-pwd.png) no-repeat;
+}
 .user #content {
 	display: block;
 	width: 490px;
