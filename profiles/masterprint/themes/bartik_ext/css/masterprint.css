@@ -65,11 +65,14 @@ a:active {
 	margin:0;
 	background:#fff;
 }
-.user #user-login {
+.user #block-system-main form {
 	width:390px;
 	margin:0 auto;
 	padding:40px 0 10px;
 	overflow:hidden;
+}
+.user #edit-actions input{
+	margin-right:0;
 }
 .user #user-login label, .user #user-login .description {
 	display:none;
@@ -82,7 +85,7 @@ a:active {
 	clear: both;
 	margin:45px 0;
 	text-align:right;
-	background:url(../images/bg-site-url.png) no-repeat 315px 50%;
+	background:url(../images/bg-site-url.png) no-repeat 343px 50%;
 	color:#808080;
 }
 .user input.form-text {
@@ -90,6 +93,7 @@ a:active {
 	border:none;
 	margin:0;
 	background:none;
+	font-weight: bold;
 }
 .user .form-item-name {
 	background:#c3effe url(../images/bg-username.png) no-repeat 0 0;
@@ -111,6 +115,19 @@ a:active {
 .actions .forget-password {
 	float:left;
 	padding:8px 0 8px 65px;
+}
+
+.user #block-system-main #user-pass {
+	position:relative;
+	padding-top:70px;
+}
+.user #user-pass .form-item-name label{
+	position:absolute;
+	top:30px;
+	left:0;
+}
+.user #user-pass .form-item-name{
+	margin-bottom:3em;
 }
 /* Header */
 #name-and-slogan {
