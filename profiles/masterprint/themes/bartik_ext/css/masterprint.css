@@ -50,13 +50,16 @@ a:active {
 .user h1#page-title {
 	margin:15px 0 0;
 	text-indent:52px;
-	width:490px;
 	height:58px;
 	line-height:58px;
 	background:#000;
 	color:#fff;
 	font-size:14px;
 	font-weight:bold;
+}
+.user h1#page-title,
+.user #content .region{
+	width:auto;
 }
 .user #block-system-main .content {
 	margin:0;
@@ -76,6 +79,7 @@ a:active {
 	padding:12px 12px 12px 60px;
 }
 .user .site-url {
+	clear: both;
 	margin:45px 0;
 	text-align:right;
 	background:url(../images/bg-site-url.png) no-repeat 315px 50%;
