@@ -176,6 +176,7 @@ a:active {
 	border:none;
 	background:none;
 	text-shadow:0 0 0 navy;
+	font-weight:bold;
 	border-radius:0;
 	-khtml-border-radius:0;
 	-moz-border-radius:0;
@@ -191,7 +192,7 @@ ul.secondary li {
 }
 .tabs ul.secondary li {
 	padding:0 10px 0 0;
-	margin:40px 0 20px;
+	margin:0 0 20px;
 }
 .tabs ul.secondary li a {
 	color:#7e7e7e;
@@ -222,5 +223,43 @@ table tr th {
 	color:#000;
 }
 span.form-required {
+	color:#000;
+}
+.user span.form-required {
 	color:#fff;
+}
+.breadcrumb {
+	padding:40px 0;
+}
+fieldset {
+  -khtml-border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  border: 1px solid #bfbfbf;
+  background:#f6f4f5;
+}
+fieldset legend {
+	text-indent:0;
+	background:#bfbfbf;
+	height:36px;
+	line-height:36px;
+	-khtml-border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	border:1px solid #bfbfbf;
+}
+.fieldset-legend {
+	display:inline-block;
+	padding:0 34px 0 10px;
+	background:#f6f4f5 url(../images/fieldset-legend.png) no-repeat 100% 50%;
+	color:#0db0e7;
+	font-weight:bold;
+}
+.fieldset-wrapper {
+    margin-top: 45px;
+}
+.form-item .description {
+    color:#7d7d7d;
 }
