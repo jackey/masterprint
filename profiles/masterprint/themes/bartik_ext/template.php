@@ -46,4 +46,5 @@ function bartik_ext_theme() {
 function bartik_ext_menu_local_tasks_process(&$variables) {
   $variables['primary'] = menu_primary_local_tasks();
   $variables['secondary'] = menu_secondary_local_tasks();
+  $variables['breadcrumb'] = theme('breadcrumb', array('breadcrumb' => drupal_get_breadcrumb()));
 }

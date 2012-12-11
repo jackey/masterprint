@@ -7,6 +7,12 @@
         <div class="right">Everything we do, we do it for you.</div>
     </div>
 </div>
+
+<!-- /# breadcrumb-->
+<?php if ($breadcrumb): ?>
+  <div id="breadcrumb"><?php print $breadcrumb; ?></div>
+<?php endif; ?>
+
 <ul id="secondary-tab" class="tabs secondary">
 	<?php print drupal_render($secondary)?>
 </ul>
