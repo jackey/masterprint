@@ -7,7 +7,7 @@ base theme = bartik
 
 stylesheets[all][] = css/masterprint.css
 
-scripts[] = scripts/jquery.autofill.min.js
+scripts[] = scripts/jquery.autofill.js
 scripts[] = scripts/modal/js/jquery.simplemodal.js
 scripts[] = scripts/masterprint.js
 

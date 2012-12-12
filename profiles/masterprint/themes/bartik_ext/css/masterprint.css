@@ -11,6 +11,9 @@ a:hover, a:focus {
 a:active {
 	color: #ccc;
 }
+input{
+	padding:6px;
+}
 #header {
 	background:none;
 }
@@ -262,4 +265,19 @@ fieldset legend {
 }
 .form-item .description {
     color:#7d7d7d;
+}
+input.form-submit, a.button{
+	background:#000;
+	color:#fff;
+	-khtml-border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	border:none;
+	letter-spacing:5px;
+	font-weight:bold;
+}
+input.form-submit:hover,
+input.form-submit:focus {
+  background: #333;
 }
