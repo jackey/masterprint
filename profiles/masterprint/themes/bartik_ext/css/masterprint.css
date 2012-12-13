@@ -175,6 +175,9 @@ input{
 	float:right;
 	color:#f6608a;
 }
+.tabs ul.primary li{
+	margin-right:1px;
+}
 .tabs ul.primary li a {
 	border:none;
 	background:none;
