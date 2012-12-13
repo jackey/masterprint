@@ -3,9 +3,13 @@
 function bartik_ext_process_breadcrumb(&$variables) {
   $bread_crumb = drupal_get_breadcrumb();
   if (!drupal_is_front_page() && arg(0) != 'user') {
-    $bread_crumb[] = drupal_get_title();
+    $bread_crumb[] = '<span class="active-breadcrumb">'.drupal_get_title(). '</span>';
   }
-  drupal_set_breadcrumb($bread_crumb);
+  else {
+    $last_bread_crumb = array_pop($bread_crumb);
+    $last_bread_crumb = preg_replace("/<a/i", '<a class="active-breadcrumb"', $last_bread_crumb);
+    $bread_crumb[] = $last_bread_crumb;
+  }
   $variables['breadcrumb'] = $bread_crumb;
 }
 
