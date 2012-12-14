@@ -1,6 +1,8 @@
+@charset "utf-8";
 /* ---------- General Layout ---------- */
 body {
 	background:#fff url(../images/bg.png);
+	font-family:"宋体";
 }
 a {
 	color: #808080;
@@ -347,4 +349,47 @@ fieldset fieldset .container-inline-date .date-padding{
 }
 .breadcrumb .active-breadcrumb{
 	color:#7d7d7d;
+}
+.vertical-tabs ul.vertical-tabs-list li.selected,
+.vertical-tabs {
+	background:#f6f4f5;
+}
+.form-item .description strong{
+	color:#000;
+	font-weight:bold;
+}
+.form-managed-file .form-file, .form-managed-file .form-submit{
+	margin-right:12px;
+}
+.vertical-tabs ul.vertical-tabs-list{
+	width:160px;
+	margin: -1px 0 -1px -160px;
+}
+div.vertical-tabs{
+	margin: 1em 0 1em 160px;
+}
+.vertical-tabs ul.vertical-tabs-list .selected strong{
+	color:#0db0e7;
+}
+.vertical-tabs ul.vertical-tabs-list li{
+	background:#bfbfbf;
+	border-color:#808080;
+	border-left-color:#bfbfbf;
+}
+.vertical-tabs ul.vertical-tabs-list .last{
+	border-bottom-color:#bfbfbf;
+}
+.vertical-tabs ul.vertical-tabs-list li a{
+	color:#000;
+	padding:8px 18px 8px 20px;
+	font-size: 12px;
+}
+.vertical-tabs ul.vertical-tabs-list li a:hover{
+	outline:0;
+}
+div.vertical-tabs .vertical-tabs-panes fieldset.vertical-tabs-pane{
+	padding:0;
+}
+.form-type-textarea .description{
+	margin-top:14px;
 }
