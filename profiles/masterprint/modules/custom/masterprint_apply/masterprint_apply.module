@@ -680,7 +680,8 @@ function user_product_apply_list($user) {
       $product_thumbnail_render = t('暂无');
     }
     else {
-      $product_thumbnail_render = '<a class="showProductThumbnail" href="'.$thumbnail_url.'" rel="lightbox">缩略图</a>';
+      //$product_thumbnail_render = '<a class="showProductThumbnail" href="'.$thumbnail_url.'" rel="lightbox">缩略图</a>';
+      $product_thumbnail_render = '<img src="'.$thumbnail_url.'" />';
     }
     $status = t('待审核');
     if ($data['status'] == PRODUCT_PASSED){
