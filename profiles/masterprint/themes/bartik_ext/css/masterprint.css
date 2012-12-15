@@ -406,3 +406,7 @@ div.vertical-tabs .vertical-tabs-panes fieldset.vertical-tabs-pane{
 .form-type-textarea .description{
 	margin-top:14px;
 }
+.product_thumbnail {
+	width:100px;
+	height: 50px;
+}
