@@ -85,6 +85,9 @@ projects[grammar_parser_lib][version] = 1.0
 projects[views_export_xlsv][subdir] = contrib
 projects[views_export_xlsv][version] = 1.0
 
+projects[field_collection][subdir] = contrib
+projects[field_collection][version] = 1.0-beta4
+
 ; Themes
 ; ------------
 projects[rubik][type] = theme
