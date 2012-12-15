@@ -226,10 +226,23 @@ ul.secondary li {
 }
 tr td, tr th {
 	border-width:0;
+	padding: 8px 26px 9px;
+}
+table {
+	font-size:14px;
 }
 table tr th {
 	background: #bfbfbf;
 	color:#000;
+}
+tbody {
+    border-top: 4px solid #fff;
+}
+tr.even, tr.odd{
+	background:#f1eff0;
+}
+.views-field-nothing-1{
+	text-align:center;
 }
 span.form-required {
 	color:#000;
