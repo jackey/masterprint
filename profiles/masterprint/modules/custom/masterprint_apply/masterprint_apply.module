@@ -606,7 +606,11 @@ function masterprint_apply_token_info() {
     'description' => t('用户产品申请'),
     'needs-data' => 'apply',
   );
-  $apply['apply_id'] = array(
+  // $apply['apply_id'] = array(
+  //   'name' => t("Apply ID"),
+  //   'description' => t("申请的产品ID."),
+  // );
+  $apply['id'] = array(
     'name' => t("Apply ID"),
     'description' => t("申请的产品ID."),
   );
@@ -631,9 +635,18 @@ function masterprint_apply_tokens($type, $tokens, array $data = array(), array $
   if ($type == 'apply') {
     $apply = $data['apply'];
     foreach ($tokens as $name => $origin) {
-      $replacements[$origin] = $apply->{$name};
+      if ($name == 'refused_hash') {
+        global $user;
+        $profile = profile2_load_by_user($user);
+        $client_user = user_load($profile['salesman']['field_salesman_client_owner'][LANGUAGE_NONE][0]['target_id']);
+        $hash_data = array('uid' => $client_user->uid);
+        $hash = encrypt(json_encode($hash_data));
+        $replacements[$name] = $hash;
+      }
+      else {
+        $replacements[$origin] = $apply->{$name};
+      }
     }
-
     return $replacements;
   }
 }
@@ -914,7 +927,10 @@ function masterprint_apply_product_submit($form, &$form_state) {
     //   array());
 
     //然后发送邮件到客户，请求审核通过
-    pet_send_mail(submit_product_apply, array('mail' => $client_account->mail, 'uid' => $client_account->uid), array('nid' => $product_id));
+    pet_send_mail(submit_product_apply, 
+      array('mail' => $client_account->mail, 'uid' => $client_account->uid), 
+      array('nid' => $product_id, 'cc' => $data['id'])
+    );
   }
 }
 
