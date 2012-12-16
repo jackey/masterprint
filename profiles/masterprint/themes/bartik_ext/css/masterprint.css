@@ -237,6 +237,12 @@ table tr th {
 	background: #bfbfbf;
 	color:#000;
 }
+tr.even{
+	background:fff;
+}
+tr.even,tr.even a{
+	color:000;
+}
 tbody {
     border-top: 4px solid #fff;
 }
