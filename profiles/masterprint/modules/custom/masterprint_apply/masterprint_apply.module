@@ -641,7 +641,7 @@ function masterprint_apply_tokens($type, $tokens, array $data = array(), array $
         $client_user = user_load($profile['salesman']->field_salesman_client_owner[LANGUAGE_NONE][0]['target_id']);
         $hash_data = array('uid' => $client_user->uid);
         $hash = encrypt(json_encode($hash_data));
-        $replacements[$name] = $hash;
+        $replacements[$origin] = $hash;
       }
       else {
         $replacements[$origin] = $apply->{$name};
