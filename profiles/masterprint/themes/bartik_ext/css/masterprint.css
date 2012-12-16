@@ -237,7 +237,7 @@ table tr th {
 	background: #bfbfbf;
 	color:#000;
 }
-tr.even,tr.even a{
+table tr th a,tr.even,tr.even a{
 	color:#000;
 }
 tbody {
