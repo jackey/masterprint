@@ -171,6 +171,7 @@ function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'masterprint_salesman_add_salesman_form') {
     $form['profile_salesman']['field_tel']['#access'] = FALSE;
     $form['profile_salesman']['field_salesman_contacter'][LANGUAGE_NONE][0]['value']['#access'] = FALSE;
+
   }
   if ($form_id == 'masterprint_user_edit_own_profile2') {
     $form['profile_salesman']['field_tel']['#access'] = FALSE;

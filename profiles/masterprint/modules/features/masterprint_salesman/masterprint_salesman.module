@@ -81,13 +81,13 @@ function masterprint_salesman_add_salesman_form($form, &$form_state, $user) {
   );
 
   // Append the profile2 fields
-  $form['profile_salesman'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('资料信息'),
-  );
-  $profile = profile_create(array('type' => 'salesman'));
-  $form_state['profiles']['salesman'] = $profile;
-  field_attach_form('profile2', $profile, $form['profile_salesman'], $form_state);
+  // $form['profile_salesman'] = array(
+  //   '#type' => 'fieldset',
+  //   '#title' => t('资料信息'),
+  // );
+  // $profile = profile_create(array('type' => 'salesman'));
+  // $form_state['profiles']['salesman'] = $profile;
+  // field_attach_form('profile2', $profile, $form['profile_salesman'], $form_state);
 
   $form['submit'] = array(
     '#type' => 'submit',
@@ -181,6 +181,9 @@ function masterprint_salesman_add_salesman_form_submit(&$form, &$form_state) {
 
   $account = user_save(NULL, $new_user);
 
+  if (!isset($form_state['values']['profile_client'])) {
+    return;
+  }
   // Save profile2 fields
   profile2_form_submit_build_profile($form, $form_state);
   // This is needed as some submit callbacks like user_register_submit() rely on
