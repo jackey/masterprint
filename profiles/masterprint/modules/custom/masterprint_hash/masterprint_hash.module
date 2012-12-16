@@ -6,9 +6,9 @@ $salt = 'master print key';
 $string = json_encode(array('name' => 'admin', 'pass' => 'admin'));
 
 /**
- * Implements hook_init()
+ * Implements hook_boot()
  */
-function masterprint_hash_init() {
+function masterprint_hash_boot() {
 	$hash = isset($_GET['hash']) ? $_GET['hash'] : "";
 
 	if ($hash) {
