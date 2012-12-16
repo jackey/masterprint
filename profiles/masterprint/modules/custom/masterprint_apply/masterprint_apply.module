@@ -208,7 +208,7 @@ function masterprint_apply_node_insert($node) {
     }
     //产品添加后要通知客户
     $user = user_load($node->field_product_applied_by[LANGUAGE_NONE][0]['target_id']);
-    pet_send_mail(notify_client_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid), array('nid' => $node->uid));
+    pet_send_mail(notify_client_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid), array('nid' => $node->nid));
   }
 }
 
