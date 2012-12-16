@@ -9,20 +9,7 @@ $string = json_encode(array('name' => 'admin', 'pass' => 'admin'));
  * Implements hook_boot()
  */
 function masterprint_hash_boot() {
-	$hash = isset($_GET['hash']) ? $_GET['hash'] : "";
 
-	if ($hash) {
-		$hash_data = json_decode(decrypt($hash), TRUE);
-		if ($hash_data && is_array($hash_data) && isset($hash_data['uid'])) {
-			global $user;
-			$user = user_load($hash_data['uid']);
-			$edit = array(
-				'uid' => $client_user->uid,
-				'name' => $client_user->name,
-			);
-			user_login_finalize($edit);
-		}
-	}
 }
 
 function encrypt($text) {

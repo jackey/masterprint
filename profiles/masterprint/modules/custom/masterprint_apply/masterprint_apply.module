@@ -52,6 +52,7 @@ function masterprint_apply_menu() {
     'title' => '产品申请通过',
     'type' => MENU_CALLBACK,
     'access arguments' => array('approve apply'),
+    'access callback' => 'masterprint_user_access',
     'page callback' => 'client_approve_apply',
     'page arguments' => array(1, 2)
   );
@@ -85,6 +86,26 @@ function masterprint_apply_menu() {
     'page arguments' => array(1),
   );
   return $items;
+}
+
+// user access
+function masterprint_user_access() {
+  $hash = isset($_GET['hash']) ? $_GET['hash'] : "";
+  if ($hash) {
+    drupal_load('module', 'user');
+    $hash_data = json_decode(decrypt($hash), TRUE);
+    if ($hash_data && is_array($hash_data) && isset($hash_data['uid'])) {
+      global $user;
+      $user = user_load($hash_data['uid']);
+      $edit = array(
+        'uid' => $client_user->uid,
+        'name' => $client_user->name,
+      );
+      user_login_finalize($edit);
+    }
+  }
+
+  return call_user_func_array('user_access', func_get_args());
 }
 
 //输出打印页面内容
