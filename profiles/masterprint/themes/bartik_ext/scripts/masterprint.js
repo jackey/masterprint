@@ -9,7 +9,6 @@
 	    $('.showProductThumbnail').click(function () {
 	    	var src = $(this).attr('href');
 	    	var img = $("<img />").attr('src', src);
-	    	console.log(img);
 	    	try {
 	    		var maxBody = $('body').height();
 	    		$.modal(img, {
@@ -20,7 +19,7 @@
 	    		});
 	    	}
 	    	catch (e) {
-
+	    		//
 	    	}
 	    	return false;
 	    });
