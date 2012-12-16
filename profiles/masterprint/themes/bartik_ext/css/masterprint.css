@@ -417,3 +417,6 @@ div.vertical-tabs .vertical-tabs-panes fieldset.vertical-tabs-pane{
 .product_thumbnail {
 	height: 50px;
 }
+html.js input.form-autocomplete {
+    background-position: 100% 8px;
+}
