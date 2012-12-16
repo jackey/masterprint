@@ -14,6 +14,15 @@ function bartik_ext_process_breadcrumb(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_html().
+ * Add global js and css file
+ */
+function bartik_ext_preprocess_html(&$variables) {
+  // Add conditional CSS for IE.
+  drupal_add_css(path_to_theme() . '/scripts/modal/css/basic_ie.css', array('group' => CSS_THEME, 'browsers' => array('IE' => 'lt IE 7', '!IE' => FALSE), 'preprocess' => FALSE));
+}
+
+/**
  * Implements hook_preprocess_page().
  */
 function bartik_ext_preprocess_page(&$vars) {
