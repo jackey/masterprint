@@ -20,7 +20,6 @@ function bartik_ext_process_breadcrumb(&$variables) {
 function bartik_ext_preprocess_html(&$variables) {
   // Add conditional CSS for IE.
   drupal_add_css(path_to_theme() . '/scripts/modal/css/basic_ie.css', array('group' => CSS_THEME, 'browsers' => array('IE' => 'lt IE 7', '!IE' => FALSE), 'preprocess' => FALSE));
-  }
 }
 
 /**
