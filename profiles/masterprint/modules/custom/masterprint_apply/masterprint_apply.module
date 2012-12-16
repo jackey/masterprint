@@ -168,6 +168,14 @@ function refused_product_apply_form_submit($form, $form_state) {
  * Implements hook_form_alter()
  */
 function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'masterprint_salesman_add_salesman_form') {
+    $form['profile_salesman']['field_tel']['#access'] = FALSE;
+    $form['profile_salesman']['field_salesman_contacter'][LANGUAGE_NONE][0]['value']['#access'] = FALSE;
+  }
+  if ($form_id == 'masterprint_user_edit_own_profile2') {
+    $form['profile_salesman']['field_tel']['#access'] = FALSE;
+    $form['profile_salesman']['field_salesman_contacter'][LANGUAGE_NONE][0]['value']['#access'] = FALSE;
+  }
   // $form['send_warehouse_manager'] = array(
   // 	'#title' => '发送给仓库管理员',
   // 	'#type' => 'checkbox',
