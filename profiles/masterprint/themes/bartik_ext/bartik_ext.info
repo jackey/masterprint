@@ -5,7 +5,7 @@ version = "7.x-1.0"
 core = 7.x
 base theme = bartik
 
-stylesheets[all][] = css/modal/css/basic.css
+stylesheets[all][] = scripts/modal/css/basic.css
 stylesheets[all][] = css/masterprint.css
 
 scripts[] = scripts/jquery.autofill.js
