@@ -23,6 +23,8 @@ input{
 	padding-top:0;
 }
 #site-name a {
+	display:block;
+	overflow:hidden;
 	color:#333;
 }
 #page, #main-wrapper {
@@ -226,7 +228,7 @@ ul.secondary li {
 }
 tr td, tr th {
 	border-width:0;
-	padding: 8px 26px 9px;
+	padding: 8px 10px 9px;
 }
 table {
 	font-size:14px;
