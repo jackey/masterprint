@@ -614,6 +614,10 @@ function masterprint_apply_token_info() {
     'name' => t(' Refused Reason'),
     'description' => t('审核拒绝原因'),
   );
+  $apply['refused_hash'] = array(
+    'name' => t('Refused Hash Data'),
+    'description' => t('Hash Data'),
+  );
 
   $tokens = array(
     'types' => array('apply' => $type),

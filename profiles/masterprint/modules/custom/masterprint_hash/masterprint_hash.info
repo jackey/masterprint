@@ -1,0 +1,4 @@
+name = Masterprint Hash
+package = masterprint
+description = A module provide hash extension.
+core = 7.x

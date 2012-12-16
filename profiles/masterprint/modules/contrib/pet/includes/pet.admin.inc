@@ -408,7 +408,7 @@ function pet_token_help() {
     );
     $tokens['token_tree'] = array(
       '#theme' => 'token_tree',
-      '#token_types' => array('node', 'user'),
+      '#token_types' => array('node', 'user', 'apply'),
     );
   }
   else {
