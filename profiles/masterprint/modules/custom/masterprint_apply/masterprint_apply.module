@@ -208,7 +208,7 @@ function masterprint_apply_node_insert($node) {
     }
     //产品添加后要通知客户
     $user = user_load($node->field_product_applied_by[LANGUAGE_NONE][0]['target_id']);
-    pet_send_mail(notify_client_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid), array('nid' => $node->uid));
+    pet_send_mail(notify_client_when_product_insert, array('mail' => $user->mail, 'uid' => $user->uid), array('nid' => $node->nid));
   }
 }
 
@@ -638,7 +638,7 @@ function masterprint_apply_tokens($type, $tokens, array $data = array(), array $
       if ($name == 'refused_hash') {
         global $user;
         $profile = profile2_load_by_user($user);
-        $client_user = user_load($profile['salesman']['field_salesman_client_owner'][LANGUAGE_NONE][0]['target_id']);
+        $client_user = user_load($profile['salesman']->field_salesman_client_owner[LANGUAGE_NONE][0]['target_id']);
         $hash_data = array('uid' => $client_user->uid);
         $hash = encrypt(json_encode($hash_data));
         $replacements[$name] = $hash;
