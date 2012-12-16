@@ -238,10 +238,10 @@ table tr th {
 	color:#000;
 }
 tr.even{
-	background:fff;
+	background:#fff;
 }
 tr.even,tr.even a{
-	color:000;
+	color:#000;
 }
 tbody {
     border-top: 4px solid #fff;
