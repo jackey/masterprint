@@ -712,7 +712,7 @@ function user_product_apply_list($user) {
       $op = '<span>'.t('已通过').'</span>';
     }
     else if ($data['status'] == PRODUCT_REFUSED) {
-      $op = '<span>'.t('已拒绝').'</span>';
+      $op = '<span >'.t('已拒绝').'</span>';
     }
     else if ($data['status'] == PRODUCT_SENT) {
       $op = '<span>'.t('已发出').'</span>';
@@ -730,15 +730,15 @@ function user_product_apply_list($user) {
       //$product_thumbnail_render = '<a class="showProductThumbnail" href="'.$thumbnail_url.'" rel="lightbox">缩略图</a>';
       $product_thumbnail_render = '<img class="product_thumbnail showProductThumbnail" href="'.$thumbnail_url.'" rel="lightbox" src="'.$thumbnail_url.'" />';
     }
-    $status = t('待审核');
+    $status = '<span class="span-simple">'.t('待审核'). '</span>';
     if ($data['status'] == PRODUCT_PASSED){
-      $status = '<span>'.t('已通过').'</span>';
+      $status = '<span  class="span-passed">'.t('已通过').'</span>';
     }
     else if ($data['status'] == PRODUCT_REFUSED) {
-      $status = '<span>'.t('已拒绝').'</span>';
+      $status = '<span  class="span-refused">'.t('已拒绝').'</span>';
     }
     else if ($data['status'] == PRODUCT_SENT) {
-      $status = '<span>'.t('已发出').'</span>';
+      $status = '<span class="span-sent">'.t('已发出').'</span>';
     }
     $apply_user = user_load($data['uid']);
     $table_row = array(

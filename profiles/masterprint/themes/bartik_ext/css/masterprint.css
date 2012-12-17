@@ -420,3 +420,26 @@ div.vertical-tabs .vertical-tabs-panes fieldset.vertical-tabs-pane{
 html.js input.form-autocomplete {
     background-position: 100% 8px;
 }
+
+.sticky-table a {
+	color:#3B3B3B;
+}
+
+tr.refused-class .span-refused {
+	color:#013282;
+	font-weight: bold;
+}
+
+tr.sent-class .span-sent{
+	color:#646464;
+	font-weight: bold;
+}
+
+tr.passed-class .span-passed{
+	color:#a00032;
+	font-weight: bold;
+}
+
+tr.simple-class .span-simple{
+	color:#0064a0;
+}
