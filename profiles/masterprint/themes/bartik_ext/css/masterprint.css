@@ -425,6 +425,10 @@ html.js input.form-autocomplete {
 	color:#3B3B3B;
 }
 
+.views-table a {
+	color:#3B3B3B;
+}
+
 tr.refused-class .span-refused {
 	color:#013282;
 	font-weight: bold;
