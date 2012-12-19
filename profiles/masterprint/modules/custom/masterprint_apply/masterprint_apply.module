@@ -643,6 +643,14 @@ function masterprint_apply_token_info() {
     'name' => t('Refused Hash Data'),
     'description' => t('Hash Data'),
   );
+  $apply['delivery_company'] = array(
+    'name' => t('Delivery Company'),
+    'description' => t('Delivery Company'),
+  );
+  $apply['delivery_serial_no'] = array(
+    'name' => t('Delivery Serial No'),
+    'description' => t('Delivery Serial No'),
+  );
 
   $tokens = array(
     'types' => array('apply' => $type),
