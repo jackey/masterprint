@@ -3,6 +3,33 @@
 (function ($) {
 	Drupal.behaviors.settingMasterprint = {
 	  attach: function (context, settings) {
+		$('input.add-new-contact').click(function () {
+			var name = $.trim($('#edit-contact-name').val());
+			var phone = $.trim($('#edit-phone').val());
+			var address = $.trim($('#edit-address').val());
+			var last = $("table.field-multiple-table tbody tr").last();
+
+			if (!name) {
+				alert("请输入联系人名称");
+				$('#edit-contact-name').focus();
+				return false;
+			}
+			if (!phone) {
+				alert("请输入联系人电话");
+				$('#edit-phone').focus();
+				return false;
+			}
+			if (!address) {
+				alert("联系人地址");
+				$('#edit-address').focus();
+				return false;
+			}
+			var new_contact = name + " " + phone + " " + address;
+			$('.form-textarea', last).val(new_contact);
+			$('input[name="field_salesman_addresses_add_more"]').trigger('mousedown');
+			return false;
+		});
+
 	    //隐藏修改用户的edit profile secodory tab
 	    $('body.page-user-edit .secondary').hide();
 
@@ -181,6 +208,8 @@
 			defaultTextColor: '#000',
 			activeTextColor: '#333'
 		});
+
+
 	  }
 	};
 })(jQuery);

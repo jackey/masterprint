@@ -41,7 +41,32 @@ function masterprint_global_preprocess_page(&$vars) {
  * Implements hook_form_alter()
  */
 function masterprint_global_form_alter(&$form, &$form_state, $form_id) {
-
+  if ($form_id == 'masterprint_salesman_add_salesman_form') {
+    $form['profile_salesman']['address_group_fields'] = array(
+      '#type' => 'fieldset',
+      '#attributes' => array('class' => array('add-new-contact-field')),
+      'contact_name' => array(
+        '#title' => t("联系人名称"),
+        '#type' => 'textfield',
+        '#size' => 20
+      ),
+      'phone' => array(
+        '#title' => t("联系人电话"),
+        '#type' => 'textfield',
+        '#size' => 20,
+      ),
+      'address' => array(
+        '#title' => t("联系人地址"),
+        '#type' => 'textfield',
+        '#size' => 20
+      ),
+      'add_new_contact' => array(
+        '#value' => t("添加联系方式"),
+        '#type' => 'button',
+        '#attributes' => array('class' => array('add-new-contact')),
+      ),
+    );
+  }
 }
 
 /**
