@@ -697,16 +697,16 @@ function masterprint_apply_tokens($type, $tokens, array $data = array(), array $
         $client= get_client_account_from_user($apply_user);
         $client_profile = profile2_load_by_user($client);
         $apply_user_profile = profile2_load_by_user($apply_user);
-        $replacements[$origin] = $client_profile['client']->field_client_name[LANGUAGE_NONE][0]['value'];
+        $replacements[$origin] = @$client_profile['client']->field_client_name[LANGUAGE_NONE][0]['value'];
       }
       else if ($name == 'apply_customer') {
         $apply_user = user_load($apply->uid);
         $apply_user_profile = profile2_load_by_user($apply_user);
         if (isset($apply_user_profile['salesman'])) {
-          $replacements[$origin] = $apply_user_profile['client']->field_salesman_name[LANGUAGE_NONE][0]['value'];
+          $replacements[$origin] = @$apply_user_profile['client']->field_salesman_name[LANGUAGE_NONE][0]['value'];
         }
         else if (isset($apply_user_profile['dealer'])) {
-          $replacements[$origin] = $apply_user_profile['client']->field_dealer_name[LANGUAGE_NONE][0]['value'];
+          $replacements[$origin] = @$apply_user_profile['client']->field_dealer_name[LANGUAGE_NONE][0]['value'];
         }
       }
       else {
