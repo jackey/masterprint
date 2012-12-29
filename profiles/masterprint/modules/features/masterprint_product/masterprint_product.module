@@ -114,7 +114,7 @@ function masterprint_product_product_node_form_validate($form, &$form_state) {
  * Implements hook_query_alter();
  */
 function masterprint_product_views_query_alter(&$view, &$query) {
-  if ($view->name = 'product_listing' && $view->current_display == 'main_list') {
+  if ($view->name == 'product_listing' && $view->current_display == 'main_list') {
     foreach ($query->where as $key => $conditions) {
       if (strpos($conditions['conditions'][0]['field'], 'field_data_field_product_applied_by') !== FALSE) {
         $client_id = $conditions['conditions'][0]['value'][':field_data_field_product_applied_by_field_product_applied_by_target_id'];
@@ -127,6 +127,12 @@ function masterprint_product_views_query_alter(&$view, &$query) {
           unset($query->where[$key]);
         }
       }
+    }
+  }
+  if ($view->name == 'client_listing' && $view->current_display == 'created_by_user') {
+    global $user;
+    if (user_is_admin($user) || $user->uid == 1) {
+      unset($query->where[0]);
     }
   }
 }

@@ -198,14 +198,19 @@ function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
     $form['profile_salesman']['field_tel']['#access'] = FALSE;
     $form['profile_salesman']['field_salesman_contacter'][LANGUAGE_NONE][0]['value']['#access'] = FALSE;
   }
-  // $form['send_warehouse_manager'] = array(
-  // 	'#title' => '发送给仓库管理员',
-  // 	'#type' => 'checkbox',
-  // 	'#option' => array(1 => '发送'),
-  // 	'#required' => TRUE,
-  // 	'#default_value' => '1',
-  // 	'#weight' => 10
-  // );
+  if ($form_id == 'masterprint_client_add_client_form') {
+    global $user;
+    if (user_is_ae($user)) {
+      $form['profile_client']['field_owned_by_ae']['#attributes']['class'][] = 'element-invisible';
+      $form['profile_client']['field_owned_by_ae'][LANGUAGE_NONE]['#default_value'] = $user->uid;
+    }
+  }
+  if ($form_id == 'masterprint_user_edit_own_profile2') {
+    global $user;
+    if (user_is_ae($user)) {
+      $form['profile_client']['field_owned_by_ae']['#attributes']['class'][] = 'element-invisible';
+    }
+  }
 
   if ($form_id == 'product_node_form') {
     global $user;
