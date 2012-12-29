@@ -651,7 +651,16 @@ function masterprint_apply_token_info() {
     'name' => t('Delivery Serial No'),
     'description' => t('Delivery Serial No'),
   );
-
+  $apply['apply_product_pdf'] = array(
+    'name' => t('Apply product pdf'),
+  );
+  $apply['apply_client'] = array(
+    'name' => t('Client name that apply that product'),
+  );
+  $apply['apply_customer'] = array(
+    'name' => t('Customer that apply that product'),
+  );
+ 
   $tokens = array(
     'types' => array('apply' => $type),
     'tokens' => array('apply' => $apply),
@@ -671,6 +680,28 @@ function masterprint_apply_tokens($type, $tokens, array $data = array(), array $
         $hash_data = array('uid' => $client_user->uid);
         $hash = encrypt(json_encode($hash_data));
         $replacements[$origin] = $hash;
+      }
+      else if ($name == 'apply_product_pdf') {
+        $node = node_load($apply->product_id);
+        $pdf_url = file_create_url($node->field_product_detail_pdf[LANGUAGE_NONE][0]['uri']);
+        $replacements[$origin] = $pdf_url;
+      }
+      else if ($name == 'apply_client') {
+        $apply_user = user_load($apply->uid);
+        $client= get_client_account_from_user($apply_user);
+        $client_profile = profile2_load_by_user($client);
+        $apply_user_profile = profile2_load_by_user($apply_user);
+        $replacements[$origin] = $client_profile['client']->field_client_name[LANGUAGE_NONE][0]['value'];
+      }
+      else if ($name == 'apply_customer') {
+        $apply_user = user_load($apply->uid);
+        $apply_user_profile = profile2_load_by_user($apply_user);
+        if (isset($apply_user_profile['salesman'])) {
+          $replacements[$origin] = $apply_user_profile['client']->field_salesman_name[LANGUAGE_NONE][0]['value'];
+        }
+        else if (isset($apply_user_profile['dealer'])) {
+          $replacements[$origin] = $apply_user_profile['client']->field_dealer_name[LANGUAGE_NONE][0]['value'];
+        }
       }
       else {
         $replacements[$origin] = $apply->{$name};
