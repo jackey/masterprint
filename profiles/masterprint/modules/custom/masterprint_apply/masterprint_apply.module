@@ -192,7 +192,6 @@ function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'masterprint_salesman_add_salesman_form') {
     $form['profile_salesman']['field_tel']['#access'] = FALSE;
     $form['profile_salesman']['field_salesman_contacter'][LANGUAGE_NONE][0]['value']['#access'] = FALSE;
-
   }
   if ($form_id == 'masterprint_user_edit_own_profile2') {
     $form['profile_salesman']['field_tel']['#access'] = FALSE;
@@ -203,6 +202,8 @@ function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
     if (user_is_ae($user)) {
       $form['profile_client']['field_owned_by_ae']['#attributes']['class'][] = 'element-invisible';
       $form['profile_client']['field_owned_by_ae'][LANGUAGE_NONE]['#default_value'] = $user->uid;
+      $form['profile_client']['field_owned_ae']['#attributes']['class'][] = 'element-invisible';
+      $form['profile_client']['field_owned_ae'][LANGUAGE_NONE]['#default_value'] = $user->uid;
     }
   }
   if ($form_id == 'masterprint_user_edit_own_profile2') {
