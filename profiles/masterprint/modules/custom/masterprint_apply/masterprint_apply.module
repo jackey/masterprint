@@ -208,7 +208,7 @@ function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
   }
   if ($form_id == 'masterprint_user_edit_own_profile2') {
     global $user;
-    if (user_is_ae($user)) {
+    if (user_is_ae($user) || user_is_client($user)) {
       $form['profile_client']['field_owned_by_ae']['#attributes']['class'][] = 'element-invisible';
     }
   }

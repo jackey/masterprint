@@ -138,7 +138,8 @@ function user_pass_reset($form, &$form_state, $uid, $timestamp, $hashed_pass, $a
           // Let the user's password be changed without the current password check.
           $token = drupal_hash_base64(drupal_random_bytes(55));
           $_SESSION['pass_reset_' . $user->uid] = $token;
-          drupal_goto('user/' . $user->uid . '/edit', array('query' => array('pass-reset-token' => $token)));
+          drupal_goto('', array('query' => array('pass-reset-token' => $token)));
+          //drupal_goto('user/' . $user->uid . '/edit', array('query' => array('pass-reset-token' => $token)));
         }
         else {
           $form['message'] = array('#markup' => t('<p>This is a one-time login for %user_name and will expire on %expiration_date.</p><p>Click on this button to log in to the site and change your password.</p>', array('%user_name' => $account->name, '%expiration_date' => format_date($timestamp + $timeout))));
