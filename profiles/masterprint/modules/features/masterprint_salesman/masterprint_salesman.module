@@ -84,6 +84,8 @@ function masterprint_salesman_add_salesman_form($form, &$form_state, $user) {
   $form['profile_salesman'] = array(
     '#type' => 'fieldset',
     '#title' => t('资料信息'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
   $profile = profile_create(array('type' => 'salesman'));
   $form_state['profiles']['salesman'] = $profile;

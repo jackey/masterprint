@@ -573,6 +573,10 @@ function client_approve_apply($id, $action = 'pass') {
   if ($action == 'pass') {
     //审核状态通过
     db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
+    //如果货已经通过或者发出 则直接返回，不做处理
+    if ($apply_product->status >= PRODUCT_PASSED) {
+      return;
+    }
     $apply_product = db_select('product_apply', 'ap')
       ->fields('ap')
       ->condition('id', $id, '=')
@@ -596,13 +600,11 @@ function client_approve_apply($id, $action = 'pass') {
       pet_send_mail(notify_warning_when_product_less, array('mail' => $client_account->mail, 'uid' => $client_account->uid),
         array('nid' => $apply_product['product_id']));
 
-      //发邮件给AE
-      $ae_accounts = list_ae_account();
-      foreach ($ae_accounts as $ae) {
-        pet_send_mail(notify_warning_when_product_less, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
-          'nid' => $apply_product['product_id']
-        ));
-      }
+      //发邮件给客户所属的AE
+      $ae_accounts = get_ae_from_client($client_account);
+      pet_send_mail(notify_warning_when_product_less, array('mail' => $ae_accounts->mail, 'uid' => $ae_accounts->uid), array(
+        'nid' => $apply_product['product_id']
+      ));
     }
     
     drupal_goto($_SERVER['HTTP_REFERER']);
@@ -614,6 +616,29 @@ function client_approve_apply($id, $action = 'pass') {
     drupal_goto($_SERVER['HTTP_REFERER']);
     return '';
   }
+}
+
+//返回客户/销售商所属下的AE
+//先找出所属客户，在根据客户找出所属AE
+//然后返回
+function get_ae_from_client($accout) {
+  if (user_is_client($accout)) {
+    $client_profile = profile2_load_by_user($accout);
+    if (!empty($client_profile['client']->field_owned_by_ae)) {
+      $ae_uid_from_client = $client_profile['client']->field_owned_by_ae[LANGUAGE_NONE][0]['target_id'];
+      return user_load($ae_uid_from_client);
+    }
+  }
+  else {
+    return array();
+  }
+}
+
+/**
+ * Implements hook_init()
+ */
+function masterprint_apply_init() {
+  // Put test code here.
 }
 
 function load_apply_pruduct($id) {
@@ -1113,4 +1138,21 @@ function list_ae_account() {
     $uids[] = $row['uid'];
   }
   return $ae = user_load_multiple($uids);
+}
+
+
+/**
+ * Get client uid from logined account.
+ */
+function get_client_uid_from_logged_account() {
+  global $user;
+  if (!$user->uid || user_is_admin($user)) {
+    return 0;
+  }
+  if (user_is_client($user)) {
+    return $user->uid;
+  }
+  else if (user_is_saler($user) || user_is_dealer($user)) {
+    return get_client_account_from_user($user)->uid;
+  }
 }
