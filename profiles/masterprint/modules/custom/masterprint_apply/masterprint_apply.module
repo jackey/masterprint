@@ -728,10 +728,10 @@ function masterprint_apply_tokens($type, $tokens, array $data = array(), array $
         $apply_user = user_load($apply->uid);
         $apply_user_profile = profile2_load_by_user($apply_user);
         if (isset($apply_user_profile['salesman'])) {
-          $replacements[$origin] = @$apply_user_profile['client']->field_salesman_name[LANGUAGE_NONE][0]['value'];
+          $replacements[$origin] = @$apply_user_profile['salesman']->field_salesman_name[LANGUAGE_NONE][0]['value'];
         }
         else if (isset($apply_user_profile['dealer'])) {
-          $replacements[$origin] = @$apply_user_profile['client']->field_dealer_name[LANGUAGE_NONE][0]['value'];
+          $replacements[$origin] = @$apply_user_profile['dealer']->field_dealer_name[LANGUAGE_NONE][0]['value'];
         }
       }
       else {
