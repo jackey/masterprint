@@ -745,15 +745,35 @@ function masterprint_apply_tokens($type, $tokens, array $data = array(), array $
 function user_product_apply_list($user) {
   $user = user_load(arg(1));
   $search_uids = array();
+  //如果当前客户是经销商/销售员，则显示当前用户申请记录.
   if (user_is_saler($user) || user_is_dealer($user)) {
     $search_uids[] = $user->uid;
   }
-  else {
+  //否则
+  //如果当前用户是客户，则显示当前属于该客户下的所有经销商/销售员的申请记录
+  else if (user_is_client($user)) {
+    //当前客户所属的经销商
     $query = db_query("select * from field_revision_field_dealer_client_owner left join profile on entity_id=pid where field_dealer_client_owner_target_id=:uid", array(':uid' => $user->uid));
     while ($row = $query->fetchAssoc()) {
       $search_uids[] = $row['uid'];
     }
+    //当前客户所属的销售员
     $query = db_query("select * from field_revision_field_salesman_client_owner left join profile on entity_id=pid where field_salesman_client_owner_target_id=:uid", array(':uid' => $user->uid));
+    while ($row = $query->fetchAssoc()) {
+      $search_uids[] = $row['uid'];
+    }
+  }
+  //如果当前用户是AE，则显示当前属于该AE的客户下的所有经销商/销售员的申请记录
+  else if (user_is_ae($user)) {
+    $client_uids = get_clients_of_ae($user);
+    //和上面查询条件相似，但查询一组销售员/经销商
+    //当前客户所属的经销商
+    $query = db_query("select * from field_revision_field_dealer_client_owner left join profile on entity_id=pid where field_dealer_client_owner_target_id in (:uids)", array(':uids' => $client_uids));
+    while ($row = $query->fetchAssoc()) {
+      $search_uids[] = $row['uid'];
+    }
+    //当前客户所属的销售员
+    $query = db_query("select * from field_revision_field_salesman_client_owner left join profile on entity_id=pid where field_salesman_client_owner_target_id in (:uids)", array(':uids' => $client_uids));
     while ($row = $query->fetchAssoc()) {
       $search_uids[] = $row['uid'];
     }
@@ -857,7 +877,7 @@ function masterprint_apply_product() {
   $query->entityCondition('entity_type', 'node')->propertyCondition('type', 'product');
   if (!user_access('list all products', $user)) {
     $uid = 0;
-    //如果是客户销售人员或者经销商 则载入所属客户下的产品
+    //如果是销售人员或者经销商 则载入所属客户下的产品
     if (isset($user->roles[SALER_ROLE_ID]) || isset($user->roles[DEALER_ROLE_ID])) {
       if (isset($user->roles[SALER_ROLE_ID])) {
         if ($profile_user->field_salesman_client_owner[LANGUAGE_NONE][0]['target_id']) {
@@ -1155,4 +1175,20 @@ function get_client_uid_from_logged_account() {
   else if (user_is_saler($user) || user_is_dealer($user)) {
     return get_client_account_from_user($user)->uid;
   }
+}
+
+/**
+ * Get clients that owned by ae.
+ */
+function get_clients_of_ae($ae) {
+  if (!user_is_ae($ae)) {
+    return FALSE;
+  }
+  $rows = db_query("SELECT * FROM {profile} p left join {field_data_field_owned_by_ae} ae
+    ON p.pid = ae.entity_id WHERE field_owned_by_ae_target_id=:uid", array(':uid' => $ae->uid))->fetchAll();
+  $clients = array();
+  foreach ($rows as $row) {
+    $clients[] = $row->uid;
+  }
+  return ($clients);
 }
