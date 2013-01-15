@@ -220,6 +220,16 @@ function masterprint_apply_form_alter(&$form, &$form_state, $form_id) {
       $form['field_product_applied_by']['#access'] = FALSE;
       $form['field_product_applied_by'][LANGUAGE_NONE]['#default_value'] = $user->uid;
     }
+    if (user_is_ae($user)) {
+      $clients_from_ae = get_clients_of_ae($user);
+      $options = array();
+      foreach ($form['field_product_applied_by'][LANGUAGE_NONE]['#options'] as $key => $option){
+        if (in_array($key, $clients_from_ae) || $key == '_none') {
+          $options[$key] = $option;
+        }
+      }
+      $form['field_product_applied_by'][LANGUAGE_NONE]['#options'] = $options;
+    }
   }
 }
 

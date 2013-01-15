@@ -114,17 +114,28 @@ function masterprint_product_product_node_form_validate($form, &$form_state) {
  * Implements hook_query_alter();
  */
 function masterprint_product_views_query_alter(&$view, &$query) {
+  global $user;
   if ($view->name == 'product_listing' && $view->current_display == 'main_list') {
-    foreach ($query->where as $key => $conditions) {
-      if (strpos($conditions['conditions'][0]['field'], 'field_data_field_product_applied_by') !== FALSE) {
-        $client_id = $conditions['conditions'][0]['value'][':field_data_field_product_applied_by_field_product_applied_by_target_id'];
-        global $user;
-        if (user_is_saler($user) || user_is_dealer($user)) {
-          $saler_client = get_client_account_from_user($user);
-          $query->where[$key]['conditions'][0]['value'][':field_data_field_product_applied_by_field_product_applied_by_target_id'] = $saler_client->uid;
+    foreach ($query->where[1]['conditions'] as $key => $conditions) {
+      if (strpos($conditions['field'], 'field_data_field_product_applied_by') !== FALSE) {
+        if (user_is_client($user)) {
+          $query->where[1]['conditions'][$key]['value'] = $user->uid;
         }
-        else if (!user_is_client($user)) {
-          unset($query->where[$key]);
+        else if(user_is_ae($user)) {
+          $client_uids = get_clients_of_ae($user);
+          $query->where[1]['conditions'][$key]['value'] = $client_uids;
+          $query->where[1]['conditions'][$key]['operator'] = 'in';
+        }
+        else {
+          unset($query->where[1]['conditions'][$key]);
+        }
+      }
+      if (strpos($conditions['field'], 'field_owned_by_ae_users__field_data_field_owned_by_ae') !== FALSE) {
+        if (user_is_ae($user)) {
+          $query->where[1]['conditions'][$key]['value'] = $user->uid;
+        }
+        else {
+          unset($query->where[1]['conditions'][$key]);
         }
       }
     }
