@@ -126,6 +126,10 @@ function masterprint_product_views_query_alter(&$view, &$query) {
           $query->where[1]['conditions'][$key]['value'] = $client_uids;
           $query->where[1]['conditions'][$key]['operator'] = 'in';
         }
+        else if (user_is_saler($user) || user_is_dealer($user)){
+          $client = get_client_account_from_user($user);
+          $query->where[1]['conditions'][$key]['value'] = $client->uid;
+        }
         else {
           unset($query->where[1]['conditions'][$key]);
         }
