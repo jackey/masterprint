@@ -116,6 +116,7 @@ function masterprint_product_product_node_form_validate($form, &$form_state) {
 function masterprint_product_views_query_alter(&$view, &$query) {
   global $user;
   if ($view->name == 'product_listing' && $view->current_display == 'main_list') {
+    unset($query->where[0]);
     foreach ($query->where[1]['conditions'] as $key => $conditions) {
       if (strpos($conditions['field'], 'field_data_field_product_applied_by') !== FALSE) {
         if (user_is_client($user)) {
