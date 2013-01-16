@@ -776,16 +776,18 @@ function user_product_apply_list($user) {
   //如果当前用户是AE，则显示当前属于该AE的客户下的所有经销商/销售员的申请记录
   else if (user_is_ae($user)) {
     $client_uids = get_clients_of_ae($user);
-    //和上面查询条件相似，但查询一组销售员/经销商
-    //当前客户所属的经销商
-    $query = db_query("select * from field_revision_field_dealer_client_owner left join profile on entity_id=pid where field_dealer_client_owner_target_id in (:uids)", array(':uids' => $client_uids));
-    while ($row = $query->fetchAssoc()) {
-      $search_uids[] = $row['uid'];
-    }
-    //当前客户所属的销售员
-    $query = db_query("select * from field_revision_field_salesman_client_owner left join profile on entity_id=pid where field_salesman_client_owner_target_id in (:uids)", array(':uids' => $client_uids));
-    while ($row = $query->fetchAssoc()) {
-      $search_uids[] = $row['uid'];
+      if (!empty($client_uids)) {
+      //和上面查询条件相似，但查询一组销售员/经销商
+      //当前客户所属的经销商
+      $query = db_query("select * from field_revision_field_dealer_client_owner left join profile on entity_id=pid where field_dealer_client_owner_target_id in (:uids)", array(':uids' => $client_uids));
+      while ($row = $query->fetchAssoc()) {
+        $search_uids[] = $row['uid'];
+      }
+      //当前客户所属的销售员
+      $query = db_query("select * from field_revision_field_salesman_client_owner left join profile on entity_id=pid where field_salesman_client_owner_target_id in (:uids)", array(':uids' => $client_uids));
+      while ($row = $query->fetchAssoc()) {
+        $search_uids[] = $row['uid'];
+      }
     }
   }
 
