@@ -2,7 +2,7 @@
 
 class cryptastic {
 
-    public function encrypt( $msg, $k = 'master print key', $base64 = false ) {
+    public function encrypt( $msg, $k = 'master print key', $base64 = true ) {
         if ( ! $td = mcrypt_module_open('rijndael-256', '', 'ctr', '') )
             return false;
  
@@ -25,7 +25,7 @@ class cryptastic {
         return $msg;                                    # return iv+ciphertext+mac
     }
     
-    public function decrypt( $msg, $k = 'master print key', $base64 = false ) {
+    public function decrypt( $msg, $k = 'master print key', $base64 = true ) {
         if ( $base64 ) $msg = base64_decode($msg);          # base64 decode?
         if ( ! $td = mcrypt_module_open('rijndael-256', '', 'ctr', '') )
             return false;
