@@ -202,7 +202,7 @@
 			activeTextColor: '#333'
 		});
 		
-		var dateVal = $('#edit-field-entry-date-und-0-value-datepicker-popup-0').next('.description').text();
+		// var dateVal = $('#edit-field-entry-date-und-0-value-datepicker-popup-0').next('.description').text();
 		$('#edit-field-entry-date-und-0-value-datepicker-popup-0').autofill({
 			value: dateVal,
 			defaultTextColor: '#000',
