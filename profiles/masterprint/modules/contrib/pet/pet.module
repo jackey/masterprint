@@ -315,7 +315,12 @@ function pet_send_one_mail($pet, $params) {
   
   // Provided for Mime Mail module; send ONLY plain text
   $params['plain'] = $pet->send_plain;
+  $params['pet_cc'] = array();
   
+  if (!valid_email_address($params['pet_to'])) {
+    return;
+  }
+
   $message = drupal_mail('pet', $pet->name, $params['pet_to'], language_default(), $params, $params['pet_from']);
   if ($message['result']) {
     watchdog('pet', 'Successfully sent email to %recipient', array('%recipient' => $params['pet_to']));

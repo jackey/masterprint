@@ -79,10 +79,6 @@ function masterprint_hash_init() {
 	$data = json_encode($user);
 	$c = new cryptastic();
 	$cryped = my_encrypt($data);
-	// dpm($cryped);
-	// dpm('hello');
-
-	// dpm((my_decrypt($cryped)));
 }
 
 function encrypt($text) {
