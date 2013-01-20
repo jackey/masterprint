@@ -91,7 +91,6 @@ function masterprint_apply_menu() {
 // user access
 function masterprint_user_access() {
   $hash = isset($_GET['hash']) ? $_GET['hash'] : "";
-  $hash = str_replace(' ', '+', $hash);
   if ($hash) {
     drupal_load('module', 'user');
     $hash_data = json_decode(decrypt($hash), TRUE);
@@ -729,7 +728,7 @@ function masterprint_apply_tokens($type, $tokens, array $data = array(), array $
         $client_user = user_load($profile['salesman']->field_salesman_client_owner[LANGUAGE_NONE][0]['target_id']);
         $hash_data = array('uid' => $client_user->uid);
         $hash = encrypt(json_encode($hash_data));
-        $replacements[$origin] = $hash;
+        $replacements[$origin] = urlencode($hash);
       }
       else if ($name == 'apply_product_pdf') {
         $node = node_load($apply->product_id);
