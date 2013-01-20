@@ -587,15 +587,16 @@ function client_approve_apply($id, $action = 'pass') {
   if ($action == 'pass') {
     //审核状态通过
     db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
-    //如果货已经通过或者发出 则直接返回，不做处理
-    if ($apply_product->status >= PRODUCT_PASSED) {
-      return;
-    }
     $apply_product = db_select('product_apply', 'ap')
       ->fields('ap')
       ->condition('id', $id, '=')
       ->execute()
       ->fetchAssoc();
+      
+    //如果货已经通过或者发出 则直接返回，不做处理
+    if ($apply_product->status >= PRODUCT_PASSED) {
+      return;
+    }
     // 需要通知仓库管理员
     $warehousr_manager = list_warehouse_manager();
     foreach ($warehousr_manager as $uid => $user) {
