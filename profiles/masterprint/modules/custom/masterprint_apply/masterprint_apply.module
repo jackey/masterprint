@@ -584,7 +584,6 @@ function masterprint_apply_process_productapply(&$vars) {
 function client_approve_apply($id, $action = 'pass') {
   if ($action == 'pass') {
     //审核状态通过
-    db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
     $apply_product = db_select('product_apply', 'ap')
       ->fields('ap')
       ->condition('id', $id, '=')
@@ -595,6 +594,9 @@ function client_approve_apply($id, $action = 'pass') {
     if ($apply_product->status >= PRODUCT_PASSED) {
       return;
     }
+
+    db_update("product_apply")->fields(array('status' => 1))->condition('id', $id, '=')->execute();
+
     // 需要通知仓库管理员
     $warehousr_manager = list_warehouse_manager();
     foreach ($warehousr_manager as $uid => $user) {
@@ -756,6 +758,9 @@ function masterprint_apply_tokens($type, $tokens, array $data = array(), array $
         }
         else if (isset($apply_user_profile['dealer'])) {
           $replacements[$origin] = @$apply_user_profile['dealer']->field_dealer_name[LANGUAGE_NONE][0]['value'];
+        }
+        else {
+          $replacements[$origin] = '';
         }
       }
       else if ($name == 'delivery_company'){
