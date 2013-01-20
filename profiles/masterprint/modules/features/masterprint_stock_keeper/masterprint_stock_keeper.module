@@ -218,7 +218,7 @@ function masterprint_stock_keeper_generate_stock_keeper_password() {
 /**
  * Form to edit stock-keeper
  */
-function masterprint_stock_keeper_edit_stock_keeper_form($form, $form_state, $user) {
+function masterprint_stock_keeper_edit_stock_keeper_form($form, &$form_state, $user) {
   $form['stock_keeper_uid'] = array(
     '#type' => 'value',
     '#value' => $user->uid,
