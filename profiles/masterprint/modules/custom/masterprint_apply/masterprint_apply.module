@@ -91,6 +91,7 @@ function masterprint_apply_menu() {
 // user access
 function masterprint_user_access() {
   $hash = isset($_GET['hash']) ? $_GET['hash'] : "";
+  $hash = str_replace(' ', '+', $hash);
   if ($hash) {
     drupal_load('module', 'user');
     $hash_data = json_decode(decrypt($hash), TRUE);
