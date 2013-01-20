@@ -495,12 +495,6 @@ function page_delivery_product_sure_submit($form, &$form_state) {
     pet_send_mail(notify_warning_when_product_less, array('mail' => $client_account->mail, 'uid' => $client_account->uid),
       array('nid' => $apply_product['product_id']));
 
-      //发邮件给客户所属的AE
-      // $ae_accounts = get_ae_from_client($client_account);
-      // pet_send_mail(notify_warning_when_product_less, array('mail' => $ae_accounts->mail, 'uid' => $ae_accounts->uid), array(
-      //   'nid' => $apply_product['product_id']
-      // ));
-
     //发邮件给客户所属的AE
     $ae = get_ae_from_client($client_account);
     pet_send_mail(notify_warning_when_product_less, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
@@ -510,11 +504,15 @@ function page_delivery_product_sure_submit($form, &$form_state) {
 
   //发邮件给客户所属的AE
   $ae = get_ae_from_client($client_account);
-  foreach ($ae_accounts as $ae) {
-    pet_send_mail(notify_apply_account_when_delivery, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
-      'nid' => $apply_product['product_id']
-    ));
-  }
+  pet_send_mail(notify_apply_account_when_delivery, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
+    'nid' => $apply_product['product_id']
+  ));
+  // $ae_accounts = get_ae_from_client($client_account);
+  // foreach ($ae_accounts as $ae) {
+  //   pet_send_mail(notify_apply_account_when_delivery, array('mail' => $ae->mail, 'uid' => $ae->uid), array(
+  //     'nid' => $apply_product['product_id']
+  //   ));
+  // }
 
   require_once(drupal_get_path('module', 'user').'/user.pages.inc');
   if (user_is_logged_in()) {
